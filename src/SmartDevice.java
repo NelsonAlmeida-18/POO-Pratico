@@ -19,13 +19,13 @@ public class SmartDevice {
     }
 
     public SmartDevice(String s) {
-        this.id = "";
+        this.id = s;
         this.on = false;
     }
 
     public SmartDevice(String s, boolean b) {
-        this.id = "";
-        this.on = false;
+        this.id = s;
+        this.on = b;
     }
 
     public void turnOn() {
@@ -38,8 +38,8 @@ public class SmartDevice {
     
     public boolean getOn() {return this.on;}
     
-    public void setOn(boolean b) {}
+    public void setOn(boolean b) {this.on = b;}
     
-    public String getID() {return "";}
+    public String getID() {return this.id;}
 
 }
