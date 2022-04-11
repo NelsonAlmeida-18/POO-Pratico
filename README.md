@@ -1,7 +1,7 @@
 <h1>POO-Pratico</h1>
 
 ><h2>Casa</h2>
-    Cada smart device deve ser identificado por um código do fabricante proveniente de um HashMap.
+    >>Cada smart device deve ser identificado por um código do fabricante proveniente de um HashMap.
     Vários smartDevices e todos eles foram pagos para instalar quer sejam usados ou não.
     Cada smartDevices regista informações de gastos elétricos.
     Cada dispositivo ligado a um smartdevice pode ser ligado ou desligado remotamente.
