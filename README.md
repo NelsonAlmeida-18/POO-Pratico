@@ -16,8 +16,8 @@
     SmartDevices:
 
         SmartBulbs:
-            tres modos de cor(Neutral warm cold)
-            dimensão em cm
+            Três modos de cor (Neutral, Warm e Cold)
+            Dimensão em centimetros
             Consumo diário
             Consumo (fórmula de cada grupo = const+tipoDeLuz)
 
