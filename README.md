@@ -1,11 +1,11 @@
 <h1>POO-Pratico</h1>
 
 ><h2>Casa</h2>
-    <p>Cada smart device deve ser identificado por um código do fabricante proveniente de um <i>HashMap</i>.</p>
-    <p>Vários <i>smartDevices</i> e todos eles foram pagos para instalar quer sejam usados ou não.</p>
-    <p>Cada <i>smartDevices</i> regista informações de gastos elétricos.</p>
-    <p>Cada dispositivo ligado a um smartdevice pode ser ligado ou desligado remotamente.</p>
-    <p>Também deve ser possível desligar todos os dispositivos de uma divisão de uma só vez.</p>
+    Cada smart device deve ser identificado por um código do fabricante proveniente de um <i>HashMap</i>.
+    Vários <i>smartDevices</i> e todos eles foram pagos para instalar quer sejam usados ou não.
+    Cada <i>smartDevices</i> regista informações de gastos elétricos.
+    Cada dispositivo ligado a um smartdevice pode ser ligado ou desligado remotamente.
+    Também deve ser possível desligar todos os dispositivos de uma divisão de uma só vez.
 
     Coleção de SmartDevices(map(String divisao, HashMap <identifier,list<SmartDevices> smartDevs))
 
