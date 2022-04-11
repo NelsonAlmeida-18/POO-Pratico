@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 /**
  * The test class SmartDeviceTest.
  *
- * @author  (your name)
- * @version (a version number or a date)
  */
 public class SmartDeviceTest {
     /**

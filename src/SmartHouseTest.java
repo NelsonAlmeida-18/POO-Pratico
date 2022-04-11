@@ -6,10 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * The test class CasaInteligenteTest.
+ * The test class SmartHouseTest.
  *
- * @author  (your name)
- * @version (a version number or a date)
  */
 public class SmartHouseTest {
     /**
@@ -84,7 +82,7 @@ public class SmartHouseTest {
 
     @Test
     public void testSetAllOn() {
-        CasaInteligente casaInte1 = new CasaInteligente("Gualtar");
+        SmartHouse casaInte1 = new SmartHouse("Gualtar");
         SmartBulb smartBul1 = new SmartBulb("b1");
         SmartSpeaker smartSpe1 = new SmartSpeaker("s1");
         casaInte1.addDevice(smartBul1);

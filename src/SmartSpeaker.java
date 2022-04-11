@@ -6,14 +6,13 @@ package src;
  * Consegue ligar-se a um canal (por simplificação uma rádio online) e permite
  * a regulação do seu nível de volume.
  *
- * @author (your name)
- * @version (a version number or a date)
  */
 public class SmartSpeaker extends SmartDevice {
     public static final int MAX = 20; //volume máximo
     
     private int volume;
     private String channel;
+    private float consumo;
 
 
     /**
@@ -27,9 +26,8 @@ public class SmartSpeaker extends SmartDevice {
     public SmartSpeaker(String s) {
         // initialise instance variables
         this.volume = 10;
+        this.channel = s;
     }
-
-
 
     public SmartSpeaker(String cod, String channel, int i) {
         // initialise instance variables
@@ -48,6 +46,13 @@ public class SmartSpeaker extends SmartDevice {
     
     public String getChannel() {return "";}
     
-    public void setChannel(String c) {}
+    public void setChannel(String c) {this.channel = c;}
+
+    public void setConsumo(float consumo) {
+        this.consumo = consumo;
+    }
+    public float getConsumo() {
+        return consumo;
+    }
 
 }

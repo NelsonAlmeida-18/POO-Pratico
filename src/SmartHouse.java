@@ -4,13 +4,10 @@ import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 
-
 /**
  * A SmartHouse faz a gestão dos SmartDevices que existem e dos
  * espaços (as salas) que existem na casa.
  *
- * @author (your name)
- * @version (a version number or a date)
  */
 public class SmartHouse {
    

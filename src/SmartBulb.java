@@ -5,8 +5,6 @@ package src;
  * é subclasse de SmartDevice) também permite escolher a intensidade da iluminação 
  * (a cor da mesma).
  *
- * @author (your name)
- * @version (a version number or a date)
  */
 public class SmartBulb extends SmartDevice {
     public static final int WARM = 2;
@@ -14,6 +12,7 @@ public class SmartBulb extends SmartDevice {
     public static final int COLD = 0;
     
     private int tone;
+    private float consumo;
 
     /**
      * Constructor for objects of class SmartBulb
@@ -22,6 +21,7 @@ public class SmartBulb extends SmartDevice {
         // initialise instance variables
         super();
         this.tone = NEUTRAL;
+        this.consumo = 0;
     }
 
     public SmartBulb(String id, int tone) {
@@ -44,6 +44,14 @@ public class SmartBulb extends SmartDevice {
 
     public int getTone() {
         return this.tone;
+    }
+
+    public void setConsumo(float consumo){
+        this.consumo = consumo;
+    }
+
+    public float getConsumo() {
+        return consumo;
     }
 
 }
