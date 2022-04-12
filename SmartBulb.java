@@ -4,7 +4,10 @@ import java.time.temporal.ChronoUnit;
 
 public class SmartBulb{
 	/**
-	*@param modo da lãmpada expresso em inteiros, 1=Warm, 0=Neural, -1=Cold
+	 * @param state estado da lâmpada, se está ligada ou desligada.
+	*@param mode da lampada expresso em inteiros, 1=Warm, 0=Neural, -1=Cold.
+	*@param dimensions dimensões da lampada
+	*@param consumoDiario consumo diario da lampada;
 	*/
 	private int state; //on ou off 1 ou 0
 	private int mode; 
