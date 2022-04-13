@@ -15,7 +15,7 @@ public class SmartHouseTest {
      */
     public SmartHouseTest()
     {
-        SmartHouse casa = new SmartHouse("");
+        SmartHouse casa = new SmartHouse();
         //assertE
     }
 
@@ -43,13 +43,13 @@ public class SmartHouseTest {
     public void testConstructor() {
         SmartHouse casaInte1 = new SmartHouse();
         assertTrue(casaInte1!=null);
-        casaInte1 = new SmartHouse("Campus de Gualtar");
+        casaInte1 = new SmartHouse("Carlos", 123123123, "Campus de Gualtar");
         assertTrue(casaInte1!=null);
     }
     
     @Test
     public void testAddFindDevice() {
-        SmartHouse casaInte1 = new SmartHouse("Gualtar");
+        SmartHouse casaInte1 = new SmartHouse("João",321321321, "Gualtar");
         SmartBulb smartBul1 = new SmartBulb("b1");
         SmartSpeaker smartSpe1 = new SmartSpeaker("s1");
         assertFalse(casaInte1.existsDevice("b1"));
@@ -63,7 +63,7 @@ public class SmartHouseTest {
 
     @Test
     public void testGetDevice() {
-        SmartHouse casaInte1 = new SmartHouse("Gualtar");
+        SmartHouse casaInte1 = new SmartHouse("João",321321321, "Gualtar");
         SmartBulb smartBul1 = new SmartBulb("b1");
         casaInte1.addDevice(smartBul1);
         assertTrue(casaInte1.getDevice("b1").equals(smartBul1));
@@ -71,7 +71,7 @@ public class SmartHouseTest {
 
     @Test
     public void testSetOn() {
-        SmartHouse casaInte1 = new SmartHouse("Gualtar");
+        SmartHouse casaInte1 = new SmartHouse("João",321321321, "Gualtar");
         SmartBulb smartBul1 = new SmartBulb("b1");
         assertFalse(smartBul1.getOn());
         casaInte1.addDevice(smartBul1);
@@ -82,7 +82,7 @@ public class SmartHouseTest {
 
     @Test
     public void testSetAllOn() {
-        SmartHouse casaInte1 = new SmartHouse("Gualtar");
+        SmartHouse casaInte1 = new SmartHouse("João",321321321, "Gualtar");
         SmartBulb smartBul1 = new SmartBulb("b1");
         SmartSpeaker smartSpe1 = new SmartSpeaker("s1");
         casaInte1.addDevice(smartBul1);
@@ -99,23 +99,23 @@ public class SmartHouseTest {
 
     @Test
     public void testAddRoom() {
-        SmartHouse casaInte1 = new SmartHouse("Gualtar");
-        casaInte1.addRoom("sala");
-        assertTrue(casaInte1.hasRoom("sala"));
-        assertFalse(casaInte1.hasRoom("quarto"));
+        SmartHouse casaInte1 = new SmartHouse("João",321321321, "Gualtar");
+        casaInte1.addDivisao("sala");
+        assertTrue(casaInte1.hasDivisao("sala"));
+        assertFalse(casaInte1.hasDivisao("quarto"));
     }
 
     @Test
     public void testAddToRoom() {
-        SmartHouse casaInte1 = new SmartHouse("Gualtar");
+        SmartHouse casaInte1 = new SmartHouse("João",321321321, "Gualtar");
         SmartBulb smartBul1 = new SmartBulb("b1");
         SmartSpeaker smartSpe1 = new SmartSpeaker("s1");
         SmartSpeaker smartSpe2 = new SmartSpeaker("s2");
         casaInte1.addDevice(smartBul1);
         casaInte1.addDevice(smartSpe1);
         casaInte1.addDevice(smartSpe2);
-        casaInte1.addRoom("sala");
-        casaInte1.addRoom("quarto");
+        casaInte1.addDivisao("sala");
+        casaInte1.addDivisao("quarto");
         casaInte1.addToRoom("sala", "b1");
         casaInte1.addToRoom("sala", "s1");
         casaInte1.addToRoom("quarto", "s2");
