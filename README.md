@@ -4,7 +4,8 @@
     <p>Neste repositório é visível a existência de 2(duas) diretorias, sendo elas as library utilizadas (lib) e
 respetiva diretoria com o conteúdo e código de desenvolvimento (src).</p>
 <p>Todo este projeto é possível ser executado através do ficheiro Main.java</p>
-<p>Para ajudar no planeamento e desenvolvimento do projeto recorremos ao [Trello](https://trello.com/b/WK4rG5Na/poo-%F0%9F%92%A9) de modo a seguirmos um plano de forma mais ordeira.</p>
+<p>Para ajudar no planeamento e desenvolvimento do projeto recorremos ao Trello de modo a seguirmos um plano de forma mais ordeira.</p>
+
 
 <h2>API da Smart City</h2>
 
