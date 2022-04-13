@@ -13,7 +13,6 @@ public class SmartCamera extends SmartDevice {
 
     private String resolucao; // posteriormente definir resolução e utilizar 'final'
     private float tamanho_ficheiros; // tamanho da pasta com os ficheiros (guardar em MB? GB?)
-    private float consumo; // consumo energético
 
     public SmartCamera(){
         this.tamanho_ficheiros = 0;
@@ -39,14 +38,6 @@ public class SmartCamera extends SmartDevice {
 
     public float getTamanho_ficheiros() {
         return tamanho_ficheiros;
-    }
-
-    public void setConsumo(float consumo) {
-        this.consumo = consumo;
-    }
-
-    public float getConsumo() {
-        return consumo;
     }
 
     public void add_Ficheiros(float tamanho_ficheiro_new){

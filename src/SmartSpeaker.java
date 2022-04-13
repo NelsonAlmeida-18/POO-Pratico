@@ -12,8 +12,6 @@ public class SmartSpeaker extends SmartDevice {
     
     private int volume;
     private String channel;
-    private float consumo;
-
 
     /**
      * Constructor for objects of class SmartSpeaker
@@ -47,12 +45,5 @@ public class SmartSpeaker extends SmartDevice {
     public String getChannel() {return "";}
     
     public void setChannel(String c) {this.channel = c;}
-
-    public void setConsumo(float consumo) {
-        this.consumo = consumo;
-    }
-    public float getConsumo() {
-        return consumo;
-    }
 
 }

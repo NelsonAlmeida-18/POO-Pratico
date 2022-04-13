@@ -12,7 +12,7 @@ public class SmartBulb extends SmartDevice {
     public static final int COLD = 0;
     
     private int tone;
-    private float consumo;
+
 
     /**
      * Constructor for objects of class SmartBulb
