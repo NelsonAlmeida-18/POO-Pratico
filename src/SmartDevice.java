@@ -50,4 +50,5 @@ public class SmartDevice {
 
     public float getConsumo(){ return this.consumo; }
 
+
 }
