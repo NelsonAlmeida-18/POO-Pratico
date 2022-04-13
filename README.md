@@ -10,7 +10,7 @@ respetiva diretoria com o conteúdo e código de desenvolvimento (src).</p>
 <h2>API da Smart City</h2>
 
 <h3>Cidade</h3>
-    <p>Cada casa contém o comercializador de energia, promietário com o respetivo nome e NIF.</p>
+    <p>Cada casa contém o comercializador de energia, proprietário com o respetivo nome e NIF.</p>
 <h4>Casa</h4>
     <p>Cada smartDevice deve ser identificado por um código do fabricante proveniente de um HashMap.</p>
     <p>Vários smartDevices e todos eles foram pagos para instalar quer sejam usados ou não.</p>
