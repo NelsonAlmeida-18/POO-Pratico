@@ -32,7 +32,7 @@ public class SmartHouse {
         this.NIF_prop = 0;
         this.morada = "";
         this.divisao = new ArrayList<String>();
-        this.devices = new HashMap();
+        this.devices = new HashMap<String,Map<String,SmartDevice>>();
         this.companhia_eletrica = "";
     }
 
