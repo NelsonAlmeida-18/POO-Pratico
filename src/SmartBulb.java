@@ -89,13 +89,8 @@ public class SmartBulb extends SmartDevice {
         return sb.toString();
     }
 
-<<<<<<< HEAD
-    public float getConsumo() {
-        return this.consumo;
-=======
     public SmartBulb clone(){
         return new SmartBulb();
->>>>>>> 2432c4625ae74b14aac938965c6758ac2c2b7f9b
     }
 
 }
