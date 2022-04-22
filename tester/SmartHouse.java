@@ -9,13 +9,13 @@ import java.util.HashMap;
  * espaços (as salas) que existem na casa.
  *
  */
-public class SmartHouse {
+public class SmartHouse{
 
     private String nome_prop;
     private String NIF_prop;
     private String morada;
     //private List<String> divisao;
-    private String companhia_eletrica;
+    private ComercializadoresEnergia companhia_eletrica;
     //private Map<String, SmartDevice> devices; // identificador -> SmartDevice
     //private Map<String, List<String>> locations; // Espaço -> Lista codigo dos devices
     //private Map<String, Map<String, SmartDevice>> devices;
@@ -32,16 +32,17 @@ public class SmartHouse {
         this.NIF_prop = "";
         this.morada = "";
         this.devices = new HashMap<String, Map<String, SmartDevice>>();
-        this.companhia_eletrica = "";
+        this.companhia_eletrica = new ComercializadoresEnergia();
     }
 
-    public SmartHouse(String nome, String NIF, String morada) {
+    public SmartHouse(String nome, String NIF, String morada, ComercializadoresEnergia comp) {
         // initialise instance variables
         this.nome_prop = nome;
         this.NIF_prop = NIF;
         this.morada = morada;
         //this.divisao = new ArrayList<String>();
         this.devices = new HashMap<>();
+        this.companhia_eletrica=comp;
     }
 
     public SmartHouse(SmartHouse sh){
@@ -61,6 +62,10 @@ public class SmartHouse {
     public void setMorada(String morada){ this.morada = morada; }
     public String getMorada(){ return this.morada; }
 
+    //nao sei se vale a pena clonar visto que é pertinente que se uma empresa muda precos mude automaticamente se bem que só no ciclo seguinte
+    public void setCompanhia_eletrica(ComercializadoresEnergia s){this.companhia_eletrica=s;}
+    public ComercializadoresEnergia getCompanhia_eletrica(){return this.companhia_eletrica.clone();}
+
     // public boolean hasDivisao(String divisao){ return this.divisao.contains(divisao);}
     // public void addDivisao(String divisao){ if(!hasDivisao(divisao)) this.divisao.add(divisao);}
     // public void delDivisao(String divisao){ if(hasDivisao(divisao)) this.divisao.remove(this.divisao.lastIndexOf(divisao));}
@@ -77,8 +82,16 @@ public class SmartHouse {
         return newHouse;
     }
 
-    public void setCompanhia_eletrica(String companhia){ this.companhia_eletrica = companhia; }
-    public String getCompanhia_eletrica() { return this.companhia_eletrica; }
+
+    //ver se isto mantem o encapsulamento
+    public Map<String, SmartDevice> getDivisao(String divisao){
+        Map<String, SmartDevice> nova = new HashMap<>();
+        nova.putAll(this.devices.get(divisao));
+        return nova;
+    }
+
+    // public void setCompanhia_eletrica(String companhia){ this.companhia_eletrica = companhia; }
+    // public String getCompanhia_eletrica() { return this.companhia_eletrica; }
 
     // to do after definition of data structure
     public void setDeviceOn(String devCode) {
@@ -188,8 +201,8 @@ public class SmartHouse {
             }
             sb.append("\n");
         }
-        sb.append("Companhia elétrica: ");
-        sb.append(this.companhia_eletrica);
+        sb.append("Companhia elétrica: \n");
+        sb.append(this.companhia_eletrica.toString());
         sb.append("\n");
         return sb.toString();
     }
