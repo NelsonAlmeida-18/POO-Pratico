@@ -1,7 +1,5 @@
 package tester;
 
-import src.SmartDevice;
-
 import java.lang.StringBuilder;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -23,7 +21,7 @@ public class SmartBulb extends SmartDevice {
     private state estado;
     private double consumo;
     private int tone;
-    private String dimensions;
+    private double dimensions;
     private LocalDateTime ligadoInit;
     private LocalDateTime dataFin;
 
@@ -43,13 +41,13 @@ public class SmartBulb extends SmartDevice {
         this.tone = tone;
     }
 
-    public SmartBulb(String id) {
+    public SmartBulb(SmartBulb id) {
         // initialise instance variables
         super(id);
         this.tone = NEUTRAL;
     }
 
-    public void setTone(int t) { // modificar para consumo futuramente
+    public void setTone(int t) {
         if (t>=WARM) this.tone = WARM;
         else if (t<=COLD) this.tone = COLD;
         else this.tone = t;
@@ -63,9 +61,9 @@ public class SmartBulb extends SmartDevice {
         return this.ligadoInit;
     }
 
-    public void setDimensions(String dimensions){this.dimensions=dimensions;}
+    public void setDimensions(double dimensions){this.dimensions=dimensions;}
 
-    public String getDimensions(){return this.dimensions;}
+    public double getDimensions(){return this.dimensions;}
 
     public void setState(SmartBulb.state est){
         switch(est.toString()){
@@ -79,6 +77,12 @@ public class SmartBulb extends SmartDevice {
                 this.tone = NEUTRAL;
         }
     }
+    /* possibly useful */
+    public void setConsumo(float con){
+        this.consumo=con;
+    }
+
+    public double getConsumo() {return this.consumo;}
 
     public boolean equals(Object obj){
         if (this==obj)
@@ -87,7 +91,7 @@ public class SmartBulb extends SmartDevice {
         if (this.getClass()!=obj.getClass() || obj==null)
             return false;
 
-        src.SmartBulb lampada = (src.SmartBulb) obj;
+        SmartBulb lampada = (SmartBulb) obj;
         return (this.tone==lampada.getTone() &&
                 this.dimensions==lampada.getDimensions() &&
                 this.ligadoInit.equals(lampada.getLigadoInit()));
@@ -101,14 +105,15 @@ public class SmartBulb extends SmartDevice {
         //sb.append(super(getOn())); // help on this
         sb.append("\nDimensões da lâmpada: ");
         sb.append(this.dimensions);
+        sb.append(" cm");
         sb.append("\nÚltima vez ligada: ");
         sb.append(this.ligadoInit.toString());
         sb.append("\n");
         return sb.toString();
     }
 
-    public src.SmartBulb clone(){
-        return new src.SmartBulb();
+    public SmartBulb clone(){
+        return new SmartBulb(this);
     }
 
     public void turnOn(){
@@ -125,6 +130,8 @@ public class SmartBulb extends SmartDevice {
     public void goToData(LocalDateTime data){
         this.dataFin=data;
     }
+
+
 
 }
 
