@@ -45,7 +45,7 @@ public abstract class SmartDevice {
         return (this.id.equals(newSD.getID()));
     }
 
-   // public SmartDevice clone(){
+    // public SmartDevice clone(){
     //    SmartDevice sc = new SmartDevice();
     //}
 
