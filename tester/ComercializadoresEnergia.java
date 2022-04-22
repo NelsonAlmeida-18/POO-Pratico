@@ -1,3 +1,5 @@
+package tester;
+
 public class ComercializadoresEnergia {
     private double precoBaseKW;
     private double fatorImposto;
@@ -16,8 +18,9 @@ public class ComercializadoresEnergia {
 
     public double getFatorImposto(){return this.fatorImposto;}
 
-    public double getPrecoDiaPorDispositivo(String id){
+   /*
+   public double getPrecoDiaPorDispositivo(String id){
         
     }
-
+    */
 }
