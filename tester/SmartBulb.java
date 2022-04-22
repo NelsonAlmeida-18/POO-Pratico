@@ -72,7 +72,7 @@ public class SmartBulb extends SmartDevice {
                 this.estado = est;
                 this.tone = NEUTRAL;
             case("OFF"):
-                this.consumo = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin)*Math.random();
+                this.consumo = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin)*this.dimensions*Math.random();
                 this.estado = est;
                 this.tone = NEUTRAL;
         }
