@@ -31,7 +31,8 @@ public class SmartCamera extends SmartDevice {
         this.tamanho_ficheiros=0;
         this.estado=state.ON;
         this.consumo=0;
-        ligadoInit=LocalDateTime.now();
+        this.ligadoInit=LocalDateTime.now();
+        this.dataFin=LocalDateTime.now();
     }
 
     public SmartCamera(float resolucao, float tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
@@ -78,12 +79,12 @@ public class SmartCamera extends SmartDevice {
         if (this.estado==state.OFF)
             return this.consumo;
         else{
-            return ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin)*this.resolucao*Math.random();
-        }
+            return ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin)*this.resolucao*((Math.random()*2)+1);
+        }                                               //tempo de gravacao, resolucao, bitrate
     }
 
     public void setResolucao(float width, float height){
-        this.resolucao=width*height/1000000;
+        this.resolucao=(width*height)/10000000;
     }
 
     public void setResolucao(float res){

@@ -1,5 +1,8 @@
 package src;
 import java.lang.StringBuilder;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.math.*;
 
 
 /**
@@ -13,48 +16,96 @@ import java.lang.StringBuilder;
  */
 public class SmartCamera extends SmartDevice {
 
-    private String resolucao; // posteriormente definir resolução e utilizar 'final'
-    private float tamanho_ficheiros; // tamanho da pasta com os ficheiros (guardar em MB? GB?)
+    private float resolucao; 
+    private double tamanho_ficheiros; // tamanho da pasta com os ficheiros (guardar em MB? GB?)
+    public enum state{
+        ON,
+        OFF
+    }
+    private state estado;
+    private double consumo;
+    private LocalDateTime ligadoInit;
 
     public SmartCamera(){
-        this.tamanho_ficheiros = 0;
-        this.resolucao = ""; // mudar para resolução 'default'
+        this.resolucao=0;
+        this.tamanho_ficheiros=0;
+        this.estado=state.ON;
+        this.consumo=0;
+        ligadoInit=LocalDateTime.now();
     }
 
-    public SmartCamera(String resolucao,float ficheiros){
-        this.resolucao = resolucao;
-        this.tamanho_ficheiros = ficheiros;
+    public SmartCamera(float resolucao, float tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
+        this.resolucao=resolucao;
+        this.tamanho_ficheiros= tamanhoFicheiros;
+        this.estado=estado;
+        this.consumo=consumo;
+        this.ligadoInit=ligadoI;
     }
 
-    public SmartCamera(SmartCamera cam){
-        this.resolucao=cam.getResolucao();
-        this.tamanho_ficheiros=cam.getTamanho_ficheiros();
+    public SmartCamera(float width,float height, float tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
+        this.resolucao=width*height/1000000;
+        this.tamanho_ficheiros= tamanhoFicheiros;
+        this.estado=estado;
+        this.consumo=consumo;
+        this.ligadoInit=ligadoI;
     }
 
-    public void setResolucao(String resolucao) {
-        if (resolucao.equals(""))
-            this.resolucao=resolucao;
+    public SmartCamera(SmartCamera sc){
+        this.resolucao=sc.getResolucao();
+        this.tamanho_ficheiros=sc.getFileSize();
+        this.estado = sc.getState();
+        this.consumo=sc.getConsumo();
+        this.ligadoInit=sc.getLastLigado();
     }
 
-    public String getResolucao() {
-        return resolucao;
+    public LocalDateTime getLastLigado(){
+        return this.ligadoInit;
     }
 
-    public void setTamanho_ficheiros(float tamanho_ficheiros) {
-        this.tamanho_ficheiros = tamanho_ficheiros;
+    public float getResolucao(){
+        return this.resolucao;
     }
 
-    public float getTamanho_ficheiros() {
-        return tamanho_ficheiros;
+    public double getFileSize(){
+        return this.tamanho_ficheiros;
     }
 
-    public void add_Ficheiros(float tamanho_ficheiro_new){
-        this.tamanho_ficheiros +=  tamanho_ficheiro_new;
+    public state getState(){
+        return this.estado;
     }
 
-    public void remove_Ficheiros(float tamanho_ficheiros_del){
-        this.tamanho_ficheiros -= tamanho_ficheiros_del;
+    public double getConsumo(){
+        return this.consumo;
     }
+
+    public void setResolucao(float width, float height){
+        this.resolucao=width*height/1000000;
+    }
+
+    public void setResolucao(float res){
+        this.resolucao=res;
+    }
+
+    public void setFileSize(float file){
+        this.tamanho_ficheiros=file;
+    }
+
+    public void setState(state est){
+        switch(est.toString()){
+            case("ON"):
+                this.ligadoInit=LocalDateTime.now();
+                this.estado = est;  
+            case("OFF"):                                                                                      //bitrate encoder random pois pode depender da quantidade de movimento e densidade populacional da imagem
+                this.consumo = ChronoUnit.MINUTES.between(this.ligadoInit, LocalDateTime.now())*this.resolucao*Math.random();
+                this.estado = est;
+        }
+    }
+
+    //nao sei se é relevante poder alterar o consumo
+    public void setConsumo(float con){
+        this.consumo=con;
+    }
+
 
     public boolean equals(Object obj){
         if(this==obj)
@@ -64,7 +115,7 @@ public class SmartCamera extends SmartDevice {
             return false;
         
         SmartCamera newC = (SmartCamera) obj;
-        return (this.resolucao.equals(newC.getResolucao()) && this.tamanho_ficheiros==newC.getTamanho_ficheiros());
+        return (this.resolucao == (newC.getResolucao()) && this.tamanho_ficheiros==newC.getFileSize()  && this.estado.toString().equals(newC.getState().toString())  &&  this.consumo == (newC.getConsumo()));
     }
 
     public String toString(){
@@ -79,5 +130,17 @@ public class SmartCamera extends SmartDevice {
 
     public SmartCamera clone(){
         return new SmartCamera(this);
+    }
+
+    //funcoes da ficha
+
+    public void turnOn(){
+        this.estado = state.ON;
+        setState(state.ON);
+    }
+
+    public void turnOff(){
+        this.estado = state.OFF;
+        setState(state.OFF);
     }
 }

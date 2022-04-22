@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * Permite ligar ou desligar circuitos. 
  *
  */
-public abstract class SmartDevice extends SmartHouse{
+public abstract class SmartDevice {
 
     private String id;
 
@@ -28,11 +28,6 @@ public abstract class SmartDevice extends SmartHouse{
     public String getID() {return this.id;}
 
     public void setID(String id){this.id=id;}
-
-
-    public abstract String toString();
-
-
 
     //rever
     public boolean equals(Object obj){
@@ -60,6 +55,8 @@ public abstract class SmartDevice extends SmartHouse{
 
     public abstract void turnOff();
 
+    public abstract SmartDevice clone();
 
+    public abstract String toString();
 
 }
