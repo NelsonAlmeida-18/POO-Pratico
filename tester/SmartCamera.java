@@ -1,4 +1,3 @@
-package tester;
 
 import java.lang.StringBuilder;
 import java.time.LocalDateTime;
@@ -17,7 +16,7 @@ import java.time.temporal.ChronoUnit;
 public class SmartCamera extends SmartDevice {
 
     private float resolucao; 
-    private double tamanho_ficheiros; // tamanho da pasta com os ficheiros (guardar em MB? GB?)
+    private double tamanho_ficheiros; 
     public enum state{
         ON,
         OFF

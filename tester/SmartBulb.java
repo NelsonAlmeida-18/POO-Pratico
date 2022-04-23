@@ -1,4 +1,4 @@
-package tester;
+
 
 import java.lang.StringBuilder;
 import java.time.LocalDateTime;
@@ -11,16 +11,19 @@ import java.time.temporal.ChronoUnit;
  *
  */
 public class SmartBulb extends SmartDevice {
-    public static final int WARM = 1;
-    public static final int NEUTRAL = 0;
-    public static final int COLD = -1;
+    public enum modo{
+        COLD,
+        NEUTRAL,
+        WARM
+    }
+    public modo mode;
     public enum state{
         ON,
         OFF
     }
     private state estado;
     private double consumo;
-    private int tone;
+   // private int tone;
     private double dimensions;
     private LocalDateTime ligadoInit;
     private LocalDateTime dataFin;
@@ -31,50 +34,68 @@ public class SmartBulb extends SmartDevice {
      */
     public SmartBulb() {
         // initialise instance variables
-        super();
-        this.tone = NEUTRAL;
+        this.mode=modo.NEUTRAL;
+        this.estado=state.ON;
+        this.consumo=0;
+        this.dimensions=1;  // não existem lampadas "inexistentes"
+        this.ligadoInit=LocalDateTime.now();
+        this.dataFin=LocalDateTime.now();
     }
 
-    public SmartBulb(String id, int tone) {
+    public SmartBulb(modo mode, state estado, double consumo, double dimensions, LocalDateTime ligadoInit) {
         // initialise instance variables
-        super(id);
-        this.tone = tone;
+        this.mode = mode;
+        this.estado = estado;
+        this.consumo=consumo;
+        this.dimensions=dimensions;
+        this.ligadoInit=ligadoInit;
     }
 
-    public SmartBulb(SmartBulb id) {
+    public SmartBulb(modo mode, state estado, double consumo, double dimensions, LocalDateTime ligadoInit, LocalDateTime dataFinal) {
         // initialise instance variables
-        super(id);
-        this.tone = NEUTRAL;
+        this.mode = mode;
+        this.estado = estado;
+        this.consumo=consumo;
+        this.dimensions=dimensions;
+        this.ligadoInit=ligadoInit;
+        this.dataFin=dataFinal;
     }
 
-    public void setTone(int t) {
-        if (t>=WARM) this.tone = WARM;
-        else if (t<=COLD) this.tone = COLD;
-        else this.tone = t;
+    public SmartBulb(SmartBulb sb) {
+        // initialise instance variables
+        this.mode = sb.getMode();
+        this.estado = sb.getEstado();
+        this.consumo= sb.getConsumo();
+        this.dimensions= sb.getDimensions();
+        this.ligadoInit= sb.getLigadoInit();
+        this.dataFin=sb.getDataFin();
+
     }
 
-    public int getTone() { return this.tone; }
+    public modo getMode(){return this.mode;}
+
+    public void setMode(modo mode){this.mode = mode;}
+
+    public state getEstado(){return this.estado;}
+
+    public LocalDateTime getDataFin(){return this.dataFin;}
 
     public void setLigadoInit(LocalDateTime ult){this.ligadoInit=ult;}
 
-    public LocalDateTime getLigadoInit(){
-        return this.ligadoInit;
-    }
+    public LocalDateTime getLigadoInit(){return this.ligadoInit; }
 
     public void setDimensions(double dimensions){this.dimensions=dimensions;}
 
     public double getDimensions(){return this.dimensions;}
 
-    public void setState(SmartBulb.state est){
+    public void setState(state est){
         switch(est.toString()){
             case("ON"):
                 this.ligadoInit=LocalDateTime.now();
                 this.estado = est;
-                this.tone = NEUTRAL;
             case("OFF"):
                 this.consumo = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin)*this.dimensions*Math.random();
                 this.estado = est;
-                this.tone = NEUTRAL;
         }
     }
     /* possibly useful */
@@ -92,7 +113,7 @@ public class SmartBulb extends SmartDevice {
             return false;
 
         SmartBulb lampada = (SmartBulb) obj;
-        return (this.tone==lampada.getTone() &&
+        return (this.mode==lampada.getMode() && this.estado==lampada.getEstado() &&
                 this.dimensions==lampada.getDimensions() &&
                 this.ligadoInit.equals(lampada.getLigadoInit()));
     }
@@ -100,14 +121,15 @@ public class SmartBulb extends SmartDevice {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("Estado da lâmpada: ");
-        sb.append(this.tone);
+        sb.append(this.estado);
         sb.append("\nModo de Funcionamento da lâmpada: ");
+        sb.append(this.mode);
         //sb.append(super(getOn())); // help on this
         sb.append("\nDimensões da lâmpada: ");
         sb.append(this.dimensions);
         sb.append(" cm");
         sb.append("\nÚltima vez ligada: ");
-        sb.append(this.ligadoInit.toString());
+        sb.append(this.ligadoInit);
         sb.append("\n");
         return sb.toString();
     }
@@ -117,22 +139,33 @@ public class SmartBulb extends SmartDevice {
     }
 
     public void turnOn(){
-        this.estado = SmartBulb.state.ON;
-        setState(SmartBulb.state.ON);
-        setTone(NEUTRAL);
+        switch(this.estado.toString()){
+            case("OFF"):
+                this.estado=state.ON;
+                this.ligadoInit=LocalDateTime.now();
+        }
     }
 
     public void turnOff(){
-        this.estado = SmartBulb.state.OFF;
-        setState(SmartBulb.state.OFF);
+        switch(this.estado.toString()){
+            case("ON"):
+                this.estado=state.OFF;
+                double factor=0;
+                switch(this.mode.toString()){
+                    case("COLD"):
+                        factor=10;
+                    case("NEUTRAL"):
+                        factor=20;
+                    case("WARM"):
+                        factor=30;
+                }
+                this.consumo=0.5+factor;
+        }
     }
 
     public void goToData(LocalDateTime data){
         this.dataFin=data;
     }
-
-
-
 }
 
 
