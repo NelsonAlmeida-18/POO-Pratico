@@ -1,5 +1,3 @@
-//package tester; // idea necessarry
-
 import java.util.Map;
 
 public class ComercializadoresEnergia {
@@ -13,7 +11,6 @@ public class ComercializadoresEnergia {
         this.precoBaseKW=0;
         this.fatorImposto=0;
     }
-
     public ComercializadoresEnergia(String nome,double precoBaseKW, double fatorImposto){
         this.nome=nome;
         this.precoBaseKW=precoBaseKW;
