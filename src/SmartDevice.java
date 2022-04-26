@@ -1,14 +1,16 @@
-package src;
-import java.lang.StringBuilder;
+
+
+import java.time.LocalDateTime;
+
 
 /**
  * A classe SmartDevice é um construtor simples.
  * Permite ligar ou desligar circuitos. 
  *
  */
-public abstract class SmartDevice{
+public abstract class SmartDevice {
 
-    private final String id;
+    private String id;
 
     /**
      * Constructor for objects of class SmartDevice
@@ -27,18 +29,7 @@ public abstract class SmartDevice{
     
     public String getID() {return this.id;}
 
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("Id do dispositivo: ");
-        sb.append(this.id);
-        sb.append("\n");
-        return sb.toString();
-    }
-
-    // public SmartDevice clone(){
-    //     return new SmartDevice(this);
-    // }
-
+    public void setID(String id){this.id=id;}
 
     //rever
     public boolean equals(Object obj){
@@ -54,11 +45,20 @@ public abstract class SmartDevice{
         return (this.id.equals(newSD.getID()));
     }
 
+    // public SmartDevice clone(){
+    //    SmartDevice sc = new SmartDevice();
+    //}
+
+    public abstract void goToData(LocalDateTime data);
+
     public abstract double getConsumo();
 
     public abstract void turnOn();
 
     public abstract void turnOff();
 
+    public abstract SmartDevice clone();
+
+    public abstract String toString();
 
 }

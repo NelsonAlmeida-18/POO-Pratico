@@ -1,8 +1,7 @@
-package src;
+
 import java.lang.StringBuilder;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.math.*;
 
 
 /**
@@ -17,7 +16,7 @@ import java.math.*;
 public class SmartCamera extends SmartDevice {
 
     private float resolucao; 
-    private double tamanho_ficheiros; // tamanho da pasta com os ficheiros (guardar em MB? GB?)
+    private double tamanho_ficheiros; 
     public enum state{
         ON,
         OFF
@@ -25,13 +24,15 @@ public class SmartCamera extends SmartDevice {
     private state estado;
     private double consumo;
     private LocalDateTime ligadoInit;
+    private LocalDateTime dataFin;
 
     public SmartCamera(){
         this.resolucao=0;
         this.tamanho_ficheiros=0;
         this.estado=state.ON;
         this.consumo=0;
-        ligadoInit=LocalDateTime.now();
+        this.ligadoInit=LocalDateTime.now();
+        this.dataFin=LocalDateTime.now();
     }
 
     public SmartCamera(float resolucao, float tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
@@ -75,11 +76,15 @@ public class SmartCamera extends SmartDevice {
     }
 
     public double getConsumo(){
-        return this.consumo;
+        if (this.estado==state.OFF)
+            return this.consumo;
+        else{
+            return ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin)*this.resolucao*((Math.random()*2)+1);
+        }                                               //tempo de gravacao, resolucao, bitrate
     }
 
     public void setResolucao(float width, float height){
-        this.resolucao=width*height/1000000;
+        this.resolucao=(width*height)/10000000;
     }
 
     public void setResolucao(float res){
@@ -96,7 +101,7 @@ public class SmartCamera extends SmartDevice {
                 this.ligadoInit=LocalDateTime.now();
                 this.estado = est;  
             case("OFF"):                                                                                      //bitrate encoder random pois pode depender da quantidade de movimento e densidade populacional da imagem
-                this.consumo = ChronoUnit.MINUTES.between(this.ligadoInit, LocalDateTime.now())*this.resolucao*Math.random();
+                this.consumo = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin)*this.resolucao*Math.random();
                 this.estado = est;
         }
     }
@@ -124,6 +129,8 @@ public class SmartCamera extends SmartDevice {
         sb.append(this.resolucao);
         sb.append("\nTamanho dos ficheiros: \n");
         sb.append(this.tamanho_ficheiros);
+        sb.append("\nEstado da camera: ");
+        sb.append(this.estado);
         sb.append("\n");
         return sb.toString();
     }
@@ -142,5 +149,9 @@ public class SmartCamera extends SmartDevice {
     public void turnOff(){
         this.estado = state.OFF;
         setState(state.OFF);
+    }
+
+    public void goToData(LocalDateTime data){
+        this.dataFin=data;
     }
 }
