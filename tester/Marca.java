@@ -1,3 +1,5 @@
+//package tester; // idea necessarry
+
 public class Marca {
 
     private final String nome;
