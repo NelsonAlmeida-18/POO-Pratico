@@ -53,21 +53,42 @@ public class Parser {
 
 
     // data , casa, dispositivo, ação
-    // YYYY-MM-DD, casaX, dispostivoY, acao
-    // YYYY-MM-DD, fornecedorX, alteraValorDesconto, novoValor
-    // YYYY-MM-DD, casaX, fornecedorN -> sendo fornecedorN o novo comercializador de energia
+    // YYYY-MM-DD, casaX, acao (case 1.0)
+    // YYYY-MM-DD, casaX, dispostivoY, acao (CASE 1.1)
+    // YYYY-MM-DD, fornecedorX, alteraValorDesconto, novoValor (CASE 2)
+    // YYYY-MM-DD, casaX, fornecedorN -> sendo fornecedorN o novo comercializador de energia (CASE 1.2)
 
     public void createLine(String line){
         String [] token = line.split(",\\s+"); // criar tokens
         String date = token[0];
         String [] data_token = date.split(".");
 
+        // data
         int year = Integer.parseInt(data_token[0]);
         int mes = Integer.parseInt(data_token[1]);
         Month month = Month.of(mes);
         int day = Integer.parseInt(data_token[2]);
         LocalDate data = LocalDate.of(year,month,day);
-        
+
+
+        if(city.constainsHouse(token[2])) {  // CASE 1.0
+            if(token[4]!=null) { // not case 1.0
+                // do smth in the house
+                if (house.constainsDevice(token[3])) { // CASE 1 . 1
+                    // do smth to the device
+                } else { // CASE 1 . 2
+                    // change comercializador de energia
+                }
+            } else {
+                // do action in the house (turn all lights, example)
+            }
+        }
+        else if(city.constainsFornecedor(token[2])){ // CASE 2
+            // altera valor de kW/h ou altera valor de Imposto
+        }
+
+
+
 
     }
 
