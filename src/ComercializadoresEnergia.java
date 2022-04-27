@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
-import java.time.LocalDateTime;
+
 
 public class ComercializadoresEnergia {
 
@@ -123,8 +123,10 @@ public class ComercializadoresEnergia {
         return (this.precoBaseKW*sd.getConsumo()*(1+this.fatorImposto))*0.9;
     }
 
+
+    //TODO ir buscar a primeira casa
     public SmartHouse getCasaMaisGastadora(){
-        SmartHouse casaMaisGastadora=new SmartHouse();//TODO ir buscar a primeira casa
+        SmartHouse casaMaisGastadora=new SmartHouse();
         double maxConsumo=0;
         for(SmartHouse casa:this.casas.keySet()){
             double consumo=casa.getConsumoDaCasa();
