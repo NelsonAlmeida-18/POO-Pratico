@@ -30,13 +30,17 @@ public class ComercializadoresEnergia {
         this.nome=nome;
         this.precoBaseKW=precoBaseKW;
         this.fatorImposto=fatorImposto;
-        List<SmartHouse> casinhas=new ArrayList<>();
-        ListIterator<SmartHouse> iter = casas.listIterator();
-        while(iter.hasNext()){
-            SmartHouse casaTemp=iter.next();
-            casinhas.add(casaTemp.clone());
+        Map<SmartHouse,List<Fatura>> casinhasNovas=new HashMap<>();
+        for(SmartHouse casa:casas.keySet()){
+            List<Fatura> casinhas=new ArrayList<>();
+            ListIterator<Fatura> iter = casas.get(casa).listIterator();
+            while(iter.hasNext()){
+                Fatura faturaTemp=iter.next();
+                casinhas.add(faturaTemp);
+            }
+            casinhasNovas.put(casa.clone(), casinhas);
         }
-        this.casas=casinhas;
+        this.casas=casinhasNovas;
     }
 
 
@@ -48,28 +52,44 @@ public class ComercializadoresEnergia {
         this.casas = ce.getCasas();
     }
 
-    public List<SmartHouse> getCasas(){
-        List<SmartHouse> casinhas=new ArrayList<>();
-        ListIterator<SmartHouse> iter = this.casas.listIterator();
-        while(iter.hasNext()){
-            SmartHouse casaTemp=iter.next();
-            casinhas.add(casaTemp.clone());
+    public Map<SmartHouse,List<Fatura>> getCasas(){
+        Map<SmartHouse,List<Fatura>> casinhasNovas=new HashMap<>();
+        for(SmartHouse casa:casas.keySet()){
+            List<Fatura> casinhas=new ArrayList<>();
+            ListIterator<Fatura> iter = casas.get(casa).listIterator();
+            while(iter.hasNext()){
+                Fatura faturaTemp=iter.next();
+                casinhas.add(faturaTemp);
+            }
+            casinhasNovas.put(casa.clone(), casinhas);
         }
-        return casinhas;
+        return casinhasNovas;
     }
 
-    public void setCasas(List<SmartHouse> casas){
-        List<SmartHouse> casinhas=new ArrayList<>();
-        ListIterator<SmartHouse> iter = casas.listIterator();
-        while(iter.hasNext()){
-            SmartHouse casaTemp=iter.next();
-            casinhas.add(casaTemp.clone());
+    public void setCasas(Map<SmartHouse,List<Fatura>> casas){
+        Map<SmartHouse,List<Fatura>> casinhasNovas=new HashMap<>();
+        for(SmartHouse casa:casas.keySet()){
+            casinhasNovas.put(casa.clone(), clonaFaturas(casas.get(casa)));
         }
-        this.casas=casinhas;
+        this.casas=casinhasNovas;
     }
 
     public void addCasa(SmartHouse casa){
-        this.casas.add(casa.clone());
+        this.casas.put(casa.clone(),new ArrayList<Fatura>());
+    }
+
+    public void addCasa(SmartHouse casa, List<Fatura> faturas){
+        this.casas.put(casa.clone(),clonaFaturas(faturas));
+    }
+
+    public List<Fatura> clonaFaturas(List<Fatura> faturas){
+        List<Fatura> casinhas=new ArrayList<>();
+        ListIterator<Fatura> iter = faturas.listIterator();
+        while(iter.hasNext()){
+            Fatura faturaTemp=iter.next();
+            casinhas.add(faturaTemp);
+        }
+        return casinhas;
     }
 
     public void removeCasa(SmartHouse casa){
@@ -77,11 +97,10 @@ public class ComercializadoresEnergia {
     }
 
     public void removeCasa(String morada){
-        ListIterator<SmartHouse> iter = this.casas.listIterator();
-        while(iter.hasNext()){
-            SmartHouse casaTemp = iter.next();
-            if (casaTemp.getMorada().equals(morada))
-                this.casas.remove(casaTemp);
+        for (SmartHouse casa:this.casas.keySet()){
+            if(casa.getMorada().equals(morada)){
+                this.casas.remove(casa);
+            }
         }
     }
 
@@ -105,45 +124,44 @@ public class ComercializadoresEnergia {
     }
 
     public SmartHouse getCasaMaisGastadora(){
-        ListIterator<SmartHouse> iter = this.casas.listIterator();
-        SmartHouse casaMaisGastadora=this.casas.get(0);//vai buscar a primeira casa 
+        SmartHouse casaMaisGastadora=new SmartHouse();//TODO ir buscar a primeira casa
         double maxConsumo=0;
-        while(iter.hasNext()){
-            SmartHouse casaTemp = iter.next();
-            double consumo=casaTemp.getConsumoDaCasa();
+        for(SmartHouse casa:this.casas.keySet()){
+            double consumo=casa.getConsumoDaCasa();
             if (consumo>maxConsumo){
                 maxConsumo=consumo;
-                casaMaisGastadora=casaTemp;
-            }
+                casaMaisGastadora=casa;
+            }  
         }
         return casaMaisGastadora;
     }
 
 
     //REVER ESTA TRETA
-    public SmartHouse getCasaMaisGastadora(LocalDateTime init, LocalDateTime fim){
-        ListIterator<SmartHouse> iter = this.casas.listIterator();
-        SmartHouse casaMaisGastadora=this.casas.get(0);//vai buscar a primeira casa 
-        double maxConsumo=0;
-        while(iter.hasNext()){
-            SmartHouse casaTemp = iter.next();
-            double consumo=casaTemp.getConsumoDaCasa();
-            if (consumo>maxConsumo ){
-                maxConsumo=consumo;
-                casaMaisGastadora=casaTemp;
-            }
-        }
-        return casaMaisGastadora;
-    }
+    // public SmartHouse getCasaMaisGastadora(LocalDateTime init, LocalDateTime fim){
+    //     ListIterator<SmartHouse> iter = this.casas.listIterator();
+    //     SmartHouse casaMaisGastadora=this.casas.get(0);//vai buscar a primeira casa 
+    //     double maxConsumo=0;
+    //     while(iter.hasNext()){
+    //         SmartHouse casaTemp = iter.next();
+    //         double consumo=casaTemp.getConsumoDaCasa();
+    //         if (consumo>maxConsumo ){
+    //             maxConsumo=consumo;
+    //             casaMaisGastadora=casaTemp;
+    //         }
+    //     }
+    //     return casaMaisGastadora;
+    // }
 
     //ver formula do valor de faturacao de cada casa
     public double getFaturacao(){
-        ListIterator<SmartHouse> iter = this.casas.listIterator();
-        double consumo=0;
-        while(iter.hasNext()){
-            consumo+=iter.next().getConsumoDaCasa()*precoBaseKW*fatorImposto;
+        double faturacao=0;
+        for(List<Fatura> faturasDeCadaCasa:this.casas.values()){
+            ListIterator<Fatura> iter = faturasDeCadaCasa.listIterator();
+            while(iter.hasNext())
+                faturacao+=iter.next().getValorDaFatura();
         }
-        return consumo;
+        return faturacao;
     }
 
     public boolean equals(Object obj){
