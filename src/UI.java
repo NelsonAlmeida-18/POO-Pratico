@@ -53,7 +53,7 @@ public class UI {
         System.out.println("3 - Criar marca de SmartSpeaker");
         System.out.println("4 - Criar preset de SmartDevice");
         System.out.println("5 - Eliminar um preset de SmartDevice");
-        System.out.println("6 - Consultar SmartHouses");
+        System.out.println("6 - Consultar SmartHouses existentes");
         System.out.println("7 - Consultar SmartDevices presets");
         System.out.println("8 - Salvar para um ficheiro");
         System.out.println("9 - Continuar");
@@ -78,21 +78,33 @@ public class UI {
             break;
 
             case 5:
-                deleteSmartDeviceMenu();
+                deleteSmartDevicePresetMenu();
             break;
 
             case 6:
-                listSmartHouses();
+                listSmartHousesMenu();
             break;
 
             case 7:
-                listSmartDevices();
+                listSmartDevicesPresetsMenu();
             break;
 
             case 8:
-                load();
+                saveState();
+            break;
+
+            case 9:
+                simulationMenu();
             break;
         }
     }
 
+    public void createSmartHouseMenu(){
+        String path;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Insira o path para o ficheiro que pretende carregar:");
+        path = sc.next();
+        sc.close();
+        Load(path); //no ficheiro parser
+    }
 }
