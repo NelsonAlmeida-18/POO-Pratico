@@ -1,5 +1,5 @@
 <h1>POO-Pratico</h1>
-
+(REFAZER .md)
 <h2>Funcionamento e Desenvolvimento do Trabalho</h2>
     <p>Neste repositório é visível a existência de 2(duas) diretorias, sendo elas as library utilizadas (lib) e
 respetiva diretoria com o conteúdo e código de desenvolvimento (src).</p>
