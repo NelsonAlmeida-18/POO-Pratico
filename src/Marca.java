@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+//package src; // idea necessarry
+>>>>>>> a4197ec99de6bec2a98cf8beeed3c68ef9045a9f
 
 import java.util.ArrayList;
 import java.util.List;

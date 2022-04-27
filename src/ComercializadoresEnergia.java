@@ -1,5 +1,3 @@
-//package tester; // idea necessarry
-
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +19,6 @@ public class ComercializadoresEnergia {
         this.fatorImposto=0;
         this.casas = new HashMap<>();
     }
-
     public ComercializadoresEnergia(String nome,double precoBaseKW, double fatorImposto){
         this.nome=nome;
         this.precoBaseKW=precoBaseKW;

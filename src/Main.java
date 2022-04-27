@@ -1,4 +1,4 @@
-
+//package src;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -15,7 +15,7 @@ public class Main{
         sh.addDevice("Sala", sd2);
         sh.addDevice("Sala", sd3);
         //sh.setHouseOFF();
-        // sh.setDeviceOn("sd1");
+        //sh.setDeviceOn("sd1");
         //sh.setDeviceOn("sd2");
         System.out.println(sh.toString());
         sd.goToData(LocalDateTime.now().plus(2, ChronoUnit.HOURS));
