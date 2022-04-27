@@ -2,6 +2,7 @@
 
 import java.util.Map;
 import java.lang.StringBuilder;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -29,14 +30,14 @@ public class SmartHouse{
     /**
      * Constructor for objects of class SmartHouse
      */
-    public SmartHouse() {
+    //public SmartHouse() {
         // initialise instance variables
-        this.nome_prop = "";
-        this.NIF_prop = "";
-        this.morada = "";
-        this.devices = new HashMap<String, Map<String, SmartDevice>>();
-        this.companhia_eletrica = new ComercializadoresEnergia();
-    }
+        //this.nome_prop = "";
+        //this.NIF_prop = "";
+        //this.morada = "";
+        //this.devices = new HashMap<String, Map<String, SmartDevice>>();
+        //this.companhia_eletrica = new ComercializadoresEnergia();
+    //}
 
     public SmartHouse(String nome, String NIF, String morada, ComercializadoresEnergia comp) {
         // initialise instance variables
@@ -222,4 +223,23 @@ public class SmartHouse{
         sb.append("\n");
         return sb.toString();
     }
+
+    //funções sobre o map<divisions, devices>
+
+    public int getTotalDivisions(){return this.devices.size();}
+
+    public ArrayList<String> getDivisaoList(){
+        
+        ArrayList<String> divs_list = new ArrayList<String>();
+        int index = 0;
+
+        for (Map.Entry<String,Map<String, SmartDevice>> devices : devices.entrySet()) {
+            divs_list.add(index, devices.getKey());
+            index++;
+        }
+
+        return divs_list;
+    }
+
+    public String getDivisaoByIndex(int index){return this.getDivisaoList().get(index);}
 }
