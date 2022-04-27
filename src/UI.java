@@ -1,20 +1,27 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.ClientInfoStatus;
 import java.util.Scanner;
 import java.lang.InterruptedException;
+import java.time.*;
+
+import static com.intellij.openapi.util.text.Strings.toUpperCase;
 
 public class UI {
 
-    public static void clearConsole() {
-       // try {
+    public static void clearConsole() throws IOException {
+       try {
             if (System.getProperty("os.name").contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             }
             else {
                 System.out.print("\033\143");
             }
-        //} catch (IOException | InterruptedException ex) {}
+        } catch (IOException | InterruptedException ex) { System.out.println(ex.getMessage());}
     }
     
-    public void menuInicial(){
+    public void menuInicial() throws IOException {
         int res;
         Scanner sc = new Scanner(System.in);
         System.out.println("Selecione uma das opções abaixo:\n");
@@ -24,23 +31,88 @@ public class UI {
 
         switch(res){
             case 1:
-            clearConsole();
-            createMenu();
-            break;
+             clearConsole();
+                createMenu();
+                break;
 
             case 2:
+                clearConsole();
                 loadMenu();
-            break;
+                break;
         }
     }
 
-    public void loadMenu(){
-        String path;
+    public void loadMenu() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Insira o path para o ficheiro que pretende carregar:");
-        path = sc.next();
+        String path = sc.next();
+        System.out.println("Insira o nome do ficheiro com a extensão (e.g. ficheiro.txt):");
+        String file = sc.next();
         sc.close();
-        parser(path); //no ficheiro parser
+        path.concat(file);
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(path));
+            String line = reader.readLine();
+            while (line != null) {
+                createMenuLine(line);
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+        /*
+    // data , casa, dispositivo, ação
+    // YYYY-MM-DD, casaX, acao (case 1.0)
+    // YYYY-MM-DD, casaX, dispostivoY, acao (CASE 1.1)
+    // YYYY-MM-DD, fornecedorX, alteraValorDesconto, novoValor (CASE 2)
+    // YYYY-MM-DD, casaX, fornecedorN -> sendo fornecedorN o novo comercializador de energia (CASE 1.2)
+        */
+    public void createMenuLine(String line){
+        String [] token = line.split(",\\s+"); // criar tokens
+        String date = token[0];
+        String [] data_token = date.split(".");
+
+        // data
+        int year = Integer.parseInt(data_token[0]);
+        int mes = Integer.parseInt(data_token[1]);
+        Month month = Month.of(mes);
+        int day = Integer.parseInt(data_token[2]);
+        LocalDate data = LocalDate.of(year,month,day);
+
+        if(casas.constains(token[1])) {  // already created house related actions
+           if(comercializadores.contains(token[2])){ // se for um comercializador, function trocar de comercializador
+               // change comercializador
+           } else { // é um device
+                if(token[1].existsDevice(token[2])){ // already created device
+                    switch(toUpperCase(token[3])){
+                        case "SETON":
+                            // function ligar
+                            break;
+                        case "SETOFF":
+                            // function desligar
+                            break;
+                        case "DELETE":
+                            // function delete
+                            break;
+                    }
+                } else{ // device not created
+                    // token[1].createSmartDevicePresetMenu(token[2])// function criar dispositivo
+                }
+           }
+        } else if(comercializadores.constains(token[1])){ // already created comercializadores related actions
+            switch(toUpperCase(token[2])){ // tipo de operação para comercializadores
+                case "ALTERAIMPOSTO":
+                    // function altera imposto de marca
+                    break;
+                case "ALTERAKWH":
+                    // function altera kw/h de marca
+                    break;
+            }
+        } else { // açao direta
+            /* como distinguir que queremos criar uma casa, ou comercializador, ou marca ou device baseado no seu ID*/
+        }
     }
 
     public void createMenu(){
