@@ -1,10 +1,7 @@
-<<<<<<< HEAD:src/Marca.java
+
 import java.util.ArrayList;
 import java.util.List;
-=======
-//package tester; // idea necessarry
 
->>>>>>> ba6681d761c618bb1adebd63177e6dc5299872fe:tester/Marca.java
 public class Marca {
 
     private final String nome;

@@ -23,6 +23,9 @@ public class SmartHouse{
                 //divisao, id,sd
     //Morada -> Map divisão -> devices) CONFIRMAR SE É ISTO
 
+    //fazer as faturas
+
+
     /**
      * Constructor for objects of class SmartHouse
      */
@@ -90,10 +93,7 @@ public class SmartHouse{
         return nova;
     }
 
-    // public void setCompanhia_eletrica(String companhia){ this.companhia_eletrica = companhia; }
-    // public String getCompanhia_eletrica() { return this.companhia_eletrica; }
-
-    // to do after definition of data structure
+    
     public void setDeviceOn(String devCode) {
         for (Map<String, SmartDevice> dispositivos: this.devices.values()){
             if (dispositivos.containsKey(devCode)){
@@ -141,7 +141,6 @@ public class SmartHouse{
     }
     
 
-
     public boolean existsDevice(String id) {
         for(Map<String, SmartDevice> dispositivos:this.devices.values()){
             if (dispositivos.containsKey(id))
@@ -174,6 +173,23 @@ public class SmartHouse{
                 return devices.get(s);
         }
         return null;
+    }
+
+
+    //rever esta
+    public double getConsumoDivisao(Map<String,SmartDevice> div){
+        double consumoDivisao=0;
+        for(SmartDevice disp:div.values()){
+            consumoDivisao+=disp.getConsumo();
+        }
+        return consumoDivisao;
+    }
+
+    public double getConsumoDaCasa(){
+        double consumoDaCasa=0;
+        for(Map<String, SmartDevice> div: this.devices.values())
+            consumoDaCasa+=getConsumoDivisao(div);
+        return consumoDaCasa;
     }
 
     public SmartHouse clone(){
