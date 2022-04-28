@@ -19,7 +19,7 @@ public abstract class SmartDevice {
         this.id = "";
     }
 
-    public SmartDevice(String s) {
+    public SmartDevice(String s) { //se for "null" é inválido
         this.id = s;
     }
 

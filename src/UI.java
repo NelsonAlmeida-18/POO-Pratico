@@ -169,7 +169,8 @@ public class UI {
             break;
 
             case 8:
-                saveState();
+                saveState(); //função save, não tem menu, simplesmente guarda na pasta save
+                System.out.println("Estado do programa guardado");
             break;
 
             case 9:
@@ -285,7 +286,7 @@ public class UI {
         
     }
 
-    public void createSmartDeviceMenu(){
+    public SmartDevice createSmartDeviceMenu(){
 
         Scanner sc = new Scanner(System.in);
         
@@ -293,25 +294,42 @@ public class UI {
         System.out.println("1 - SmartSpeaker");
         System.out.println("2 - SmartCamera");
         System.out.println("3 - SmartBulb");
+        System.out.println("4 - Cancelar");
+
         
         int res = sc.next();
+        sc.close();
 
         switch(res){
             case 1:
-                createSmartSpeakerMenu();
+                SmartDevice sSpeaker = new SmartDevice(createSmartSpeakerMenu());
+                return sSpeaker;
             break;
 
             case 2:
-                createSmartCameraMenu();
+                SmartDevice sCamera = new SmartDevice(createSmartCameraMenu());
+                return sCamera;
             break;
 
             case 3:
-                createSmartBulbMenu();
+                SmartDevice sBulb = new SmartDevice(createSmartBulbMenu());
+                return sBulb;
+            break;
+
+            case 4:
+                System.out.println("Operação Cancelada");
+                String s = "NULL";
+                SmartDevice empty = new SmartDevice(s); //neste caso cria-se uma instância para retornar mas não entra na cidade porque o id diz NULL
+                return empty;
+            break;
+
+            default:
+                System.out.println("Opção inexistente");
+                return createSmartDeviceMenu();
             break;
         }
         
-        sc.close();
-        
+   
     }
 
     public void createSmartSpeakerMenu(){
@@ -415,4 +433,92 @@ public class UI {
         System.out.println("SmartBulb adicionada com exito.");
         
     }
+
+    public void createComercializadorMenu(){
+
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Insira o nome do comercializador:");
+        String nome = sc.next();
+        
+        System.out.println("Insira o preço base (KW):");
+        int preco = sc.nextInt();
+        
+        System.out.println("Insira o fator imposto:");
+        int imposto = sc.nextInt();
+        sc.close();
+        
+        ComercializadoresEnergia comercializador = city.createComercializadorEnergia(nome, preco, imposto);
+        System.out.println("Comercializador "+ nome +" criado");
+        
+    }
+    
+    public void createMarcaMenu(){
+
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Insira o nome da marca:");
+        String nome = sc.next();
+        
+        System.out.println("Insira o consumo diário associado ao uso dos dispostivos:");
+        double consumo = sc.nextInt();
+        
+        sc.close();
+        
+        Marca marca = city.createMarca(nome, consumo);
+        System.out.println("Marca "+ nome +" criada. Consumo diário dos dispositivos: "+ consumo);
+        
+    }
+
+    
+    public void createSmartDevicePresetMenu(){
+
+        city.createDevicePreset(createSmartDeviceMenu());
+    }
+
+    public void deleteSmartDevicePresetMenu(){ //falta adicionar opções de voltar atrás ou cancelar
+
+        city.listSmartDevicesPresets(); //lista os presets existentes
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Insira o nome do preset que pretende eliminar:");
+        String preset_name = sc.next();
+        sc.close();
+
+        city.deleteSmartDevicePreset(preset_name);
+
+    }
+
+    public void listSmartHousesMenu(){ //falta adicionar opções de voltar atrás ou cancelar
+
+        city.listSmartHouses(); //lista das existentes
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Insira o id da casa para ver mais detalhes:");
+        int id_casa = sc.nextInt();
+        sc.close();
+
+        city.getSmartHouseDetails(id_casa);
+
+    }
+
+    public void listSmartDevicesPresetsMenu(){ //falta adicionar opções de voltar atrás ou cancelar
+
+        city.listSmartDevicesPresets(); //lista das existentes
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Insira o nome do SmartDevice para ver mais detalhes:");
+        String come = sc.next();
+        sc.close();
+
+        city.getSmartDevicePresetDetails(nome);
+
+    }
+    
+    public void simulationMenu(){
+        //pedir data
+        //calcula
+        //mostra
+    }
+
 }
