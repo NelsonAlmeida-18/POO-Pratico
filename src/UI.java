@@ -112,6 +112,13 @@ public class UI {
             }
         } else { // açao direta
             /* como distinguir que queremos criar uma casa, ou comercializador, ou marca ou device baseado no seu ID*/
+
+            /*
+            createSmartDevicePresetMenu();
+            createSmartHouseMenu();
+            createMarcaMenu();
+            createComercizalidorMenu();
+             */
         }
     }
 
@@ -182,7 +189,7 @@ public class UI {
     //Morada -> Map divisão -> devices) CONFIRMAR SE É ISTO
 
     public void createSmartHouseMenu(){
-
+        // dar atributo hname
         Scanner sc = new Scanner(System.in);
         
         System.out.println("Insira o nome do proprietário:");
@@ -198,7 +205,7 @@ public class UI {
         System.out.println("Fornecedores disponiveis:");
         city.listComercializadores();
         String fornecedor = sc.next();
-
+        //if (hname!=null) SmartHouse hname = city.createHouse(nome_prop, nif, morada, fornecedor); else (o que está em baixo)
         SmartHouse house = city.createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
         
         System.out.println("Insira o número de divisões da casa:");
