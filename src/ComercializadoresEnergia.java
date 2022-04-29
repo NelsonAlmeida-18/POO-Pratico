@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.time.LocalDateTime;
+
 
 
 public class ComercializadoresEnergia {
@@ -13,12 +15,6 @@ public class ComercializadoresEnergia {
     private Map<SmartHouse,List<Fatura>> casas;
     //private List<SmartHouse> casas;
 
-    public ComercializadoresEnergia(){
-        this.nome="";
-        this.precoBaseKW=0;
-        this.fatorImposto=0;
-        this.casas = new HashMap<>();
-    }
     public ComercializadoresEnergia(String nome,double precoBaseKW, double fatorImposto){
         this.nome=nome;
         this.precoBaseKW=precoBaseKW;
@@ -112,25 +108,49 @@ public class ComercializadoresEnergia {
 
     public double getFatorImposto(){return this.fatorImposto;}
 
-    /**/
-    //public double getPrecoDiaPorDispositivo(String id){return 1.0;}
-
     public ComercializadoresEnergia clone(){
         return new ComercializadoresEnergia(this);
+    }
+
+
+    public void geraFatura(SmartHouse casa){
+        if (this.casas.containsKey(casa)){
+            List<Fatura> faturas = this.casas.get(casa);
+            Fatura newFatura = new Fatura(LocalDateTime.now(), LocalDateTime.now(), casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
+            faturas.add(newFatura);
+        }
+        else{
+            List<Fatura> faturas = new ArrayList<>();
+            Fatura newFatura = new Fatura(LocalDateTime.now(), LocalDateTime.now(), casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
+            faturas.add(newFatura);
+            this.casas.put(casa,faturas);
+        }
+    }
+
+    public List<Fatura> getFaturas(SmartHouse casa){
+        List<Fatura> faturas = new ArrayList<>();
+        if(this.casas.containsKey(casa)){
+            ListIterator<Fatura> iter = this.casas.get(casa).listIterator();
+            while(iter.hasNext())
+                faturas.add(iter.next().clone());
+        }
+        return faturas;
+    }
+
+    public void terminaContrato(SmartHouse casa){
+        removeCasa(casa);
     }
 
     public double getPrecoPerDevice(SmartDevice sd){
         return (this.precoBaseKW*sd.getConsumo()*(1+this.fatorImposto))*0.9;
     }
 
-
-    //TODO ir buscar a primeira casa
     public SmartHouse getCasaMaisGastadora(){
-        SmartHouse casaMaisGastadora=new SmartHouse();
+        SmartHouse casaMaisGastadora=null;
         double maxConsumo=0;
         for(SmartHouse casa:this.casas.keySet()){
             double consumo=casa.getConsumoDaCasa();
-            if (consumo>maxConsumo){
+            if (consumo>maxConsumo  ||  casaMaisGastadora==null){
                 maxConsumo=consumo;
                 casaMaisGastadora=casa;
             }  
@@ -138,22 +158,25 @@ public class ComercializadoresEnergia {
         return casaMaisGastadora;
     }
 
+    public SmartHouse getCasaMaisGastadora(LocalDateTime dataInit, LocalDateTime dataFin){
+        SmartHouse casaMaisGastadora=null;
+        double maxConsumo=0;
+        for(SmartHouse casa:this.casas.keySet()){
+            List<Fatura> faturas = this.casas.get(casa);
+            ListIterator<Fatura> iter = faturas.listIterator();
+            while(iter.hasNext()){
+                Fatura faturaTemp = iter.next();
+                if(faturaTemp.getDataInicial().isBefore(dataInit)  &&  faturaTemp.getDataFinal().isAfter(dataFin)){//falta ver se as datas coincidem
+                    if(faturaTemp.getKwsConsumidos()>maxConsumo ||  casaMaisGastadora==null){//será que é assim? assim estou a comparar consumos de kws e não em euros
+                        casaMaisGastadora=casa;
+                        maxConsumo=faturaTemp.getKwsConsumidos();
+                    }
+                }
+            }
+        }
+        return casaMaisGastadora;
+    }
 
-    //REVER ESTA TRETA
-    // public SmartHouse getCasaMaisGastadora(LocalDateTime init, LocalDateTime fim){
-    //     ListIterator<SmartHouse> iter = this.casas.listIterator();
-    //     SmartHouse casaMaisGastadora=this.casas.get(0);//vai buscar a primeira casa 
-    //     double maxConsumo=0;
-    //     while(iter.hasNext()){
-    //         SmartHouse casaTemp = iter.next();
-    //         double consumo=casaTemp.getConsumoDaCasa();
-    //         if (consumo>maxConsumo ){
-    //             maxConsumo=consumo;
-    //             casaMaisGastadora=casaTemp;
-    //         }
-    //     }
-    //     return casaMaisGastadora;
-    // }
 
     //ver formula do valor de faturacao de cada casa
     public double getFaturacao(){
@@ -181,6 +204,11 @@ public class ComercializadoresEnergia {
         sb.append(this.precoBaseKW);
         sb.append("\nFator do Imposto energético: ");
         sb.append(this.fatorImposto);
+        sb.append("\nCasas na companhia: \n");
+        for(SmartHouse casa:this.casas.keySet()){
+            sb.append(casa.getMorada());  //TODO Mudar de get morada para get ID
+            sb.append(this.casas.get(casa).toString());
+        }
         sb.append("\n");
         return sb.toString();
     }

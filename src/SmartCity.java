@@ -1,6 +1,8 @@
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-public class SmartCity {
+public abstract class SmartCity {
     
     private List<SmartHouse> casas;
     private List<ComercializadoresEnergia> comercializadores;
@@ -11,6 +13,15 @@ public class SmartCity {
     public SmartCity(){
         this.deviceID = 0;
     }
+
+    public List<ComercializadoresEnergia> listComercializadores(){
+        List<ComercializadoresEnergia> ret = new ArrayList<>();
+        ListIterator<ComercializadoresEnergia> iter = this.comercializadores.listIterator();
+        while(iter.hasNext())
+            ret.add(iter.next().clone());
+        return ret;
+    }
+
 
     //city.listComercializadores();
 
