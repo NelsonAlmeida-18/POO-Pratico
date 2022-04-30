@@ -7,6 +7,7 @@ import java.lang.InterruptedException;
 import java.time.*;
 import java.util.Map;
 
+
 //import static com.intellij.openapi.util.text.Strings.toUpperCase;
 
 public class UI {
@@ -84,11 +85,13 @@ public class UI {
         int day = Integer.parseInt(data_token[2]);
         LocalDate data = LocalDate.of(year,month,day);
 
-        if(casas.constains(token[1])) {  // already created house related actions
-           if(comercializadores.contains(token[2])){ // se for um comercializador, function trocar de comercializador
+        if(this.city.getCasas().contains(token[1])) {  // already created house related actions
+           if(this.city.getComercializadores().contains(token[2])){ // se for um comercializador, function trocar de comercializador
                // change comercializador
            } else { // é um device
-                if(token[1].existsDevice(token[2])){ // already created device
+
+            //é capaz de dar erro quando retorna null fazer case para isso
+                if(this.city.getCasa(token[1]).existsDevice(token[2])){ // already created device
                     switch((token[3]).toUpperCase()){
                         case "SETON":
                             // function ligar
@@ -182,16 +185,6 @@ public class UI {
         }
     }
 
-    private String morada;
-    //private List<String> divisao;
-    private ComercializadoresEnergia companhia_eletrica;
-    //private Map<String, SmartDevice> devices; // identificador -> SmartDevice
-    //private Map<String, List<String>> locations; // Espaço -> Lista codigo dos devices
-    //private Map<String, Map<String, SmartDevice>> devices;
-    private Map<String,Map<String, SmartDevice>> devices;
-                //divisao, id,sd
-    //Morada -> Map divisão -> devices) CONFIRMAR SE É ISTO
-
 
     public void createSmartHouseMenu(){
         // dar atributo hname
@@ -218,8 +211,8 @@ public class UI {
         //if (hname!=null) SmartHouse hname = city.createHouse(nome_prop, nif, morada, fornecedor); else (o que está em baixo)
         //SmartHouse house = city.createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
         
-        String id = "";//adicionar forma de criar um id random ou por passagem
-        SmartHouse house = new SmartHouse(id,nome_prop,nif, morada,fornecedor);
+        // String id = "";//adicionar forma de criar um id random ou por passagem
+        // SmartHouse house = new SmartHouse(id,nome_prop,nif, morada,fornecedor);
 
         System.out.println("Insira o número de divisões da casa:");
         int num_divisoes = sc.nextInt();
@@ -313,8 +306,8 @@ public class UI {
 
         switch(res){
             case 1:
-                SmartDevice sSpeaker = new SmartSpeaker(createSmartSpeakerMenu());
-                return sSpeaker;
+                //SmartDevice sSpeaker = new SmartSpeaker(createSmartSpeakerMenu());
+                createSmartSpeakerMenu();
             break;
 
             case 2:

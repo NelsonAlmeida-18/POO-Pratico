@@ -22,6 +22,64 @@ public abstract class SmartCity {
         return ret;
     }
 
+    public List<SmartHouse> getCasas(){return this.casas;}
+
+    public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
+
+    public ComercializadoresEnergia getComercializador(String id){
+        ListIterator<ComercializadoresEnergia> iter = this.comercializadores.listIterator();
+        while(iter.hasNext()){
+            ComercializadoresEnergia temp = iter.next();
+            if(temp.getNome().equals(id)){
+                return temp;
+            }
+        }
+        return null;
+    }
+
+    public SmartHouse getCasa(String id){
+        ListIterator<SmartHouse> iter = this.casas.listIterator();
+        while(iter.hasNext()){
+            SmartHouse temp = iter.next();
+            if (temp.getID().equals(id))
+                return temp;
+        }
+        return null;
+    }
+
+    public void createHouse(String id, String nome, String nif, String morada, String comercializadorDeEnergia){
+        if(getCasa(id)!=null){
+            if (getComercializador(comercializadorDeEnergia)!=null){
+                ComercializadoresEnergia comer = getComercializador(comercializadorDeEnergia);
+                if(comer!=null){
+                    SmartHouse casa = new SmartHouse(id,nome,nif,morada,comer);
+                    this.casas.add(casa);
+                }
+            }
+        }
+    }
+
+    public void criaDivisoes(String id, String divisao){
+        SmartHouse temp = getCasa(id);
+        if(temp!=null){
+            if(!temp.hasDivisao(divisao)){
+                temp.addDivisao(divisao);
+            }
+        }
+    }
+
+    // public void criaDivisoes(String id, List<String> divisoes){
+    //     SmartHouse temp = getCasa(id);
+    //     if(temp!=null){
+    //         if(!temp.hasDivisao(divisao)){
+    //             temp.addDivisao(divisao);
+    //         }
+    //     }
+    // }
+
+
+
+
 
     //city.listComercializadores();
 
