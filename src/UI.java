@@ -222,12 +222,7 @@ public class UI {
         }
     }
 
-<<<<<<< HEAD
-
-    public void createSmartHouseMenu(){
-=======
     public void createSmartHouseMenu(SmartCity city){
->>>>>>> 5214b8863558f40a73ee308ec326e53c76528947
         // dar atributo hname
         Scanner sc = new Scanner(System.in);
         
@@ -273,13 +268,8 @@ public class UI {
 
 
         
-<<<<<<< HEAD
         //String id = "";//adicionar forma de criar um id random ou por passagem
         //SmartHouse house = new SmartHouse(id,nome_prop,nif, morada,fornecedor);
-=======
-        // String id = "";//adicionar forma de criar um id random ou por passagem
-        // SmartHouse house = new SmartHouse(id,nome_prop,nif, morada,fornecedor);
->>>>>>> 7e924393b9897555b089ac9926a45054d61299da
 
         System.out.println("Insira o número de divisões da casa:");
         int num_divisoes = sc.nextInt();
