@@ -7,6 +7,7 @@ import java.lang.InterruptedException;
 import java.time.*;
 import java.util.Map;
 
+
 //import static com.intellij.openapi.util.text.Strings.toUpperCase;
 
 public class UI {
@@ -112,11 +113,13 @@ public class UI {
         int day = Integer.parseInt(data_token[2]);
         LocalDate data = LocalDate.of(year,month,day);
 
-        if(casas.constains(token[1])) {  // already created house related actions
-           if(comercializadores.contains(token[2])){ // se for um comercializador, function trocar de comercializador
+        if(this.city.getCasas().contains(token[1])) {  // already created house related actions
+           if(this.city.getComercializadores().contains(token[2])){ // se for um comercializador, function trocar de comercializador
                // change comercializador
            } else { // é um device
-                if(token[1].existsDevice(token[2])){ // already created device
+
+            //é capaz de dar erro quando retorna null fazer case para isso
+                if(this.city.getCasa(token[1]).existsDevice(token[2])){ // already created device
                     switch((token[3]).toUpperCase()){
                         case "SETON":
                             // function ligar
@@ -219,7 +222,12 @@ public class UI {
         }
     }
 
+<<<<<<< HEAD
+
+    public void createSmartHouseMenu(){
+=======
     public void createSmartHouseMenu(SmartCity city){
+>>>>>>> 5214b8863558f40a73ee308ec326e53c76528947
         // dar atributo hname
         Scanner sc = new Scanner(System.in);
         
@@ -265,8 +273,13 @@ public class UI {
 
 
         
+<<<<<<< HEAD
         //String id = "";//adicionar forma de criar um id random ou por passagem
         //SmartHouse house = new SmartHouse(id,nome_prop,nif, morada,fornecedor);
+=======
+        // String id = "";//adicionar forma de criar um id random ou por passagem
+        // SmartHouse house = new SmartHouse(id,nome_prop,nif, morada,fornecedor);
+>>>>>>> 7e924393b9897555b089ac9926a45054d61299da
 
         System.out.println("Insira o número de divisões da casa:");
         int num_divisoes = sc.nextInt();
@@ -377,8 +390,8 @@ public class UI {
 
         switch(res){
             case 1:
-                SmartDevice sSpeaker = new SmartSpeaker(createSmartSpeakerMenu());
-                return sSpeaker;
+                //SmartDevice sSpeaker = new SmartSpeaker(createSmartSpeakerMenu());
+                createSmartSpeakerMenu();
             break;
 
             case 2:
