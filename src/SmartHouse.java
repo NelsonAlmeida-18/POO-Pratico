@@ -4,6 +4,7 @@ import java.util.Map;
 import java.lang.StringBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * A SmartHouse faz a gestão dos SmartDevices que existem e dos
@@ -12,19 +13,14 @@ import java.util.HashMap;
  */
 public class SmartHouse{
 
+    private String id;
     private String nome_prop;
     private String NIF_prop;
     private String morada;
-    //private List<String> divisao;
     private ComercializadoresEnergia companhia_eletrica;
-    //private Map<String, SmartDevice> devices; // identificador -> SmartDevice
-    //private Map<String, List<String>> locations; // Espaço -> Lista codigo dos devices
-    //private Map<String, Map<String, SmartDevice>> devices;
     private Map<String,Map<String, SmartDevice>> devices;
                 //divisao, id,sd
     //Morada -> Map divisão -> devices) CONFIRMAR SE É ISTO
-
-    //fazer as faturas
 
 
     /**
@@ -39,22 +35,30 @@ public class SmartHouse{
         //this.companhia_eletrica = new ComercializadoresEnergia();
     //}
 
-    public SmartHouse(String nome, String NIF, String morada, ComercializadoresEnergia comp) {
+    public SmartHouse(String id,String nome, String NIF, String morada, ComercializadoresEnergia comp) {
         // initialise instance variables
+        this.id=id;
         this.nome_prop = nome;
         this.NIF_prop = NIF;
         this.morada = morada;
-        //this.divisao = new ArrayList<String>();
-        this.devices = new HashMap<>();
         this.companhia_eletrica=comp;
+        this.devices = new HashMap<>();
     }
 
     public SmartHouse(SmartHouse sh){
+        this.id = sh.getID();
         this.nome_prop=sh.getNome_prop();
         this.NIF_prop = sh.getNIF_prop();
         this.morada= sh.getMorada();
-        this.devices=sh.getHouse();
         this.companhia_eletrica=sh.getCompanhia_eletrica();
+    }
+
+    public String getID(){
+        return this.id;
+    }
+
+    public void setID(String id){
+        this.id = id;
     }
 
     public void setNome_prop(String nome) { this.nome_prop = nome; }
@@ -73,6 +77,8 @@ public class SmartHouse{
     // public boolean hasDivisao(String divisao){ return this.divisao.contains(divisao);}
     // public void addDivisao(String divisao){ if(!hasDivisao(divisao)) this.divisao.add(divisao);}
     // public void delDivisao(String divisao){ if(hasDivisao(divisao)) this.divisao.remove(this.divisao.lastIndexOf(divisao));}
+
+    
     public Map<String,Map<String, SmartDevice>> getHouse(){
         Map<String,Map<String, SmartDevice>> newHouse = new HashMap<>();
         for (String div:this.devices.keySet()){
@@ -186,6 +192,17 @@ public class SmartHouse{
         return consumoDivisao;
     }
 
+    public void addDivisao(String div){
+        if(!this.devices.containsKey(div)){
+            Map<String,SmartDevice> disp = new HashMap<>();
+            this.devices.put(div,disp);
+        }
+    }
+
+    public boolean hasDivisao(String div){
+        return this.devices.containsKey(div);
+    }
+
     public double getConsumoDaCasa(){
         double consumoDaCasa=0;
         for(Map<String, SmartDevice> div: this.devices.values())
@@ -222,6 +239,16 @@ public class SmartHouse{
         sb.append(this.companhia_eletrica.toString());
         sb.append("\n");
         return sb.toString();
+    }
+
+    public void mudaDeFornecedor(ComercializadoresEnergia novoComercializadoresEnergia){
+        this.companhia_eletrica.geraFatura(this);
+        List<Fatura> faturasAnteriores = this.companhia_eletrica.getFaturas(this); //ir buscar as faturas anteriores para passar para a nova empresa não sei se é pertinente
+        this.companhia_eletrica.terminaContrato(this);//terminar contrato
+        this.companhia_eletrica=novoComercializadoresEnergia;
+        this.companhia_eletrica=novoComercializadoresEnergia;
+        this.companhia_eletrica.addCasa(this);
+        //não sei se passar as faturas anteriores é pertinente
     }
 
     //funções sobre o map<divisions, devices>

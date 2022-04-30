@@ -27,14 +27,14 @@ public class SmartCamera extends SmartDevice {
     private LocalDateTime ligadoInit;
     private LocalDateTime dataFin;
 
-    public SmartCamera(){
-        this.resolucao=0;
-        this.tamanho_ficheiros=0;
-        this.estado=state.ON;
-        this.consumo=0;
-        this.ligadoInit=LocalDateTime.now();
-        this.dataFin=LocalDateTime.now();
-    }
+    // public SmartCamera(){
+    //     this.resolucao=0;
+    //     this.tamanho_ficheiros=0;
+    //     this.estado=state.ON;
+    //     this.consumo=0;
+    //     this.ligadoInit=LocalDateTime.now();
+    //     this.dataFin=LocalDateTime.now();
+    // }
 
     public SmartCamera(float resolucao, float tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
         this.resolucao=resolucao;

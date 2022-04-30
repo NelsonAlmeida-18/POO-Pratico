@@ -5,14 +5,19 @@ import java.sql.ClientInfoStatus;
 import java.util.Scanner;
 import java.lang.InterruptedException;
 import java.time.*;
+import java.util.Map;
 
-import static com.intellij.openapi.util.text.Strings.toUpperCase;
+//import static com.intellij.openapi.util.text.Strings.toUpperCase;
 
 public class UI {
 
+<<<<<<< HEAD
     public UI(SmartCity city){
         menuInicial(city);
     }
+=======
+    private SmartCity city;
+>>>>>>> f764abeb0a702d6214fb23f22eb2610b80242cd2
 
     public static void clearConsole() throws IOException {
        try {
@@ -32,7 +37,7 @@ public class UI {
         System.out.println("1 - Criar uma cidade\n");
         System.out.println("2 - Carregar a partir de um ficheiro\n");
         res = sc.nextInt();
-
+        sc.close();
         switch(res){
             case 1:
              clearConsole();
@@ -90,7 +95,7 @@ public class UI {
                // change comercializador
            } else { // é um device
                 if(token[1].existsDevice(token[2])){ // already created device
-                    switch(toUpperCase(token[3])){
+                    switch((token[3]).toUpperCase()){
                         case "SETON":
                             // function ligar
                             break;
@@ -106,7 +111,7 @@ public class UI {
                 }
            }
         } else if(comercializadores.constains(token[1])){ // already created comercializadores related actions
-            switch(toUpperCase(token[2])){ // tipo de operação para comercializadores
+            switch((token[2]).toUpperCase()){ // tipo de operação para comercializadores
                 case "ALTERAIMPOSTO":
                     // function altera imposto de marca
                     break;
@@ -183,7 +188,22 @@ public class UI {
         }
     }
 
+<<<<<<< HEAD
     public void createSmartHouseMenu(SmartCity city){
+=======
+    private String morada;
+    //private List<String> divisao;
+    private ComercializadoresEnergia companhia_eletrica;
+    //private Map<String, SmartDevice> devices; // identificador -> SmartDevice
+    //private Map<String, List<String>> locations; // Espaço -> Lista codigo dos devices
+    //private Map<String, Map<String, SmartDevice>> devices;
+    private Map<String,Map<String, SmartDevice>> devices;
+                //divisao, id,sd
+    //Morada -> Map divisão -> devices) CONFIRMAR SE É ISTO
+
+
+    public void createSmartHouseMenu(){
+>>>>>>> f764abeb0a702d6214fb23f22eb2610b80242cd2
         // dar atributo hname
         Scanner sc = new Scanner(System.in);
         
@@ -200,9 +220,21 @@ public class UI {
         System.out.println("Fornecedores disponiveis:");
         city.listComercializadores();
         String fornecedor = sc.next();
+
+        //Nada disto faz sentido, temos de falar 
+        if(city.listComercializadores().toString().contains(fornecedor)){
+
+        }
         //if (hname!=null) SmartHouse hname = city.createHouse(nome_prop, nif, morada, fornecedor); else (o que está em baixo)
+<<<<<<< HEAD
         SmartHouse house = createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
+=======
+        //SmartHouse house = city.createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
+>>>>>>> f764abeb0a702d6214fb23f22eb2610b80242cd2
         
+        String id = "";//adicionar forma de criar um id random ou por passagem
+        SmartHouse house = new SmartHouse(id,nome_prop,nif, morada,fornecedor);
+
         System.out.println("Insira o número de divisões da casa:");
         int num_divisoes = sc.nextInt();
 
@@ -237,9 +269,8 @@ public class UI {
     }
 
     public void addDeviceToDivisaoMenu(SmartHouse house, String division){
-        
         //verifica se divisão existe em casa
-        if(house.hasDivisao){
+        if(house.hasDivisao(division)){
             Scanner sc = new Scanner(System.in);
             
             System.out.println("Adicionar SmartDevice em "+ division);
@@ -293,12 +324,12 @@ public class UI {
         System.out.println("4 - Cancelar");
 
         
-        int res = sc.next();
+        int res = sc.nextInt();
         sc.close();
 
         switch(res){
             case 1:
-                SmartDevice sSpeaker = new SmartDevice(createSmartSpeakerMenu());
+                SmartDevice sSpeaker = new SmartSpeaker(createSmartSpeakerMenu());
                 return sSpeaker;
             break;
 
@@ -339,8 +370,8 @@ public class UI {
 
         switch(res){
             case 0:
-                city.createSmartSpeaker();
-            break;
+                //city.createSmartSpeaker();//não se podem criar smartDevices vazios
+                break;
 
             case 1:
                 System.out.println("Insira o volume (0 a 20):");
