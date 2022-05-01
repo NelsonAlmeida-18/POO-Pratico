@@ -211,7 +211,7 @@ public class ComercializadoresEnergia {
         if (this==obj) return true;
         if (obj==null||this.getClass()!=obj.getClass()) return false;
         ComercializadoresEnergia ce = (ComercializadoresEnergia) obj;
-        return (this.nome.equals(ce.getNome())  &&  this.precoBaseKW== ce.getPrecoBaseKW() && this.fatorImposto==ce.getFatorImposto());
+        return (this.nome==ce.getNome()  &&  this.precoBaseKW== ce.getPrecoBaseKW() && this.fatorImposto==ce.getFatorImposto());
     }
 
     public String toString(){

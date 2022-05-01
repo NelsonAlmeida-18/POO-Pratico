@@ -32,6 +32,7 @@ public class SmartSpeaker extends SmartDevice {
     //CLASS CONSTRUCTORS
 
     public SmartSpeaker() {
+        this.id = getId();
         this.volume = 10;
         this.estacao = "";
         this.estado = state.OFF;
@@ -40,7 +41,8 @@ public class SmartSpeaker extends SmartDevice {
         this.dataFin = LocalDateTime.now();
     }
 
-    public SmartSpeaker(int volume, String estacao, Marca marca, double consumo) {
+    public SmartSpeaker(int id,int volume, String estacao, Marca marca, double consumo) {
+        this.id = id;
         this.volume = volume;
         this.estacao = estacao;
         this.marca = marca;
@@ -51,6 +53,7 @@ public class SmartSpeaker extends SmartDevice {
     }
 
     public SmartSpeaker(SmartSpeaker speaker) {
+        this.id = speaker.getId();
         this.volume = speaker.getVolume();
         this.estacao = speaker.getEstacao();
         this.estado = speaker.getEstado();
@@ -140,6 +143,18 @@ public class SmartSpeaker extends SmartDevice {
     @Override
     public SmartDevice clone() {
         return new SmartSpeaker(this);
+    }
+
+    public boolean equals(Object obj){
+        if(this==obj)
+            return true;
+
+        if (obj==null||obj.getClass()!=this.getClass())
+            return false;
+
+        SmartSpeaker newC = (SmartSpeaker) obj;
+        return (this.id == newC.getId() && this.volume == (newC.getVolume()) && this.estacao==newC.getEstacao()  && this.estado.toString().equals(newC.getEstado().toString())
+                &&  this.consumo == (newC.getConsumo()));
     }
 
     @Override

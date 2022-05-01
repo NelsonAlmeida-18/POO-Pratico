@@ -1,9 +1,11 @@
-import com.intellij.util.containers.hash.HashMap;
+//import com.intellij.util.containers.hash.HashMap;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 import java.util.Map;
+import java.nio.file.*;
+import java.nio.charset.*;
 
 public class Parser {
 
@@ -13,8 +15,7 @@ public class Parser {
         List<String> linhas = readFile("dados.csv");
         String[] linhaPartida;
         String divisao = null;
-        int id_house;
-        SmartHouse casaMaisRecente = null;
+        int id_house = 0;
         
         for (String linha : linhas) {
             
@@ -52,7 +53,7 @@ public class Parser {
                     city.createComercializadorEnergia(parseComercializadoresEnergia(linhaPartida[1]));
                     break;
                 case "Marca":
-                    Marca m = new Marca(linhaPartida[1]);
+                    city.createMarca(parseMarca(linhaPartida[1]));
                     break;
                 default:
                     System.out.println("Linha inválida.");
@@ -60,49 +61,53 @@ public class Parser {
             }
         }
         System.out.println("done!");
+        return city;
     }
 
     public List<String> readFile(String nomeFich) {
-        try { List<String> lines = Files.readAllLines(Paths.get(nomeFich), StandardCharsets.UTF_8); }
-        catch(IOException exc) { List<String> lines = new ArrayList<>(); }
-        return lines;
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(nomeFich), StandardCharsets.UTF_8);
+            return lines;
+        }
+        catch(IOException exc) {
+            List<String> lines = new ArrayList<>();
+            return lines;
+        }
     }
 
     public SmartHouse parseCasa(String input, int houseID){
         String[] campos = input.split(",");
         String nome = campos[0];
         int nif = Integer.parseInt(campos[1]);
-        String morada = campos[2];
-        ComercializadoresEnergia fornecedor = new ComercializadoresEnergia(campos[3]);
-        Map<String, Map<String, SmartDevice>> devices = new HashMap<>();
-        return new SmartHouse(houseID, nome,nif,morada,fornecedor,devices); // fazer metodo
+        ComercializadoresEnergia fornecedor = new ComercializadoresEnergia(campos[2]);
+        return new SmartHouse(houseID, nome,nif,fornecedor); // fazer metodo
     }
-    public SmartBulb parseSmartBulb(String input){
+
+    public SmartBulb parseSmartBulb(String input, int sd_id){
         String[] campos = input.split(",");
-        String upper = campos[0].toUpperCase();
-        SmartBulb.modo mode = SmartBulb.modo.upper;
+        String mode = campos[0];
         int dimensions = Integer.parseInt(campos[1]);
         double consumo = Double.parseDouble(campos[2]);
-        return new SmartBulb(mode,dimensions,consumo); // fazer metodo
+        return new SmartBulb(sd_id, mode,dimensions,consumo); // fazer metodo
 
     }
-    public SmartCamera parseSmartCamera(String input){
+    public SmartCamera parseSmartCamera(String input, int sd_id){
         String[] campos = input.split(",");
         String resolucao = campos[0]; //resolução 0000x0000?
         resolucao.replace("(","");
         resolucao.replace(")","");
         int tamanho = Integer.parseInt(campos[1]);
         double consumo = Double.parseDouble(campos[2]);
-        return new SmartCamera(resolucao,tamanho,consumo); // fazer metodo
+        return new SmartCamera(sd_id, resolucao,tamanho,consumo); // fazer metodo
     }
 
-    public SmartSpeaker parseSmartSpeaker(String input){
+    public SmartSpeaker parseSmartSpeaker(String input, int sd_id){
         String[] campos = input.split(",");
         int vol = Integer.parseInt(campos[0]);
         String estacao = campos[1];
-        String marca = campos[2];
+        Marca marca = new Marca(campos[2]);
         double consumo = Double.parseDouble(campos[3]);
-        return SmartSpeaker(vol,estacao,marca,consumo);
+        return new SmartSpeaker(sd_id, vol,estacao,marca,consumo);
 
     }
 
@@ -110,6 +115,12 @@ public class Parser {
         String[] campos = input.split(",");
         String nome = campos[0];
         return new ComercializadoresEnergia(nome);
+    }
+
+    public Marca parseMarca(String input){
+        String[] campos = input.split(",");
+        String nome = campos[0];
+        return new Marca(nome);
     }
 
 }

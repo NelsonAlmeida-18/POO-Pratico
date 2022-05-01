@@ -1,17 +1,13 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.ClientInfoStatus;
 import java.util.Scanner;
 import java.lang.InterruptedException;
 import java.time.*;
 import java.util.Map;
-<<<<<<< HEAD
 import java.io.File;
-=======
 import java.util.List;
 import java.util.ListIterator;
->>>>>>> 5e95a15050f25928de7351fb14da79da7409973a
 
 
 //import static com.intellij.openapi.util.text.Strings.toUpperCase;
@@ -269,11 +265,6 @@ public class UI {
     }
 
     public void createSmartHouseMenu(SmartCity city){
-<<<<<<< HEAD
-        // dar atributo hname
-=======
-
->>>>>>> 5e95a15050f25928de7351fb14da79da7409973a
         Scanner sc = new Scanner(System.in);
 
         System.out.println("ID da casa:");
