@@ -142,4 +142,21 @@ public class SmartCity {
     //createSmartCamera();
 
     //createSmartBulb();
+
+    public String toString(){
+        StringBuilder bd = new StringBuilder();
+        
+        bd.append("\nCASAS:\n");
+        bd.append(this.casas.toString());
+        bd.append("\nCOMERCIALIZADORES:\n");
+        bd.append(this.comercializadores.toString());
+        bd.append("\nMARCAS:\n");
+        bd.append(this.marcas.toString());
+        bd.append("\nPRESETS:\n");
+        bd.append(this.presets.toString());
+        bd.append("\n");
+        
+        return bd.toString();
+    }
+
 }

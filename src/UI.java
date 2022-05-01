@@ -68,8 +68,9 @@ public class UI {
         Scanner sc = new Scanner(System.in);
         System.out.println("Selecione uma das opções abaixo:\n");
         System.out.println("1 - Criar uma cidade");
-        System.out.println("2 - Carregar a partir de um ficheiro");
-        System.out.println("3 - Sair");
+        System.out.println("2 - Carregar a partir de um estado de programa");
+        System.out.println("3 - Carregar a partir de um estado de programa");
+        System.out.println("4 - Sair");
         res = sc.nextInt();
         sc.close();
         switch(res){
@@ -83,7 +84,12 @@ public class UI {
                 loadMenu(city);
                 break;
             
-            case 3:
+            case 2:
+                clearConsole();
+                city = parse(city.getHouseId(), city.getDeviceId());
+                break;
+            
+            case 4:
                 System.out.println("Tem a certeza que quer sair?");
                 if(response() == 1){
                     System.out.println("Saindo");
@@ -103,7 +109,7 @@ public class UI {
             
         }
     }
-
+/* 
     public void loadMenu(SmartCity city) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Insira o path para o ficheiro que pretende carregar:");
@@ -123,7 +129,7 @@ public class UI {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } */
         /*
     // data , casa, dispositivo, ação
     // YYYY-MM-DD, casaX, acao (case 1.0)

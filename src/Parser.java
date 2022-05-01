@@ -3,7 +3,6 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
-import java.util.Map;
 import java.nio.file.*;
 import java.nio.charset.*;
 
@@ -23,7 +22,7 @@ public class Parser {
             
             switch(linhaPartida[0]){
                 case "Casa":
-                    city.createHouse(parseCasa(linhaPartida[1], city.giveHouseId()));
+                    city.createHouse(parseCasa(linhaPartida[1], city.giveHouseId(),city));
                     id_house = city.getHouseId();
 
                     break;
@@ -75,12 +74,14 @@ public class Parser {
         }
     }
 
-    public SmartHouse parseCasa(String input, int houseID){
+    public SmartHouse parseCasa(String input, int houseID, SmartCity city){
         String[] campos = input.split(",");
         String nome = campos[0];
         int nif = Integer.parseInt(campos[1]);
-        ComercializadoresEnergia fornecedor = new ComercializadoresEnergia(campos[2]);
-        return new SmartHouse(houseID, nome,nif,fornecedor); // fazer metodo
+        String fornecedor = campos[2];
+        ComercializadoresEnergia comercializador = city.getComercializador(fornecedor);
+        if(comercializador == null){comercializador = new ComercializadoresEnergia(fornecedor);}
+        return new SmartHouse(houseID, nome,nif,comercializador);
     }
 
     public SmartBulb parseSmartBulb(String input, int sd_id){
@@ -88,9 +89,9 @@ public class Parser {
         String mode = campos[0];
         int dimensions = Integer.parseInt(campos[1]);
         double consumo = Double.parseDouble(campos[2]);
-        return new SmartBulb(sd_id, mode,dimensions,consumo); // fazer metodo
-
+        return new SmartBulb(sd_id, mode,dimensions,consumo);
     }
+
     public SmartCamera parseSmartCamera(String input, int sd_id){
         String[] campos = input.split(",");
         String resolucao = campos[0]; //resolução 0000x0000?
@@ -98,7 +99,7 @@ public class Parser {
         resolucao.replace(")","");
         int tamanho = Integer.parseInt(campos[1]);
         double consumo = Double.parseDouble(campos[2]);
-        return new SmartCamera(sd_id, resolucao,tamanho,consumo); // fazer metodo
+        return new SmartCamera(sd_id, resolucao,tamanho,consumo);
     }
 
     public SmartSpeaker parseSmartSpeaker(String input, int sd_id){

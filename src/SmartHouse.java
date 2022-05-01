@@ -53,15 +53,14 @@ public class SmartHouse{
         this.companhia_eletrica=sh.getCompanhia_eletrica();
     }
 
-    public SmartHouse(int houseID, String nome,int nif,String fornecedor){
+    public SmartHouse(int houseID, String nome,int nif, ComercializadoresEnergia fornecedor){
         this.id = houseID;
         this.nome_prop = nome;
         this.NIF_prop = nif;
         this.morada = "";
-        ComercializadoresEnergia forn = new ComercializadoresEnergia(fornecedor);
-        this.companhia_eletrica = forn;
+        this.companhia_eletrica = fornecedor;
     }
-    
+
     public int getID(){
         return this.id;
     }
