@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.lang.InterruptedException;
 import java.time.*;
+import java.util.Map;
+import java.io.File;
+import java.util.List;
 import java.util.ListIterator;
 
 
@@ -34,6 +37,10 @@ public class UI {
         }
         
         return ret;
+    }
+
+    public void saveState(SmartCity city, String nameOfFile){
+        city.saveState(nameOfFile);
     }
 
     public static void clearConsole() throws IOException {
@@ -122,7 +129,7 @@ public class UI {
             BufferedReader reader = new BufferedReader(new FileReader(path));
             String line = reader.readLine();
             while (line != null) {
-                city.clone(createMenuLine(line)); //createMenuLine devolve a cidade guardada no ficheiro
+                createMenuLine(city,line); //createMenuLine devolve a cidade guardada no ficheiro
                 line = reader.readLine();
             }
             reader.close();
@@ -137,7 +144,7 @@ public class UI {
     // YYYY-MM-DD, fornecedorX, alteraValorDesconto, novoValor (CASE 2)
     // YYYY-MM-DD, casaX, fornecedorN -> sendo fornecedorN o novo comercializador de energia (CASE 1.2)
         */
-    public void createMenuLine(String line){
+    public void createMenuLine(SmartCity cidade, String line){
         String [] token = line.split(",\\s+"); // criar tokens
         String date = token[0];
         String [] data_token = date.split(".");
@@ -149,13 +156,13 @@ public class UI {
         int day = Integer.parseInt(data_token[2]);
         LocalDate data = LocalDate.of(year,month,day);
 
-        if(this.city.getCasas().contains(token[1])) {  // already created house related actions
-           if(this.city.getComercializadores().contains(token[2])){ // se for um comercializador, function trocar de comercializador
+        if(cidade.getCasas().contains(token[1])) {  // already created house related actions
+           if(cidade.getComercializadores().contains(token[2])){ // se for um comercializador, function trocar de comercializador
                // change comercializador
            } else { // é um device
 
             //é capaz de dar erro quando retorna null fazer case para isso
-                if(this.city.getCasa(token[1]).existsDevice(token[2])){ // already created device
+                if(cidade.getCasa(token[1]).existsDevice(token[2])){ // already created device
                     switch((token[3]).toUpperCase()){
                         case "SETON":
                             // function ligar
@@ -264,8 +271,10 @@ public class UI {
     }
 
     public void createSmartHouseMenu(SmartCity city){
-
         Scanner sc = new Scanner(System.in);
+
+        System.out.println("ID da casa:");
+        String id = sc.next();
         
         System.out.println("Insira o nome do proprietário:");
         String nome_prop = sc.next();
@@ -343,8 +352,8 @@ public class UI {
             System.out.println("1 - Adicionar preset");
             System.out.println("2 - Criar SmartDevice");
 
-            int res = sc.nextInt();
-            sc.close();
+        int res = sc.nextInt();
+        sc.close();
 
             switch(res){
                 case 1:
@@ -597,7 +606,7 @@ public class UI {
         city.getSmartDevicePresetDetails(nome);
 
     } 
-    
+        
     public void simulationMenu(SmartCity city){
         //pedir data
         //calcula

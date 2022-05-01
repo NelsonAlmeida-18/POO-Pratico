@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class SmartCity {
     
@@ -16,6 +20,16 @@ public class SmartCity {
         this.houseID = 0;
     }
 
+<<<<<<< HEAD
+    public void saveState(String nameOfFile) throws FileNotFoundException,IOException{
+        FileOutputStream fos = new FileOutputStream(nameOfFile);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(this);
+        oos.flush();
+        oos.close();
+    }
+
+=======
     public SmartCity(int houseID, int deviceID){
         this.deviceID = deviceID;
         this.houseID = houseID;
@@ -29,6 +43,7 @@ public class SmartCity {
 
     public int giveHouseId(){return ++(this.houseID);} //serve para dar o id e aumentar o numero de casas
 
+>>>>>>> 5e95a15050f25928de7351fb14da79da7409973a
 
     public List<ComercializadoresEnergia> listComercializadores(){
         List<ComercializadoresEnergia> ret = new ArrayList<>();
