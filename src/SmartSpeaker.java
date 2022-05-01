@@ -49,12 +49,15 @@ public class SmartSpeaker extends SmartDevice {
 
     //GETTERS & SETTERS
 
+    @Override
+    public String getID() {return super.getID();}
+
     public int getVolume() {
         return this.volume;
     }
 
     public void setVolume(int volume) {
-        this.volume = volume;
+        if((volume <= 20) && (volume >= 0)) this.volume = volume;
     }
 
     public String getEstacao() {
@@ -143,11 +146,11 @@ public class SmartSpeaker extends SmartDevice {
     //funções que nem sei se são realmente necessárias but why not
 
     public void volumeUp(){
-        this.setVolume(this.volume+1);
+        if(this.volume < 20) this.setVolume(this.volume+1);
     }
 
     public void volumeDown(){
-        this.setVolume(this.volume-1);
+        if(this.volume > 0) this.setVolume(this.volume-1);
     }
 
 }

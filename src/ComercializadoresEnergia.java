@@ -15,6 +15,13 @@ public class ComercializadoresEnergia {
     private Map<SmartHouse,List<Fatura>> casas;
     //private List<SmartHouse> casas;
 
+    public ComercializadoresEnergia(String nome){
+        this.nome=nome;
+        this.precoBaseKW= 0.142;
+        this.fatorImposto= 0.001;
+        this.casas = new HashMap<>();
+    }
+
     public ComercializadoresEnergia(String nome,double precoBaseKW, double fatorImposto){
         this.nome=nome;
         this.precoBaseKW=precoBaseKW;
@@ -189,6 +196,17 @@ public class ComercializadoresEnergia {
         return faturacao;
     }
 
+    public String listOfClientes(){
+        StringBuilder sb = new StringBuilder();
+        
+        for(SmartHouse casa:this.casas.keySet()){
+            sb.append(casa.getMorada());  //TODO Mudar de get morada para get ID
+            sb.append(this.casas.get(casa).toString());
+        }
+        
+        return sb.toString();
+    }
+
     public boolean equals(Object obj){
         if (this==obj) return true;
         if (obj==null||this.getClass()!=obj.getClass()) return false;
@@ -198,18 +216,18 @@ public class ComercializadoresEnergia {
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Nome da Empresa: ");
+        sb.append("NOME: ");
         sb.append(this.nome);
-        sb.append("\nPreço base do KW: ");
+        sb.append("\tPREÇO BASE KWH: ");
         sb.append(this.precoBaseKW);
-        sb.append("\nFator do Imposto energético: ");
+        sb.append("\tIMPOSTO ENERGÉTICO: ");
         sb.append(this.fatorImposto);
-        sb.append("\nCasas na companhia: \n");
-        for(SmartHouse casa:this.casas.keySet()){
+        sb.append("\tNo. CLIENTES: ");
+        /* for(SmartHouse casa:this.casas.keySet()){
             sb.append(casa.getMorada());  //TODO Mudar de get morada para get ID
             sb.append(this.casas.get(casa).toString());
-        }
-        sb.append("\n");
+        } */
+        sb.append(this.casas.size());
         return sb.toString();
     }
 

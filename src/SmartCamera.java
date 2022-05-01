@@ -60,6 +60,9 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=sc.getLastLigado();
     }
 
+    @Override
+    public String getID() {return super.getID();}
+
     public LocalDateTime getLastLigado(){
         return this.ligadoInit;
     }

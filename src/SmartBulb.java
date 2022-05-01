@@ -72,6 +72,9 @@ public class SmartBulb extends SmartDevice {
 
     }
 
+    @Override
+    public String getID() {return super.getID();}
+
     public modo getMode(){return this.mode;}
 
     public void setMode(modo mode){this.mode = mode;}

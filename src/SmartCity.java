@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-public abstract class SmartCity {
+public class SmartCity {
     
     private List<SmartHouse> casas;
     private List<ComercializadoresEnergia> comercializadores;
@@ -23,6 +23,8 @@ public abstract class SmartCity {
     }
 
     public List<SmartHouse> getCasas(){return this.casas;}
+
+    public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
 
     public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
 
@@ -59,7 +61,7 @@ public abstract class SmartCity {
         }
     }
 
-    public void criaDivisoes(String id, String divisao){
+    public void criaDivisao(String id, String divisao){
         SmartHouse temp = getCasa(id);
         if(temp!=null){
             if(!temp.hasDivisao(divisao)){
@@ -78,20 +80,19 @@ public abstract class SmartCity {
     // }
 
 
+    //createHouse(nome_prop, nif, morada, fornecedor)
 
+    //listSmartDevicesPresets();
 
+    //getPreset(selection)
 
-    //city.listComercializadores();
-
-    //city.createHouse(nome_prop, nif, morada, fornecedor)
-
-    //city.listSmartDevicesPresets();
-
-    //city.getPreset(selection)
-
-    //city.createSmartSpeaker();
+    //createSmartSpeaker();
     
-    //city.createSmartCamera();
+    //createSmartCamera();
 
-    //city.createSmartBulb();
+    //createSmartBulb();
+
+    //addDeviceToDivisao(house_id, nome_divisao, createSmartDeviceMenu(city));
+    //addDeviceToDivisao(house_id, nome_divisao, preset_selection);
+    //string, string, SmartDevice OU string) se for string faz um
 }
