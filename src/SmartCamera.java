@@ -139,7 +139,7 @@ public class SmartCamera extends SmartDevice {
             return false;
         
         SmartCamera newC = (SmartCamera) obj;
-        return (this.resolucao == (newC.getResolucao()) && this.tamanho_ficheiros==newC.getFileSize()  && this.estado.toString().equals(newC.getState().toString())  &&  this.consumo == (newC.getConsumo()));
+        return (this.id == newC.getId() && this.resolucao == (newC.getResolucao()) && this.tamanho_ficheiros==newC.getFileSize()  && this.estado.toString().equals(newC.getState().toString())  &&  this.consumo == (newC.getConsumo()));
     }
 
     public String toString(){
