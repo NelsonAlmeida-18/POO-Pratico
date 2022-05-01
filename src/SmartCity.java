@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public abstract class SmartCity {
     
@@ -13,6 +17,15 @@ public abstract class SmartCity {
     public SmartCity(){
         this.deviceID = 0;
     }
+
+    public void saveState(String nameOfFile) throws FileNotFoundException,IOException{
+        FileOutputStream fos = new FileOutputStream(nameOfFile);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(this);
+        oos.flush();
+        oos.close();
+    }
+
 
     public List<ComercializadoresEnergia> listComercializadores(){
         List<ComercializadoresEnergia> ret = new ArrayList<>();

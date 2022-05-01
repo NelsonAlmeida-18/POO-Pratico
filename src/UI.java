@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.lang.InterruptedException;
 import java.time.*;
 import java.util.Map;
+import java.io.File;
 
 
 //import static com.intellij.openapi.util.text.Strings.toUpperCase;
@@ -14,6 +15,10 @@ public class UI {
 
     public UI(SmartCity city){
         menuInicial(city);
+    }
+
+    public void saveState(SmartCity city, String nameOfFile){
+        city.saveState(nameOfFile);
     }
 
     public static void clearConsole() throws IOException {
@@ -60,7 +65,7 @@ public class UI {
             BufferedReader reader = new BufferedReader(new FileReader(path));
             String line = reader.readLine();
             while (line != null) {
-                city.clone(createMenuLine(line)); //createMenuLine devolve a cidade guardada no ficheiro
+                createMenuLine(city,line); //createMenuLine devolve a cidade guardada no ficheiro
                 line = reader.readLine();
             }
             reader.close();
@@ -75,7 +80,7 @@ public class UI {
     // YYYY-MM-DD, fornecedorX, alteraValorDesconto, novoValor (CASE 2)
     // YYYY-MM-DD, casaX, fornecedorN -> sendo fornecedorN o novo comercializador de energia (CASE 1.2)
         */
-    public void createMenuLine(String line){
+    public void createMenuLine(SmartCity cidade, String line){
         String [] token = line.split(",\\s+"); // criar tokens
         String date = token[0];
         String [] data_token = date.split(".");
@@ -87,13 +92,13 @@ public class UI {
         int day = Integer.parseInt(data_token[2]);
         LocalDate data = LocalDate.of(year,month,day);
 
-        if(this.city.getCasas().contains(token[1])) {  // already created house related actions
-           if(this.city.getComercializadores().contains(token[2])){ // se for um comercializador, function trocar de comercializador
+        if(cidade.getCasas().contains(token[1])) {  // already created house related actions
+           if(cidade.getComercializadores().contains(token[2])){ // se for um comercializador, function trocar de comercializador
                // change comercializador
            } else { // é um device
 
             //é capaz de dar erro quando retorna null fazer case para isso
-                if(this.city.getCasa(token[1]).existsDevice(token[2])){ // already created device
+                if(cidade.getCasa(token[1]).existsDevice(token[2])){ // already created device
                     switch((token[3]).toUpperCase()){
                         case "SETON":
                             // function ligar
@@ -177,7 +182,17 @@ public class UI {
             break;
 
             case 8:
-                saveState(city); //função save, não tem menu, simplesmente guarda na pasta save
+                Scanner scan = new Scanner(System.in);
+                System.out.println("Dá um nome ao teu ficheiro: \n");
+                String nameOfFIle = scan.next();
+                File f = new File("./"+nameOfFIle);
+                while(f.exists()){
+                    System.out.println("Esse ficheiro já existe, dá um nome válido ao ficheiro: \n");
+                    nameOfFIle=scan.next();
+                    f = new File("./"+nameOfFIle);
+                }
+                scan.close();
+                saveState(city, nameOfFIle); //função save, não tem menu, simplesmente guarda na pasta save
                 System.out.println("Estado do programa guardado");
             break;
 
@@ -187,14 +202,12 @@ public class UI {
         }
     }
 
-<<<<<<< HEAD
-
-    public void createSmartHouseMenu(){
-=======
     public void createSmartHouseMenu(SmartCity city){
->>>>>>> 5214b8863558f40a73ee308ec326e53c76528947
         // dar atributo hname
         Scanner sc = new Scanner(System.in);
+
+        System.out.println("ID da casa:");
+        String id = sc.next();
         
         System.out.println("Insira o nome do proprietário:");
         String nome_prop = sc.next();
@@ -215,7 +228,7 @@ public class UI {
 
         }
         //if (hname!=null) SmartHouse hname = city.createHouse(nome_prop, nif, morada, fornecedor); else (o que está em baixo)
-        SmartHouse house = createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
+        city.createHouse(id,nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
         
         // String id = "";//adicionar forma de criar um id random ou por passagem
         // SmartHouse house = new SmartHouse(id,nome_prop,nif, morada,fornecedor);
@@ -225,58 +238,53 @@ public class UI {
 
         for(int i = 0; i < num_divisoes; i++){
             System.out.println("Insira o nome da divisão "+ i +":");
-                house.addDivisao(sc.next());
+            String divisao=sc.next();
+            city.criaDivisoes(id, divisao);
         }
 
         sc.close();
 
         System.out.println("Insira os dispositivos para cada divisão:");
-        addDivisionDevicesMenu(house);
+        addDivisionDevicesMenu(id,city);
 
         city.addSmartHouse(house);
         
     }
 
-    public void addDivisionDevicesMenu(SmartHouse house){
+    public void addDivisionDevicesMenu(String id, SmartCity cidade){
         
         Scanner sc = new Scanner(System.in);
-        
-        for(int i = 0; i < house.getTotalDivisions(); i++){
-            System.out.println("Quantos dispositivos pretende adicionar em "+ house.getDivisaoByIndex(i) +"?");
-            int num_disp = sc.nextInt();
+        System.out.println("Quantos dispositivos pretende adicionar na casa com o id  "+ id +"?");
+        int numDevices = sc.nextInt();
+        for(int i = 0; i <numDevices; i++){
 
-            for(int j = 0; j < num_disp; num_disp++){
                 addDeviceToDivisaoMenu(house, house.getDivisaoByIndex(i)); //adiciona um dispositivo a uma divisão
-            }
         }
 
         sc.close();
     }
 
-    public void addDeviceToDivisaoMenu(SmartHouse house, String division){
+    public void addDeviceToDivisaoMenu(SmartCity cidade,String id, String division){
         //verifica se divisão existe em casa
-        if(house.hasDivisao(division)){
-            Scanner sc = new Scanner(System.in);
-            
-            System.out.println("Adicionar SmartDevice em "+ division);
-            System.out.println();
-            System.out.println("1 - Adicionar preset");
-            System.out.println("2 - Criar SmartDevice");
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Adicionar SmartDevice em "+ division);
+        System.out.println();
+        System.out.println("1 - Adicionar preset");
+        System.out.println("2 - Criar SmartDevice");
 
-            int res = sc.nextInt();
-            sc.close();
+        int res = sc.nextInt();
+        sc.close();
 
-            switch(res){
-                case 1:
-                    SmartDevice sd = addPresetMenu();
-                break;
-    
-                case 2:
-                    createSmartDeviceMenu();
-                break;
-            }
-            
-        }else{System.out.println("Erro: a divisão não existe");}
+        switch(res){
+            case 1:
+                SmartDevice sd = addPresetMenu();
+            break;
+
+            case 2:
+                createSmartDeviceMenu();
+            break;
+        }
 
         
     }
