@@ -16,8 +16,9 @@ import java.time.temporal.ChronoUnit;
  */
 public class SmartCamera extends SmartDevice {
 
+    private int id;
     private float resolucao; 
-    private double tamanho_ficheiros; 
+    private int tamanho_ficheiros;
     public enum state{
         ON,
         OFF
@@ -36,7 +37,7 @@ public class SmartCamera extends SmartDevice {
     //     this.dataFin=LocalDateTime.now();
     // }
 
-    public SmartCamera(float resolucao, float tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
+    public SmartCamera(float resolucao, int tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
         this.resolucao=resolucao;
         this.tamanho_ficheiros= tamanhoFicheiros;
         this.estado=estado;
@@ -44,7 +45,20 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=ligadoI;
     }
 
-    public SmartCamera(float width,float height, float tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
+    public SmartCamera(String resolucao, int tamanhoFicheiros, double consumo){
+ 
+        String[] wxh = resolucao.split("x");
+        float width = Float.parseFloat(wxh[0]);
+        float height = Float.parseFloat(wxh[1]);
+
+        this.resolucao=width*height/1000000;
+        this.tamanho_ficheiros= tamanhoFicheiros;
+        this.estado=state.OFF;
+        this.consumo=consumo;
+        this.ligadoInit=LocalDateTime.now();
+    }
+
+    public SmartCamera(float width,float height, int tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
         this.resolucao=width*height/1000000;
         this.tamanho_ficheiros= tamanhoFicheiros;
         this.estado=estado;
@@ -60,6 +74,9 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=sc.getLastLigado();
     }
 
+    @Override
+    public int getId() {return this.id;}
+
     public LocalDateTime getLastLigado(){
         return this.ligadoInit;
     }
@@ -68,7 +85,7 @@ public class SmartCamera extends SmartDevice {
         return this.resolucao;
     }
 
-    public double getFileSize(){
+    public int getFileSize(){
         return this.tamanho_ficheiros;
     }
 
@@ -92,7 +109,7 @@ public class SmartCamera extends SmartDevice {
         this.resolucao=res;
     }
 
-    public void setFileSize(float file){
+    public void setFileSize(int file){
         this.tamanho_ficheiros=file;
     }
 

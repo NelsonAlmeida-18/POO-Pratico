@@ -6,18 +6,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-public abstract class SmartCity {
+public class SmartCity {
     
     private List<SmartHouse> casas;
     private List<ComercializadoresEnergia> comercializadores;
     private List<Marca> marcas;
     private List<SmartDevice> presets;
-    private int deviceID;
+    private int houseID; //diz quantas casas tem na cidade e atribui o seu numero
+    private int deviceID; //diz quantos devices tem na cidade e atribui o seu numero
 
     public SmartCity(){
         this.deviceID = 0;
+        this.houseID = 0;
     }
 
+<<<<<<< HEAD
     public void saveState(String nameOfFile) throws FileNotFoundException,IOException{
         FileOutputStream fos = new FileOutputStream(nameOfFile);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -26,6 +29,21 @@ public abstract class SmartCity {
         oos.close();
     }
 
+=======
+    public SmartCity(int houseID, int deviceID){
+        this.deviceID = deviceID;
+        this.houseID = houseID;
+    }
+
+    public int getHouseId(){return this.houseID;}
+    
+    public int getDeviceId(){return this.deviceID;}
+
+    public int giveDeviceId(){return ++(this.deviceID);} //serve para dar o id e aumentar o numero de devices
+
+    public int giveHouseId(){return ++(this.houseID);} //serve para dar o id e aumentar o numero de casas
+
+>>>>>>> 5e95a15050f25928de7351fb14da79da7409973a
 
     public List<ComercializadoresEnergia> listComercializadores(){
         List<ComercializadoresEnergia> ret = new ArrayList<>();
@@ -36,6 +54,8 @@ public abstract class SmartCity {
     }
 
     public List<SmartHouse> getCasas(){return this.casas;}
+
+    public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
 
     public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
 
@@ -50,7 +70,11 @@ public abstract class SmartCity {
         return null;
     }
 
-    public SmartHouse getCasa(String id){
+    public void createComercializador(ComercializadoresEnergia com){ 
+        this.comercializadores.add(com);
+    }
+
+    public SmartHouse getCasa(int id){
         ListIterator<SmartHouse> iter = this.casas.listIterator();
         while(iter.hasNext()){
             SmartHouse temp = iter.next();
@@ -72,7 +96,28 @@ public abstract class SmartCity {
         }
     }
 
-    public void criaDivisoes(String id, String divisao){
+    public void createHouse(SmartHouse house){
+        if(getCasa(house.getId)!=null){
+            if (getComercializador(comercializadorDeEnergia)!=null){
+                ComercializadoresEnergia comer = getComercializador(comercializadorDeEnergia);
+                if(comer!=null){
+                    SmartHouse casa = new SmartHouse(id,nome,nif,morada,comer);
+                    this.casas.add(casa);
+                }
+            }
+        }
+    }
+
+    public void criaDivisao(String id, String divisao){
+        SmartHouse temp = getCasa(id);
+        if(temp!=null){
+            if(!temp.hasDivisao(divisao)){
+                temp.addDivisao(divisao);
+            }
+        }
+    }
+
+    public void criaDivisao(int id, String divisao){
         SmartHouse temp = getCasa(id);
         if(temp!=null){
             if(!temp.hasDivisao(divisao)){
@@ -91,20 +136,19 @@ public abstract class SmartCity {
     // }
 
 
+    //createHouse(nome_prop, nif, morada, fornecedor)
 
+    //listSmartDevicesPresets();
 
+    //getPreset(selection)
 
-    //city.listComercializadores();
-
-    //city.createHouse(nome_prop, nif, morada, fornecedor)
-
-    //city.listSmartDevicesPresets();
-
-    //city.getPreset(selection)
-
-    //city.createSmartSpeaker();
+    //createSmartSpeaker();
     
-    //city.createSmartCamera();
+    //createSmartCamera();
 
-    //city.createSmartBulb();
+    //createSmartBulb();
+                                                   //SmartDevice
+    //addDeviceToDivisao(house_id, nome_divisao, createSmartDeviceMenu(city));
+    //addDeviceToDivisao(house_id, nome_divisao, preset_selection);
+    //string, string, SmartDevice OU string) se for string faz um
 }
