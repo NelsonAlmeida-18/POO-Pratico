@@ -15,7 +15,7 @@ public class SmartHouse{
 
     private String id;
     private String nome_prop;
-    private String NIF_prop;
+    private Integer NIF_prop;
     private String morada;
     private ComercializadoresEnergia companhia_eletrica;
     private Map<String,Map<String, SmartDevice>> devices;
@@ -35,7 +35,7 @@ public class SmartHouse{
         //this.companhia_eletrica = new ComercializadoresEnergia();
     //}
 
-    public SmartHouse(String id,String nome, String NIF, String morada, ComercializadoresEnergia comp) {
+    public SmartHouse(String id,String nome, Integer NIF, String morada, ComercializadoresEnergia comp) {
         // initialise instance variables
         this.id=id;
         this.nome_prop = nome;
@@ -64,8 +64,8 @@ public class SmartHouse{
     public void setNome_prop(String nome) { this.nome_prop = nome; }
     public String getNome_prop() { return this.nome_prop; }
 
-    public void setNIF_prop(String NIF) { this.NIF_prop = NIF;}
-    public String getNIF_prop(){ return this.NIF_prop; }
+    public void setNIF_prop(Integer NIF) { this.NIF_prop = NIF;}
+    public int getNIF_prop(){ return this.NIF_prop; }
 
     public void setMorada(String morada){ this.morada = morada; }
     public String getMorada(){ return this.morada; }
@@ -146,7 +146,6 @@ public class SmartHouse{
             setDivisaoOFF(divisao);
         }
     }
-    
 
     public boolean existsDevice(String id) {
         for(Map<String, SmartDevice> dispositivos:this.devices.values()){

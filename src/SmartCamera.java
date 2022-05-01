@@ -17,7 +17,7 @@ import java.time.temporal.ChronoUnit;
 public class SmartCamera extends SmartDevice {
 
     private float resolucao; 
-    private double tamanho_ficheiros; 
+    private int tamanho_ficheiros;
     public enum state{
         ON,
         OFF
@@ -36,7 +36,7 @@ public class SmartCamera extends SmartDevice {
     //     this.dataFin=LocalDateTime.now();
     // }
 
-    public SmartCamera(float resolucao, float tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
+    public SmartCamera(float resolucao, int tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
         this.resolucao=resolucao;
         this.tamanho_ficheiros= tamanhoFicheiros;
         this.estado=estado;
@@ -44,7 +44,7 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=ligadoI;
     }
 
-    public SmartCamera(float width,float height, float tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
+    public SmartCamera(float width,float height, int tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
         this.resolucao=width*height/1000000;
         this.tamanho_ficheiros= tamanhoFicheiros;
         this.estado=estado;
@@ -68,7 +68,7 @@ public class SmartCamera extends SmartDevice {
         return this.resolucao;
     }
 
-    public double getFileSize(){
+    public int getFileSize(){
         return this.tamanho_ficheiros;
     }
 
@@ -92,7 +92,7 @@ public class SmartCamera extends SmartDevice {
         this.resolucao=res;
     }
 
-    public void setFileSize(float file){
+    public void setFileSize(int file){
         this.tamanho_ficheiros=file;
     }
 
