@@ -11,6 +11,8 @@ import java.time.temporal.ChronoUnit;
  *
  */
 public class SmartBulb extends SmartDevice {
+    
+    public int id;
     public enum modo{
         COLD,
         NEUTRAL,
@@ -24,7 +26,7 @@ public class SmartBulb extends SmartDevice {
     private state estado;
     private double consumo;
    // private int tone;
-    private double dimensions;
+    private int dimensions;
     private LocalDateTime ligadoInit;
     private LocalDateTime dataFin;
 
@@ -35,14 +37,24 @@ public class SmartBulb extends SmartDevice {
     public SmartBulb() {
         // initialise instance variables
         this.mode=modo.NEUTRAL;
-        this.estado=state.ON;
+        this.estado=state.OFF;
         this.consumo=0;
         this.dimensions=1;  // não existem lampadas "inexistentes"
         this.ligadoInit=LocalDateTime.now();
         this.dataFin=LocalDateTime.now();
     }
 
-    public SmartBulb(modo mode, state estado, double consumo, double dimensions, LocalDateTime ligadoInit) {
+    public SmartBulb(modo mode,int dimensions, double consumo) {
+        // initialise instance variables
+        this.mode = mode;
+        this.estado = state.OFF;
+        this.consumo=consumo;
+        this.dimensions=dimensions;
+        this.ligadoInit=LocalDateTime.now();
+        this.dataFin=LocalDateTime.now();
+    }
+
+    public SmartBulb(modo mode, state estado, double consumo, int dimensions, LocalDateTime ligadoInit) {
         // initialise instance variables
         this.mode = mode;
         this.estado = estado;
@@ -51,7 +63,7 @@ public class SmartBulb extends SmartDevice {
         this.ligadoInit=ligadoInit;
     }
 
-    public SmartBulb(modo mode, state estado, double consumo, double dimensions, LocalDateTime ligadoInit, LocalDateTime dataFinal) {
+    public SmartBulb(modo mode, state estado, double consumo, int dimensions, LocalDateTime ligadoInit, LocalDateTime dataFinal) {
         // initialise instance variables
         this.mode = mode;
         this.estado = estado;
@@ -73,7 +85,7 @@ public class SmartBulb extends SmartDevice {
     }
 
     @Override
-    public String getID() {return super.getID();}
+    public int getId() {return this.id;}
 
     public modo getMode(){return this.mode;}
 
@@ -87,9 +99,9 @@ public class SmartBulb extends SmartDevice {
 
     public LocalDateTime getLigadoInit(){return this.ligadoInit; }
 
-    public void setDimensions(double dimensions){this.dimensions=dimensions;}
+    public void setDimensions(int dimensions){this.dimensions=dimensions;}
 
-    public double getDimensions(){return this.dimensions;}
+    public int getDimensions(){return this.dimensions;}
 
     public void setState(state est){
         switch(est.toString()){

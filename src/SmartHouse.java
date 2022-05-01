@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class SmartHouse{
 
-    private String id;
+    private int id;
     private String nome_prop;
     private Integer NIF_prop;
     private String morada;
@@ -35,7 +35,7 @@ public class SmartHouse{
         //this.companhia_eletrica = new ComercializadoresEnergia();
     //}
 
-    public SmartHouse(String id,String nome, Integer NIF, String morada, ComercializadoresEnergia comp) {
+    public SmartHouse(int id,String nome, Integer NIF, String morada, ComercializadoresEnergia comp) {
         // initialise instance variables
         this.id=id;
         this.nome_prop = nome;
@@ -45,7 +45,7 @@ public class SmartHouse{
         this.devices = new HashMap<>();
     }
 
-    public SmartHouse(SmartHouse sh){
+    public SmartHouse(int id, SmartHouse sh){ //o id tem sempre de ser passado pela cidade para
         this.id = sh.getID();
         this.nome_prop=sh.getNome_prop();
         this.NIF_prop = sh.getNIF_prop();

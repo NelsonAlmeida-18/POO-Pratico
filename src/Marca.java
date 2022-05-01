@@ -4,12 +4,17 @@ import java.util.List;
 
 public class Marca {
 
-    private final String nome;
-    private final double consumoDiario;
+    private String nome;
+    private double consumoDiario;
 
     public Marca(String nome, double consumo) {
         this.nome = nome;
         this.consumoDiario = consumo;
+    }
+
+    public Marca(String nome) {
+        this.nome = nome;
+        this.consumoDiario = 0.72; //coluna com consumo de 30W * 24h em kWh
     }
 
     public String getNome() {
@@ -19,4 +24,9 @@ public class Marca {
     public double getConsumoDiario() {
         return this.consumoDiario;
     }
+
+    public void setConsumoDiario(double consumoDiario) {
+        this.consumoDiario = consumoDiario;
+    }
+
 }

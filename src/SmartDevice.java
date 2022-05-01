@@ -9,29 +9,12 @@ import java.time.LocalDateTime;
  *
  */
 public abstract class SmartDevice {
-
-    private String id;
-
-    /**
-     * Constructor for objects of class SmartDevice
-     */
-    public SmartDevice() {
-        this.id = "";
-    }
-
-    public SmartDevice(String s) { //se for "null" é inválido
-        this.id = s;
-    }
-
-    public SmartDevice(SmartDevice sd){
-        this.id = sd.getID();
-    }
-    
+/* 
     public String getID() {return this.id;}
 
     public void setID(String id){this.id=id;}
 
-    //rever
+     //rever
     public boolean equals(Object obj){
         if (this==obj)
             return true;
@@ -47,7 +30,9 @@ public abstract class SmartDevice {
 
     // public SmartDevice clone(){
     //    SmartDevice sc = new SmartDevice();
-    //}
+    //} */
+
+    public abstract int getId(); //para definir nas subclasses
 
     public abstract void goToData(LocalDateTime data);
 

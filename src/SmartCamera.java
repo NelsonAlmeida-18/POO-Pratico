@@ -16,6 +16,7 @@ import java.time.temporal.ChronoUnit;
  */
 public class SmartCamera extends SmartDevice {
 
+    private int id;
     private float resolucao; 
     private int tamanho_ficheiros;
     public enum state{
@@ -44,6 +45,19 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=ligadoI;
     }
 
+    public SmartCamera(String resolucao, int tamanhoFicheiros, double consumo){
+ 
+        String[] wxh = resolucao.split("x");
+        float width = Float.parseFloat(wxh[0]);
+        float height = Float.parseFloat(wxh[1]);
+
+        this.resolucao=width*height/1000000;
+        this.tamanho_ficheiros= tamanhoFicheiros;
+        this.estado=state.OFF;
+        this.consumo=consumo;
+        this.ligadoInit=LocalDateTime.now();
+    }
+
     public SmartCamera(float width,float height, int tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
         this.resolucao=width*height/1000000;
         this.tamanho_ficheiros= tamanhoFicheiros;
@@ -61,7 +75,7 @@ public class SmartCamera extends SmartDevice {
     }
 
     @Override
-    public String getID() {return super.getID();}
+    public int getId() {return this.id;}
 
     public LocalDateTime getLastLigado(){
         return this.ligadoInit;

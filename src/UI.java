@@ -201,8 +201,9 @@ public class UI {
         System.out.println("5 - Eliminar um preset de SmartDevice");
         System.out.println("6 - Consultar SmartHouses existentes");
         System.out.println("7 - Consultar SmartDevices presets");
-        System.out.println("8 - Salvar para um ficheiro");
-        System.out.println("9 - Ir para a simulação");
+        System.out.println("8 - Carregar de um ficheiro");
+        System.out.println("9 - Salvar para um ficheiro");
+        System.out.println("10 - Ir para a simulação");
         res = sc.nextInt();
         sc.close();
 
@@ -243,12 +244,16 @@ public class UI {
             break;
 
             case 8:
+                city = carregar(parse(city.getHouseId(), city.getDeviceId())); //carregar faz gestão de conflitos para dar merge à cidade já existente e à cidade que se está a carregar do log
+            break;
+
+            case 9:
                 saveState(city); //função save, não tem menu, simplesmente guarda na pasta save
                 System.out.println("Estado do programa guardado");
                 createMenu(city);
             break;
 
-            case 9:
+            case 10:
                 simulationMenu(city);
                 menuInicial(city);
             break;

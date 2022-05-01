@@ -16,6 +16,7 @@ import java.time.temporal.ChronoUnit;
 
 public class SmartSpeaker extends SmartDevice {
 
+    private int id;
     private int volume;
     private String estacao;
     public enum state {
@@ -23,6 +24,7 @@ public class SmartSpeaker extends SmartDevice {
         OFF
     }
     private SmartSpeaker.state estado;
+    private Marca marca;
     private double consumo;
     private LocalDateTime ligadoInit;
     private LocalDateTime dataFin;
@@ -32,8 +34,18 @@ public class SmartSpeaker extends SmartDevice {
     public SmartSpeaker() {
         this.volume = 10;
         this.estacao = "";
-        this.estado = SmartSpeaker.state.ON;
+        this.estado = state.OFF;
         this.consumo = 0;
+        this.ligadoInit = LocalDateTime.now();
+        this.dataFin = LocalDateTime.now();
+    }
+
+    public SmartSpeaker(int volume, String estacao, Marca marca, double consumo) {
+        this.volume = volume;
+        this.estacao = estacao;
+        this.marca = marca;
+        this.estado = state.OFF;
+        this.consumo = consumo;
         this.ligadoInit = LocalDateTime.now();
         this.dataFin = LocalDateTime.now();
     }
@@ -50,7 +62,15 @@ public class SmartSpeaker extends SmartDevice {
     //GETTERS & SETTERS
 
     @Override
-    public String getID() {return super.getID();}
+    public int getId() {return this.id;}
+
+    public Marca getMarca() {
+        return this.marca;
+    }
+
+    public Marca setMarca() {
+        return this.marca;
+    }
 
     public int getVolume() {
         return this.volume;

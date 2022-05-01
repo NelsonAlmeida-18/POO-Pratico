@@ -7,45 +7,52 @@ import java.util.Map;
 
 public class Parser {
 
-    public void parse(){
+    public SmartCity parse(int houseID, int deviceID){
+        
+        SmartCity city = new SmartCity(houseID, deviceID);
         List<String> linhas = readFile("dados.csv");
         String[] linhaPartida;
         String divisao = null;
+        int id_house;
         SmartHouse casaMaisRecente = null;
+        
         for (String linha : linhas) {
+            
             linhaPartida = linha.split(":", 2);
+            
             switch(linhaPartida[0]){
                 case "Casa":
-                    casaMaisRecente = parseCasa(linhaPartida[1]);
+                    city.createHouse(parseCasa(linhaPartida[1], city.giveHouseId()));
+                    id_house = city.getHouseId();
 
                     break;
                 case "Divisao":
-                    if (casaMaisRecente == null) System.out.println("Linha inválida.");
+                    //if (casaMaisRecente == null) System.out.println("Linha inválida.");
                     divisao = linhaPartida[1];
-                    casaMaisRecente.addDivisao(divisao);
-
+                    city.criaDivisao(id_house, divisao);
                     break;
                 case "SmartBulb":
                     if (divisao == null) System.out.println("Linha inválida.");
-                    SmartBulb sd1 = parseSmartBulb(linhaPartida[1]);
-                    casaMaisRecente.addDevice(sd1); // FAZER FUNÇÃO
-                    casaMaisRecente.addDevice(divisao, sd1.getId()); // change para addToDevice
+                    SmartBulb sd1 = parseSmartBulb(linhaPartida[1], city.giveDeviceId());
+                    city.addDeviceToDivisao(id_house, divisao, sd1); // FAZER FUNÇÃO
+                    //casaMaisRecente.addDevice(divisao, sd1.getId()); // change para addToDevice
 
                     break;
                 case "SmartCamera":
                     if (divisao == null) System.out.println("Linha inválida.");
-                    SmartBulb sd2 = parseSmartCamera(linhaPartida[1]);
-                    casaMaisRecente.addDevice(sd2); // FAZER FUNÇÃO
-                    casaMaisRecente.addDevice(divisao, sd2.getId());  // change para addToDevice
+                    SmartCamera sd2 = parseSmartCamera(linhaPartida[1], city.giveDeviceId());
+                    city.addDeviceToDivisao(id_house, divisao, sd2);
                     break;
                 case "SmartSpeaker":
                     if (divisao == null) System.out.println("Linha inválida.");
-                    SmartBulb sd3 = parseSmartSpeaker(linhaPartida[1]);
-                    casaMaisRecente.addDevice(sd3); // FAZER FUNÇÃO
-                    casaMaisRecente.addDevice(divisao, sd3.getId());  // change para addToDevice
+                    SmartSpeaker sd3 = parseSmartSpeaker(linhaPartida[1], city.giveDeviceId());
+                    city.addDeviceToDivisao(id_house, divisao, sd3);
                     break;
                 case "Fornecedor":
-                    ComercializadoresEnergia ce = new ComercializadoresEnergia(linhaPartida[1]);
+                    city.createComercializadorEnergia(parseComercializadoresEnergia(linhaPartida[1]));
+                    break;
+                case "Marca":
+                    Marca m = new Marca(linhaPartida[1]);
                     break;
                 default:
                     System.out.println("Linha inválida.");
@@ -61,14 +68,14 @@ public class Parser {
         return lines;
     }
 
-    public SmartHouse parseCasa(String input){
+    public SmartHouse parseCasa(String input, int houseID){
         String[] campos = input.split(",");
         String nome = campos[0];
         int nif = Integer.parseInt(campos[1]);
         String morada = campos[2];
         ComercializadoresEnergia fornecedor = new ComercializadoresEnergia(campos[3]);
         Map<String, Map<String, SmartDevice>> devices = new HashMap<>();
-        return new SmartHouse(nome,nif,morada,fornecedor,devices); // fazer metodo
+        return new SmartHouse(houseID, nome,nif,morada,fornecedor,devices); // fazer metodo
     }
     public SmartBulb parseSmartBulb(String input){
         String[] campos = input.split(",");
@@ -81,7 +88,7 @@ public class Parser {
     }
     public SmartCamera parseSmartCamera(String input){
         String[] campos = input.split(",");
-        String resolucao = campos[0];
+        String resolucao = campos[0]; //resolução 0000x0000?
         resolucao.replace("(","");
         resolucao.replace(")","");
         int tamanho = Integer.parseInt(campos[1]);
@@ -95,8 +102,14 @@ public class Parser {
         String estacao = campos[1];
         String marca = campos[2];
         double consumo = Double.parseDouble(campos[3]);
-        return new SmartSpeaker(vol,estacao,marca,consumo); // fazer metodo
+        return SmartSpeaker(vol,estacao,marca,consumo);
 
+    }
+
+    public ComercializadoresEnergia parseComercializadoresEnergia(String input){
+        String[] campos = input.split(",");
+        String nome = campos[0];
+        return new ComercializadoresEnergia(nome);
     }
 
 }
