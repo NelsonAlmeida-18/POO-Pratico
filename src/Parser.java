@@ -1,159 +1,102 @@
+import com.intellij.util.containers.hash.HashMap;
 
-import java.time.Month;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.*;
-import java.time.*;
+import java.util.Map;
 
 public class Parser {
 
-    public static void clearConsole() throws IOException {
-        try {
-            if (System.getProperty("os.name").contains("Windows")) {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            }
-            else {
-                System.out.print("\033\143");
-            }
-        } catch (IOException | InterruptedException ex) {}
-    }
+    public void parse(){
+        List<String> linhas = readFile("dados.csv");
+        String[] linhaPartida;
+        String divisao = null;
+        SmartHouse casaMaisRecente = null;
+        for (String linha : linhas) {
+            linhaPartida = linha.split(":", 2);
+            switch(linhaPartida[0]){
+                case "Casa":
+                    casaMaisRecente = parseCasa(linhaPartida[1]);
 
-    public Optional<String> getExtension(String filename) {
-        return Optional.ofNullable(filename)
-                .filter(f -> f.contains("."))
-                .map(f -> f.substring(filename.lastIndexOf(".") + 1));
-    }
+                    break;
+                case "Divisao":
+                    if (casaMaisRecente == null) System.out.println("Linha inválida.");
+                    divisao = linhaPartida[1];
+                    casaMaisRecente.addDivisao(divisao);
 
-    public void menu() throws IOException {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Create/Edit Menu - 1");
-        System.out.println("Load Menu - 2");
-        String input = sc.next();
-        sc.close();
+                    break;
+                case "SmartBulb":
+                    if (divisao == null) System.out.println("Linha inválida.");
+                    SmartBulb sd1 = parseSmartBulb(linhaPartida[1]);
+                    casaMaisRecente.addDevice(sd1); // FAZER FUNÇÃO
+                    casaMaisRecente.addDevice(divisao, sd1.getId()); // change para addToDevice
 
-        switch(input){
-
-            case "1":
-                create();
-                break;
-
-            case "2":
-                load();
-                break;
-
-        }
-        clearConsole();
-
-    }
-
-    // create
-    public void create(){
-
-    }
-
-
-    // data , casa, dispositivo, ação
-    // YYYY-MM-DD, casaX, acao (case 1.0)
-    // YYYY-MM-DD, casaX, dispostivoY, acao (CASE 1.1)
-    // YYYY-MM-DD, fornecedorX, alteraValorDesconto, novoValor (CASE 2)
-    // YYYY-MM-DD, casaX, fornecedorN -> sendo fornecedorN o novo comercializador de energia (CASE 1.2)
-
-    public void createLine(String line){
-        String [] token = line.split(",\\s+"); // criar tokens
-        String date = token[0];
-        String [] data_token = date.split(".");
-
-        // data
-        int year = Integer.parseInt(data_token[0]);
-        int mes = Integer.parseInt(data_token[1]);
-        Month month = Month.of(mes);
-        int day = Integer.parseInt(data_token[2]);
-        LocalDate data = LocalDate.of(year,month,day);
-
-
-        if(city.constainsHouse(token[2])) {  // CASE 1.0
-            if(token[4]!=null) { // not case 1.0
-                // do smth in the house
-                if (house.constainsDevice(token[3])) { // CASE 1 . 1
-                    // do smth to the device
-                } else { // CASE 1 . 2
-                    // change comercializador de energia
-                }
-            } else {
-                // do action in the house (turn all lights, example)
+                    break;
+                case "SmartCamera":
+                    if (divisao == null) System.out.println("Linha inválida.");
+                    SmartBulb sd2 = parseSmartCamera(linhaPartida[1]);
+                    casaMaisRecente.addDevice(sd2); // FAZER FUNÇÃO
+                    casaMaisRecente.addDevice(divisao, sd2.getId());  // change para addToDevice
+                    break;
+                case "SmartSpeaker":
+                    if (divisao == null) System.out.println("Linha inválida.");
+                    SmartBulb sd3 = parseSmartSpeaker(linhaPartida[1]);
+                    casaMaisRecente.addDevice(sd3); // FAZER FUNÇÃO
+                    casaMaisRecente.addDevice(divisao, sd3.getId());  // change para addToDevice
+                    break;
+                case "Fornecedor":
+                    ComercializadoresEnergia ce = new ComercializadoresEnergia(linhaPartida[1]);
+                    break;
+                default:
+                    System.out.println("Linha inválida.");
+                    break;
             }
         }
-        else if(city.constainsFornecedor(token[2])){ // CASE 2
-            // altera valor de kW/h ou altera valor de Imposto
-        }
-
-
-
-
+        System.out.println("done!");
     }
 
-    public void createDevice(){
-
+    public List<String> readFile(String nomeFich) {
+        try { List<String> lines = Files.readAllLines(Paths.get(nomeFich), StandardCharsets.UTF_8); }
+        catch(IOException exc) { List<String> lines = new ArrayList<>(); }
+        return lines;
     }
 
-    public void createMarca(){
+    public SmartHouse parseCasa(String input){
+        String[] campos = input.split(",");
+        String nome = campos[0];
+        int nif = Integer.parseInt(campos[1]);
+        String morada = campos[2];
+        ComercializadoresEnergia fornecedor = new ComercializadoresEnergia(campos[3]);
+        Map<String, Map<String, SmartDevice>> devices = new HashMap<>();
+        return new SmartHouse(nome,nif,morada,fornecedor,devices); // fazer metodo
+    }
+    public SmartBulb parseSmartBulb(String input){
+        String[] campos = input.split(",");
+        String upper = campos[0].toUpperCase();
+        SmartBulb.modo mode = SmartBulb.modo.upper;
+        int dimensions = Integer.parseInt(campos[1]);
+        double consumo = Double.parseDouble(campos[2]);
+        return new SmartBulb(mode,dimensions,consumo); // fazer metodo
 
     }
-
-    public void createHouse(){
-
+    public SmartCamera parseSmartCamera(String input){
+        String[] campos = input.split(",");
+        String resolucao = campos[0];
+        resolucao.replace("(","");
+        resolucao.replace(")","");
+        int tamanho = Integer.parseInt(campos[1]);
+        double consumo = Double.parseDouble(campos[2]);
+        return new SmartCamera(resolucao,tamanho,consumo); // fazer metodo
     }
 
-    public void createDivisao(){
+    public SmartSpeaker parseSmartSpeaker(String input){
+        String[] campos = input.split(",");
+        int vol = Integer.parseInt(campos[0]);
+        String estacao = campos[1];
+        String marca = campos[2];
+        double consumo = Double.parseDouble(campos[3]);
+        return new SmartSpeaker(vol,estacao,marca,consumo); // fazer metodo
 
-    }
-
-    public void createComercializadores(){
-
-    }
-
-    public void editDevice(){
-
-    }
-
-    public void editMarca(){
-
-    }
-
-    public void editHouse(){
-
-    }
-
-    public void editDivisao(){
-
-    }
-
-    public void editComercializadores(){
-
-    }
-
-    // load
-    public void load() throws FileNotFoundException {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Nome do ficheiro de input (dentro da dir save): ");
-        String fname = sc.next();
-        sc.close();
-        fname.concat(".");
-        String ext = String.valueOf(getExtension(fname));
-        fname.concat(ext);
-        String dir = "../save/" + fname;
-        BufferedReader reader;
-        try{
-            reader = new BufferedReader(new FileReader(dir));
-            String line = reader.readLine();
-            while(line!=null){
-                createLine(line);
-                line = reader.readLine();
-            }
-            reader.close();
-        } catch(IOException e){
-            e.printStackTrace();
-        }
     }
 
 }
