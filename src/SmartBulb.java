@@ -36,6 +36,7 @@ public class SmartBulb extends SmartDevice {
      */
     public SmartBulb() {
         // initialise instance variables
+        this.id = getId();
         this.mode=modo.NEUTRAL;
         this.estado=state.OFF;
         this.consumo=0;
@@ -44,8 +45,9 @@ public class SmartBulb extends SmartDevice {
         this.dataFin=LocalDateTime.now();
     }
 
-    public SmartBulb(modo mode,int dimensions, double consumo) {
+    public SmartBulb(int id, modo mode,int dimensions, double consumo) {
         // initialise instance variables
+        this.id = id;
         this.mode = mode;
         this.estado = state.OFF;
         this.consumo=consumo;
@@ -54,8 +56,33 @@ public class SmartBulb extends SmartDevice {
         this.dataFin=LocalDateTime.now();
     }
 
-    public SmartBulb(modo mode, state estado, double consumo, int dimensions, LocalDateTime ligadoInit) {
+    public SmartBulb(int id, String mode,int dimensions, double consumo) {
         // initialise instance variables
+        this.id = id;
+        modo modos = modo.NEUTRAL;
+        switch (mode.toUpperCase()) {
+            case "COLD":
+                modos = modo.COLD;
+                break;
+            case "NEUTRAL":
+                modos = modo.NEUTRAL;
+                break;
+            case "WARM":
+                modos = modo.WARM;
+                break;
+        }
+
+        this.mode = modos;
+        this.estado = state.OFF;
+        this.consumo=consumo;
+        this.dimensions=dimensions;
+        this.ligadoInit=LocalDateTime.now();
+        this.dataFin=LocalDateTime.now();
+    }
+
+    public SmartBulb(int id, modo mode, state estado, double consumo, int dimensions, LocalDateTime ligadoInit) {
+        // initialise instance variables
+        this.id = id;
         this.mode = mode;
         this.estado = estado;
         this.consumo=consumo;
@@ -63,8 +90,9 @@ public class SmartBulb extends SmartDevice {
         this.ligadoInit=ligadoInit;
     }
 
-    public SmartBulb(modo mode, state estado, double consumo, int dimensions, LocalDateTime ligadoInit, LocalDateTime dataFinal) {
+    public SmartBulb(int id, modo mode, state estado, double consumo, int dimensions, LocalDateTime ligadoInit, LocalDateTime dataFinal) {
         // initialise instance variables
+        this.id = id;
         this.mode = mode;
         this.estado = estado;
         this.consumo=consumo;
@@ -75,6 +103,7 @@ public class SmartBulb extends SmartDevice {
 
     public SmartBulb(SmartBulb sb) {
         // initialise instance variables
+        this.id = sb.getId();
         this.mode = sb.getMode();
         this.estado = sb.getEstado();
         this.consumo= sb.getConsumo();

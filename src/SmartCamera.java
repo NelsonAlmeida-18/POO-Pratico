@@ -38,6 +38,7 @@ public class SmartCamera extends SmartDevice {
     // }
 
     public SmartCamera(float resolucao, int tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
+        this.id = getId();
         this.resolucao=resolucao;
         this.tamanho_ficheiros= tamanhoFicheiros;
         this.estado=estado;
@@ -45,12 +46,12 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=ligadoI;
     }
 
-    public SmartCamera(String resolucao, int tamanhoFicheiros, double consumo){
+    public SmartCamera(int id, String resolucao, int tamanhoFicheiros, double consumo){
  
         String[] wxh = resolucao.split("x");
         float width = Float.parseFloat(wxh[0]);
         float height = Float.parseFloat(wxh[1]);
-
+        this.id = id;
         this.resolucao=width*height/1000000;
         this.tamanho_ficheiros= tamanhoFicheiros;
         this.estado=state.OFF;

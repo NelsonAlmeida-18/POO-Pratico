@@ -52,12 +52,19 @@ public class SmartHouse{
         this.morada= sh.getMorada();
         this.companhia_eletrica=sh.getCompanhia_eletrica();
     }
-
-    public String getID(){
+    public SmartHouse(int houseID, String nome,int nif,String fornecedor){
+        this.id = houseID;
+        this.nome_prop = nome;
+        this.NIF_prop = nif;
+        this.morada = "";
+        ComercializadoresEnergia forn = new ComercializadoresEnergia(fornecedor);
+        this.companhia_eletrica = forn;
+    }
+    public int getID(){
         return this.id;
     }
 
-    public void setID(String id){
+    public void setID(int id){
         this.id = id;
     }
 
@@ -268,4 +275,6 @@ public class SmartHouse{
     }
 
     public String getDivisaoByIndex(int index){return this.getDivisaoList().get(index);}
+
+
 }
