@@ -42,8 +42,6 @@ public class SmartCity {
 
     public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
 
-    public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
-
     public ComercializadoresEnergia getComercializador(String id){
         ListIterator<ComercializadoresEnergia> iter = this.comercializadores.listIterator();
         while(iter.hasNext()){
@@ -82,11 +80,11 @@ public class SmartCity {
     }
 
     public void createHouse(SmartHouse house){
-        if(getCasa(house.getId)!=null){
+        if(getCasa(house.getId())!=null){
             if (getComercializador(comercializadorDeEnergia)!=null){
                 ComercializadoresEnergia comer = getComercializador(comercializadorDeEnergia);
                 if(comer!=null){
-                    SmartHouse casa = new SmartHouse(id,nome,nif,morada,comer);
+                    SmartHouse casa = new SmartHouse(id,nome,nif,comer);
                     this.casas.add(casa);
                 }
             }

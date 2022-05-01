@@ -157,13 +157,15 @@ public class SmartBulb extends SmartDevice {
             return false;
 
         SmartBulb lampada = (SmartBulb) obj;
-        return (this.mode==lampada.getMode() && this.estado==lampada.getEstado() &&
+        return (this.id == lampada.getId() && this.mode==lampada.getMode() && this.estado==lampada.getEstado() &&
                 this.dimensions==lampada.getDimensions() &&
                 this.ligadoInit.equals(lampada.getLigadoInit()));
     }
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
+        sb.append("ID da lâmpada: ");
+        sb.append(this.id);
         sb.append("Estado da lâmpada: ");
         sb.append(this.estado);
         sb.append("\nModo de Funcionamento da lâmpada: ");

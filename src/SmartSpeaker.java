@@ -145,6 +145,18 @@ public class SmartSpeaker extends SmartDevice {
         return new SmartSpeaker(this);
     }
 
+    public boolean equals(Object obj){
+        if(this==obj)
+            return true;
+
+        if (obj==null||obj.getClass()!=this.getClass())
+            return false;
+
+        SmartSpeaker newC = (SmartSpeaker) obj;
+        return (this.id == newC.getId() && this.volume == (newC.getVolume()) && this.estacao==newC.getEstacao()  && this.estado.toString().equals(newC.getEstado().toString())
+                &&  this.consumo == (newC.getConsumo()));
+    }
+
     @Override
     public String toString(){
         //"\nMarca: \n"+this.marca+
