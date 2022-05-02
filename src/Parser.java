@@ -2,25 +2,31 @@
 
 import java.util.ArrayList;
 import java.util.List;
-import java.io.*;
+
+//import apple.laf.JRSUIConstants.WindowTitleBarSeparator;
+
 import java.nio.file.*;
 import java.nio.charset.*;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Files;
 
 public class Parser {
 
     public Parser(){
     }
 
-    public SmartCity parse(int houseID, int deviceID){
-        
+    public SmartCity parse(int houseID, int deviceID) throws IOException{
+        Path path = Path.of("/Users/rkeat/Desktop/POO-Pratico/src/logs.txt");
+        String content = Files.readString(path);
         SmartCity city = new SmartCity(houseID, deviceID);
-        List<String> linhas = readFile("logs.txt");
         //List<String> linhas = readFile("dados.csv");
+        String[] contentSplited = content.split("\n");
         String[] linhaPartida;
         String divisao = null;
         int id_house = 0;
         
-        for (String linha : linhas) {
+        for (String linha : contentSplited) {
             
             linhaPartida = linha.split(":", 2);
             
@@ -99,11 +105,15 @@ public class Parser {
     public SmartCamera parseSmartCamera(String input, int sd_id){
         String[] campos = input.split(",");
         String resolucao = campos[0]; //resolução 0000x0000?
-        resolucao.replace("(","");
-        resolucao.replace(")","");
+        resolucao = resolucao.replace("(","");
+        resolucao = resolucao.replace(")","");
+        String[] widthHeight = resolucao.split("x");
         int tamanho = Integer.parseInt(campos[1]);
-        double consumo = Double.parseDouble(campos[2]);
-        return new SmartCamera(sd_id, resolucao,tamanho,consumo);
+        float width = Float.parseFloat(widthHeight[0]);
+        float heigth = Float.parseFloat(widthHeight[1]);
+        float consumo = Float.parseFloat(campos[2]);
+        //inicializei a off para testes
+        return new SmartCamera(sd_id, width,heigth,tamanho,SmartCamera.state.OFF, consumo);
     }
 
     public SmartSpeaker parseSmartSpeaker(String input, int sd_id){

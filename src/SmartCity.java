@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.io.FileNotFoundException;
@@ -11,16 +12,19 @@ import java.io.*;
 
 public class SmartCity {
     
-    private Map<Integer,SmartHouse> casas;
-    private List<ComercializadoresEnergia> comercializadores;
-    private List<Marca> marcas;
-    private Map<String,SmartDevice> presets;
+    private Map<Integer,SmartHouse> casas=new HashMap<>();
+    private List<ComercializadoresEnergia> comercializadores=new ArrayList<>();
+    private List<Marca> marcas = new ArrayList<>(); 
+    private Map<String,SmartDevice> presets= new HashMap<>();
     private int houseID; //diz quantas casas tem na cidade e atribui o seu numero
     private int deviceID; //diz quantos devices tem na cidade e atribui o seu numero
 
     public SmartCity(){
         this.deviceID = 0;
         this.houseID = 0;
+        this.comercializadores=new ArrayList<ComercializadoresEnergia>();
+        this.marcas = new ArrayList<>();
+        this.presets=new HashMap<>();
     }
 
     public String readFromFile(String filename)throws Exception{
@@ -144,6 +148,7 @@ public class SmartCity {
 
     public void createComercializadorEnergia(String nome, double preco, double imposto){ 
         ComercializadoresEnergia com = new ComercializadoresEnergia(nome, preco, imposto);
+        //System.out.println(com.toString());
         this.comercializadores.add(com);
     }
 
