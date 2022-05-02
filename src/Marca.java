@@ -1,7 +1,4 @@
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Marca {
 
     private String nome;
@@ -27,6 +24,16 @@ public class Marca {
 
     public void setConsumoDiario(double consumoDiario) {
         this.consumoDiario = consumoDiario;
+    }
+
+    public String toString(){
+        StringBuffer sb = new StringBuffer();
+        sb.append("NOME: ");
+        sb.append(this.nome);
+        sb.append("\tCONSUMO DIÁRIO: ");
+        sb.append(this.consumoDiario);
+        sb.append("\n");
+        return sb.toString();
     }
 
 }

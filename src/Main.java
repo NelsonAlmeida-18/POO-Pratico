@@ -20,9 +20,12 @@ public class Main{
         System.out.println(edp.toString());
         //System.out.println(edp.getFaturacao()); */
 
-
         SmartCity city = new SmartCity();
+        Parser p = new Parser();
+        city = p.parse(city.getDeviceId(), city.getHouseId());
         UI ui = new UI();
+
+        //city.toString();
 
         try{
             ui.menuInicial(city);

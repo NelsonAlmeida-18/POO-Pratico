@@ -18,7 +18,7 @@ public class SmartHouse{
     private int NIF_prop;
     private String morada;
     private ComercializadoresEnergia companhia_eletrica;
-    private Map<String,Map<String, SmartDevice>> devices;
+    private Map<String,Map<Integer, SmartDevice>> devices;
                 //divisao, id,sd
     //Morada -> Map divisão -> devices) CONFIRMAR SE É ISTO
 
@@ -61,6 +61,14 @@ public class SmartHouse{
         this.companhia_eletrica = fornecedor;
     }
 
+    public SmartHouse(SmartHouse sh){
+        this.id = sh.getID();
+        this.nome_prop = sh.getNome_prop();
+        this.NIF_prop = sh.getNIF_prop();
+        this.morada = sh.getMorada();
+        this.companhia_eletrica = sh.getCompanhia_eletrica();
+    }
+
     public int getID(){
         return this.id;
     }
@@ -87,10 +95,10 @@ public class SmartHouse{
     // public void delDivisao(String divisao){ if(hasDivisao(divisao)) this.divisao.remove(this.divisao.lastIndexOf(divisao));}
 
     
-    public Map<String,Map<String, SmartDevice>> getHouse(){
-        Map<String,Map<String, SmartDevice>> newHouse = new HashMap<>();
+    public Map<String,Map<Integer, SmartDevice>> getHouse(){
+        Map<String,Map<Integer, SmartDevice>> newHouse = new HashMap<>();
         for (String div:this.devices.keySet()){
-            Map<String, SmartDevice> devi = new HashMap<>();
+            Map<Integer, SmartDevice> devi = new HashMap<>();
             for(SmartDevice sd:this.devices.get(div).values()){
                 //falta clonar
                 devi.put(sd.getID(), sd);
@@ -102,15 +110,15 @@ public class SmartHouse{
 
 
     //ver se isto mantem o encapsulamento
-    public Map<String, SmartDevice> getDivisao(String divisao){
-        Map<String, SmartDevice> nova = new HashMap<>();
+    public Map<Integer, SmartDevice> getDivisao(String divisao){
+        Map<Integer, SmartDevice> nova = new HashMap<>();
         nova.putAll(this.devices.get(divisao));
         return nova;
     }
 
     
-    public void setDeviceOn(String devCode) {
-        for (Map<String, SmartDevice> dispositivos: this.devices.values()){
+    public void setDeviceOn(int devCode) {
+        for (Map<Integer, SmartDevice> dispositivos: this.devices.values()){
             if (dispositivos.containsKey(devCode)){
                 dispositivos.get(devCode).turnOn();
             }
@@ -119,7 +127,7 @@ public class SmartHouse{
 
     public void setDivisaoOn(String div){
         if (this.devices.containsKey(div)){
-            Map <String, SmartDevice> divisao = this.devices.get(div);
+            Map <Integer, SmartDevice> divisao = this.devices.get(div);
             for (SmartDevice sd:divisao.values()){
                 sd.turnOn();
             }
@@ -132,8 +140,8 @@ public class SmartHouse{
         }
     }
     
-    public void setDeviceOFF(String devCode) {
-        for (Map<String, SmartDevice> dispositivos: this.devices.values()){
+    public void setDeviceOFF(int devCode) {
+        for (Map<Integer, SmartDevice> dispositivos: this.devices.values()){
             if (dispositivos.containsKey(devCode)){
                 dispositivos.get(devCode).turnOff();
             }
@@ -142,7 +150,7 @@ public class SmartHouse{
 
     public void setDivisaoOFF(String div){
         if (this.devices.containsKey(div)){
-            Map <String, SmartDevice> divisao = this.devices.get(div);
+            Map <Integer, SmartDevice> divisao = this.devices.get(div);
             for (SmartDevice sd:divisao.values()){
                 sd.turnOff();
             }
@@ -155,15 +163,15 @@ public class SmartHouse{
         }
     }
 
-    public boolean existsDevice(String id) {
-        for(Map<String, SmartDevice> dispositivos:this.devices.values()){
+    public boolean existsDevice(Integer id) {
+        for(Map<Integer, SmartDevice> dispositivos:this.devices.values()){
             if (dispositivos.containsKey(id))
                 return true;
         }
         return false;
     }
 
-    public boolean existsDevice(String id, String divisao) {
+    public boolean existsDevice(Integer id, String divisao) {
         return this.devices.get(divisao).containsKey(id);
     }
     
@@ -173,15 +181,15 @@ public class SmartHouse{
             this.devices.get(divisao).put(s.getID(),s);
         }
         else{//criar a divisao 
-            Map<String, SmartDevice> disp = new HashMap<String,SmartDevice>();
+            Map<Integer, SmartDevice> disp = new HashMap<>();
             //falta clonar
             disp.put(s.getID(),s);
             this.devices.put(divisao, disp);
         }
     }
     
-    public SmartDevice getDevice(String s) {
-        for(Map<String, SmartDevice> devices: this.devices.values()){
+    public SmartDevice getDevice(Integer s) {
+        for(Map<Integer, SmartDevice> devices: this.devices.values()){
             if(devices.containsKey(s))
                 //falta clonar
                 return devices.get(s);
@@ -191,7 +199,7 @@ public class SmartHouse{
 
 
     //rever esta
-    public double getConsumoDivisao(Map<String,SmartDevice> div){
+    public double getConsumoDivisao(Map<Integer,SmartDevice> div){
         double consumoDivisao=0;
         for(SmartDevice disp:div.values()){
             consumoDivisao+=disp.getConsumo();
@@ -201,7 +209,7 @@ public class SmartHouse{
 
     public void addDivisao(String div){
         if(!this.devices.containsKey(div)){
-            Map<String,SmartDevice> disp = new HashMap<>();
+            Map<Integer,SmartDevice> disp = new HashMap<>();
             this.devices.put(div,disp);
         }
     }
@@ -210,9 +218,11 @@ public class SmartHouse{
         return this.devices.containsKey(div);
     }
 
+
+    //isto é o consumo em KW's e não o consumo monetário
     public double getConsumoDaCasa(){
         double consumoDaCasa=0;
-        for(Map<String, SmartDevice> div: this.devices.values())
+        for(Map<Integer, SmartDevice> div: this.devices.values())
             consumoDaCasa+=getConsumoDivisao(div);
         return consumoDaCasa;
     }
@@ -223,13 +233,13 @@ public class SmartHouse{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Nome do Proprietário: ");
+        sb.append("PROPIETÁRTIO: ");
         sb.append(this.nome_prop);
-        sb.append("\nNIF do proprietário: ");
+        sb.append("\tNIF: ");
         sb.append(this.NIF_prop);
-        sb.append("\nMorada: ");
+        sb.append("\tMORADA: ");
         sb.append(this.morada);
-        sb.append("\nDispositivos por divisão: \n");
+        /* sb.append("\tDispositivos por divisão: \n");
         for(String divisao:this.devices.keySet()){
             sb.append(divisao);
             sb.append("\n");
@@ -241,10 +251,10 @@ public class SmartHouse{
                 sb.append("\n");
             }
             sb.append("\n");
-        }
-        sb.append("Companhia elétrica: \n");
+        } */
+        sb.append("\tCompanhia elétrica: ");
         sb.append(this.companhia_eletrica.toString());
-        sb.append("\n");
+        //sb.append("\n");
         return sb.toString();
     }
 
@@ -267,7 +277,7 @@ public class SmartHouse{
         ArrayList<String> divs_list = new ArrayList<String>();
         int index = 0;
 
-        for (Map.Entry<String,Map<String, SmartDevice>> devices : devices.entrySet()) {
+        for (Map.Entry<String,Map<Integer, SmartDevice>> devices : devices.entrySet()) {
             divs_list.add(index, devices.getKey());
             index++;
         }

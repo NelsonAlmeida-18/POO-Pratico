@@ -34,9 +34,9 @@ public class SmartBulb extends SmartDevice {
     /**
      * Constructor for objects of class SmartBulb
      */
-    public SmartBulb() {
+    public SmartBulb(int id) {
         // initialise instance variables
-        this.id = getId();
+        this.id = id;
         this.mode=modo.NEUTRAL;
         this.estado=state.OFF;
         this.consumo=0;
@@ -80,6 +80,30 @@ public class SmartBulb extends SmartDevice {
         this.dataFin=LocalDateTime.now();
     }
 
+    public SmartBulb(int id, String mode,int dimensions, double consumo, String estado) {
+        // initialise instance variables
+        this.id = id;
+        modo modos = modo.NEUTRAL;
+        switch (mode.toUpperCase()) {
+            case "COLD":
+                modos = modo.COLD;
+                break;
+            case "NEUTRAL":
+                modos = modo.NEUTRAL;
+                break;
+            case "WARM":
+                modos = modo.WARM;
+                break;
+        }
+
+        this.mode = modos;
+        this.estado = toState(estado);
+        this.consumo=consumo;
+        this.dimensions=dimensions;
+        this.ligadoInit=LocalDateTime.now();
+        this.dataFin=LocalDateTime.now();
+    }
+
     public SmartBulb(int id, modo mode, state estado, double consumo, int dimensions, LocalDateTime ligadoInit) {
         // initialise instance variables
         this.id = id;
@@ -103,7 +127,7 @@ public class SmartBulb extends SmartDevice {
 
     public SmartBulb(SmartBulb sb) {
         // initialise instance variables
-        this.id = sb.getId();
+        this.id = sb.getID();
         this.mode = sb.getMode();
         this.estado = sb.getEstado();
         this.consumo= sb.getConsumo();
@@ -114,7 +138,7 @@ public class SmartBulb extends SmartDevice {
     }
 
     @Override
-    public int getId() {return this.id;}
+    public int getID() {return this.id;}
 
     public modo getMode(){return this.mode;}
 
@@ -157,7 +181,7 @@ public class SmartBulb extends SmartDevice {
             return false;
 
         SmartBulb lampada = (SmartBulb) obj;
-        return (this.id == lampada.getId() && this.mode==lampada.getMode() && this.estado==lampada.getEstado() &&
+        return (this.id == lampada.getID() && this.mode==lampada.getMode() && this.estado==lampada.getEstado() &&
                 this.dimensions==lampada.getDimensions() &&
                 this.ligadoInit.equals(lampada.getLigadoInit()));
     }
@@ -211,6 +235,25 @@ public class SmartBulb extends SmartDevice {
 
     public void goToData(LocalDateTime data){
         this.dataFin=data;
+    }
+
+    public SmartBulb.state toState(String state){
+        SmartBulb.state ret = SmartBulb.state.OFF;
+        
+        switch(state){
+            case ("ON"):
+                ret = SmartBulb.state.ON;
+            break;
+
+            case ("OFF"):
+                ret = SmartBulb.state.OFF;
+            break;
+
+            default:
+            
+        }
+
+        return ret;
     }
 }
 

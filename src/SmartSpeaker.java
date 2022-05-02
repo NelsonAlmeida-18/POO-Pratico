@@ -32,7 +32,7 @@ public class SmartSpeaker extends SmartDevice {
     //CLASS CONSTRUCTORS
 
     public SmartSpeaker() {
-        this.id = getId();
+        this.id = getID();
         this.volume = 10;
         this.estacao = "";
         this.estado = state.OFF;
@@ -52,8 +52,20 @@ public class SmartSpeaker extends SmartDevice {
         this.dataFin = LocalDateTime.now();
     }
 
+    public SmartSpeaker(int id,int volume, String estacao, String estado, Marca marca, double consumo) {
+        this.id = id;
+        this.volume = volume;
+        this.estacao = estacao;
+        this.estado = toState(estado);
+        this.marca = marca;
+        this.estado = state.OFF;
+        this.consumo = consumo;
+        this.ligadoInit = LocalDateTime.now();
+        this.dataFin = LocalDateTime.now();
+    }
+
     public SmartSpeaker(SmartSpeaker speaker) {
-        this.id = speaker.getId();
+        this.id = speaker.getID();
         this.volume = speaker.getVolume();
         this.estacao = speaker.getEstacao();
         this.estado = speaker.getEstado();
@@ -65,7 +77,7 @@ public class SmartSpeaker extends SmartDevice {
     //GETTERS & SETTERS
 
     @Override
-    public int getId() {return this.id;}
+    public int getID() {return this.id;}
 
     public Marca getMarca() {
         return this.marca;
@@ -153,7 +165,7 @@ public class SmartSpeaker extends SmartDevice {
             return false;
 
         SmartSpeaker newC = (SmartSpeaker) obj;
-        return (this.id == newC.getId() && this.volume == (newC.getVolume()) && this.estacao==newC.getEstacao()  && this.estado.toString().equals(newC.getEstado().toString())
+        return (this.id == newC.getID() && this.volume == (newC.getVolume()) && this.estacao==newC.getEstacao()  && this.estado.toString().equals(newC.getEstado().toString())
                 &&  this.consumo == (newC.getConsumo()));
     }
 
@@ -188,4 +200,22 @@ public class SmartSpeaker extends SmartDevice {
         if(this.volume > 0) this.setVolume(this.volume-1);
     }
 
-}
+    public SmartSpeaker.state toState(String state){
+        SmartSpeaker.state ret = SmartSpeaker.state.OFF;
+        
+        switch(state){
+            case ("ON"):
+                ret = SmartSpeaker.state.ON;
+            break;
+
+            case ("OFF"):
+                ret = SmartSpeaker.state.OFF;
+            break;
+
+            default:
+            
+        }
+
+        return ret;
+    }
+}   

@@ -37,8 +37,8 @@ public class SmartCamera extends SmartDevice {
     //     this.dataFin=LocalDateTime.now();
     // }
 
-    public SmartCamera(float resolucao, int tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
-        this.id = getId();
+    public SmartCamera(int id,float resolucao, int tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
+        this.id = id;
         this.resolucao=resolucao;
         this.tamanho_ficheiros= tamanhoFicheiros;
         this.estado=estado;
@@ -59,12 +59,22 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=LocalDateTime.now();
     }
 
-    public SmartCamera(float width,float height, int tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
+    public SmartCamera(int id, float width,float height, int tamanhoFicheiros, String estado){
+        this.id = id;
+        this.resolucao=width*height/1000000;
+        this.tamanho_ficheiros= tamanhoFicheiros;
+        this.estado=toState(estado);
+        this.consumo=resolucao*tamanhoFicheiros;
+        this.ligadoInit=LocalDateTime.now();
+    }
+
+    public SmartCamera(int id, float width,float height, int tamanhoFicheiros, state estado, float consumo){
+        this.id = id;
         this.resolucao=width*height/1000000;
         this.tamanho_ficheiros= tamanhoFicheiros;
         this.estado=estado;
         this.consumo=consumo;
-        this.ligadoInit=ligadoI;
+        this.ligadoInit=LocalDateTime.now();
     }
 
     public SmartCamera(SmartCamera sc){
@@ -76,7 +86,7 @@ public class SmartCamera extends SmartDevice {
     }
 
     @Override
-    public int getId() {return this.id;}
+    public int getID() {return this.id;}
 
     public LocalDateTime getLastLigado(){
         return this.ligadoInit;
@@ -139,7 +149,7 @@ public class SmartCamera extends SmartDevice {
             return false;
         
         SmartCamera newC = (SmartCamera) obj;
-        return (this.id == newC.getId() && this.resolucao == (newC.getResolucao()) && this.tamanho_ficheiros==newC.getFileSize()  && this.estado.toString().equals(newC.getState().toString())  &&  this.consumo == (newC.getConsumo()));
+        return (this.id == newC.getID() && this.resolucao == (newC.getResolucao()) && this.tamanho_ficheiros==newC.getFileSize()  && this.estado.toString().equals(newC.getState().toString())  &&  this.consumo == (newC.getConsumo()));
     }
 
     public String toString(){
@@ -173,4 +183,23 @@ public class SmartCamera extends SmartDevice {
     public void goToData(LocalDateTime data){
         this.dataFin=data;
     }
-}
+
+    public SmartCamera.state toState(String state){
+        SmartCamera.state ret = SmartCamera.state.OFF;
+        
+        switch(state){
+            case ("ON"):
+                ret = SmartCamera.state.ON;
+            break;
+
+            case ("OFF"):
+                ret = SmartCamera.state.OFF;
+            break;
+
+            default:
+            
+        }
+
+        return ret;
+    }
+}   

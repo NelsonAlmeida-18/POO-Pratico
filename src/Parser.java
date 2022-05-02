@@ -8,10 +8,14 @@ import java.nio.charset.*;
 
 public class Parser {
 
+    public Parser(){
+    }
+
     public SmartCity parse(int houseID, int deviceID){
         
         SmartCity city = new SmartCity(houseID, deviceID);
-        List<String> linhas = readFile("dados.csv");
+        List<String> linhas = readFile("logs.txt");
+        //List<String> linhas = readFile("dados.csv");
         String[] linhaPartida;
         String divisao = null;
         int id_house = 0;

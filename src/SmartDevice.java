@@ -32,7 +32,7 @@ public abstract class SmartDevice {
     //    SmartDevice sc = new SmartDevice();
     //} */
 
-    public abstract int getId(); //para definir nas subclasses
+    public abstract int getID(); //para definir nas subclasses
 
     public abstract void goToData(LocalDateTime data);
 
