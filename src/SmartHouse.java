@@ -53,7 +53,11 @@ public class SmartHouse{
         this.companhia_eletrica=sh.getCompanhia_eletrica();
     }
 
+<<<<<<< HEAD
     public SmartHouse(int houseID, String nome,int nif, ComercializadoresEnergia fornecedor){
+=======
+    public SmartHouse(int houseID, String nome,int nif,ComercializadoresEnergia fornecedor){
+>>>>>>> 53344174f4d70a9fd974dc9c3a72d10d59ad18e6
         this.id = houseID;
         this.nome_prop = nome;
         this.NIF_prop = nif;
