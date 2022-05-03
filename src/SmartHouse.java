@@ -1,6 +1,7 @@
 //package src; // idea necessarry
 
 import java.util.Map;
+import java.io.Serializable;
 import java.lang.StringBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,14 +12,14 @@ import java.util.List;
  * espaços (as salas) que existem na casa.
  *
  */
-public class SmartHouse{
+public class SmartHouse implements Serializable{
 
     private int id;
     private String nome_prop;
     private int NIF_prop;
     private String morada;
     private ComercializadoresEnergia companhia_eletrica;
-    private Map<String,Map<Integer, SmartDevice>> devices;
+    private Map<String,Map<Integer, SmartDevice>> devices = new HashMap<>();
                 //divisao, id,sd
     //Morada -> Map divisão -> devices) CONFIRMAR SE É ISTO
 
@@ -208,6 +209,10 @@ public class SmartHouse{
     }
 
     public void addDivisao(String div){
+        if (this.devices ==null){
+            Map<Integer,SmartDevice> disp = new HashMap<>();
+            this.devices.put(div,disp);
+        }
         if(!this.devices.containsKey(div)){
             Map<Integer,SmartDevice> disp = new HashMap<>();
             this.devices.put(div,disp);
@@ -239,19 +244,23 @@ public class SmartHouse{
         sb.append(this.NIF_prop);
         sb.append("\tMORADA: ");
         sb.append(this.morada);
-        /* sb.append("\tDispositivos por divisão: \n");
-        for(String divisao:this.devices.keySet()){
-            sb.append(divisao);
-            sb.append("\n");
-            for(SmartDevice sd:this.devices.get(divisao).values()){
-                sb.append("Id do dispositivo: ");
-                sb.append(sd.getID());
+        sb.append("Numero de divisãoes: ");
+        sb.append(this.devices.size());
+        sb.append("\tDispositivos por divisão: \n");
+        if (this.devices!=null){
+            for(String divisao:this.devices.keySet()){
+                sb.append(divisao);
                 sb.append("\n");
-                sb.append(sd.toString());
+                for(SmartDevice sd:this.devices.get(divisao).values()){
+                    sb.append("Id do dispositivo: ");
+                    sb.append(sd.getID());
+                    sb.append("\n");
+                    sb.append(sd.toString());
+                    sb.append("\n");
+                }
                 sb.append("\n");
-            }
-            sb.append("\n");
-        } */
+            } 
+        }
         sb.append("\tCompanhia elétrica: ");
         sb.append(this.companhia_eletrica.toString());
         //sb.append("\n");

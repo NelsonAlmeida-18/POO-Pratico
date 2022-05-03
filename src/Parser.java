@@ -23,8 +23,7 @@ public class Parser {
         //List<String> linhas = readFile("dados.csv");
         String[] contentSplited = content.split("\n");
         String[] linhaPartida;
-        String divisao = null;
-        int id_house = 0;
+        String divisao = "";
         
         for (String linha : contentSplited) {
             
@@ -32,31 +31,28 @@ public class Parser {
             
             switch(linhaPartida[0]){
                 case "Casa":
-                    city.createHouse(parseCasa(linhaPartida[1], city.giveHouseId(),city));
-                    id_house = city.getHouseId();
+                    city.createHouse(parseCasa(linhaPartida[1],city));
 
                     break;
                 case "Divisao":
                     //if (casaMaisRecente == null) System.out.println("Linha inválida.");
                     divisao = linhaPartida[1];
-                    city.criaDivisao(id_house, divisao);
+                    city.criaDivisao(divisao);
                     break;
                 case "SmartBulb":
                     if (divisao == null) System.out.println("Linha inválida.");
-                    SmartBulb sd1 = parseSmartBulb(linhaPartida[1], city.giveDeviceId());
-                    city.addDeviceToDivisao(id_house, divisao, sd1); // FAZER FUNÇÃO
-                    //casaMaisRecente.addDevice(divisao, sd1.getId()); // change para addToDevice
-
+                    SmartBulb sd1 = parseSmartBulb(linhaPartida[1], city);
+                    city.addDeviceToDivisao(divisao, sd1); // FAZER FUNÇÃO
                     break;
                 case "SmartCamera":
                     if (divisao == null) System.out.println("Linha inválida.");
-                    SmartCamera sd2 = parseSmartCamera(linhaPartida[1], city.giveDeviceId());
-                    city.addDeviceToDivisao(id_house, divisao, sd2);
+                    SmartCamera sd2 = parseSmartCamera(linhaPartida[1], city);
+                    city.addDeviceToDivisao(divisao, sd2);
                     break;
                 case "SmartSpeaker":
                     if (divisao == null) System.out.println("Linha inválida.");
-                    SmartSpeaker sd3 = parseSmartSpeaker(linhaPartida[1], city.giveDeviceId());
-                    city.addDeviceToDivisao(id_house, divisao, sd3);
+                    SmartSpeaker sd3 = parseSmartSpeaker(linhaPartida[1], city);
+                    city.addDeviceToDivisao(divisao, sd3);
                     break;
                 case "Fornecedor":
                     city.createComercializadorEnergia(parseComercializadoresEnergia(linhaPartida[1]));
@@ -65,7 +61,7 @@ public class Parser {
                     city.createMarca(parseMarca(linhaPartida[1]));
                     break;
                 default:
-                    System.out.println("Linha inválida.");
+                    //System.out.println("Linha inválida.");
                     break;
             }
         }
@@ -84,25 +80,25 @@ public class Parser {
         }
     }
 
-    public SmartHouse parseCasa(String input, int houseID, SmartCity city){
+    public SmartHouse parseCasa(String input, SmartCity city){
         String[] campos = input.split(",");
         String nome = campos[0];
         int nif = Integer.parseInt(campos[1]);
         String fornecedor = campos[2];
         ComercializadoresEnergia comercializador = city.getComercializador(fornecedor);
         if(comercializador == null){comercializador = new ComercializadoresEnergia(fornecedor);}
-        return new SmartHouse(houseID, nome,nif,comercializador);
+        return new SmartHouse(city.getHouseId(),nome,nif,comercializador);
     }
 
-    public SmartBulb parseSmartBulb(String input, int sd_id){
+    public SmartBulb parseSmartBulb(String input, SmartCity city){
         String[] campos = input.split(",");
         String mode = campos[0];
         int dimensions = Integer.parseInt(campos[1]);
         double consumo = Double.parseDouble(campos[2]);
-        return new SmartBulb(sd_id, mode,dimensions,consumo);
+        return new SmartBulb(city.giveDeviceId(), mode,dimensions,consumo);
     }
 
-    public SmartCamera parseSmartCamera(String input, int sd_id){
+    public SmartCamera parseSmartCamera(String input, SmartCity city){
         String[] campos = input.split(",");
         String resolucao = campos[0]; //resolução 0000x0000?
         resolucao = resolucao.replace("(","");
@@ -113,16 +109,17 @@ public class Parser {
         float heigth = Float.parseFloat(widthHeight[1]);
         float consumo = Float.parseFloat(campos[2]);
         //inicializei a off para testes
-        return new SmartCamera(sd_id, width,heigth,tamanho,SmartCamera.state.OFF, consumo);
+        return new SmartCamera(city.giveDeviceId(), width,heigth,tamanho,SmartCamera.state.OFF, consumo);
     }
 
-    public SmartSpeaker parseSmartSpeaker(String input, int sd_id){
+    public SmartSpeaker parseSmartSpeaker(String input, SmartCity city){
         String[] campos = input.split(",");
         int vol = Integer.parseInt(campos[0]);
         String estacao = campos[1];
         Marca marca = new Marca(campos[2]);
+        city.createMarca(marca);
         double consumo = Double.parseDouble(campos[3]);
-        return new SmartSpeaker(sd_id, vol,estacao,marca,consumo);
+        return new SmartSpeaker(city.giveDeviceId(), vol,estacao,marca,consumo);
 
     }
 

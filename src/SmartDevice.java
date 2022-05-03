@@ -1,5 +1,6 @@
 //package src;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
  * Permite ligar ou desligar circuitos. 
  *
  */
-public abstract class SmartDevice {
+public abstract class SmartDevice implements Serializable{
 /* 
     public String getID() {return this.id;}
 

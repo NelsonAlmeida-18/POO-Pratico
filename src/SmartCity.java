@@ -10,14 +10,14 @@ import java.util.Map;
 import java.lang.StringBuilder;
 import java.io.*;
 
-public class SmartCity {
+public class SmartCity implements Serializable {
     
     private Map<Integer,SmartHouse> casas=new HashMap<>();
     private List<ComercializadoresEnergia> comercializadores=new ArrayList<>();
     private List<Marca> marcas = new ArrayList<>(); 
     private Map<String,SmartDevice> presets= new HashMap<>();
-    private int houseID; //diz quantas casas tem na cidade e atribui o seu numero
-    private int deviceID; //diz quantos devices tem na cidade e atribui o seu numero
+    private int houseID=0; //diz quantas casas tem na cidade e atribui o seu numero
+    private int deviceID=0; //diz quantos devices tem na cidade e atribui o seu numero
 
     public SmartCity(){
         this.deviceID = 0;
@@ -37,6 +37,7 @@ public class SmartCity {
                 sb.append(st);
                 sb.append("\n");
             }
+            br.close();
             return sb.toString();
         }
         catch(Exception e){
@@ -50,6 +51,7 @@ public class SmartCity {
         for(Integer id: toMerge.getCasas().keySet()){
             if(!casas.containsKey(id)){
                 this.casas.put(id,toMerge.getCasa(id));
+                //this.deviceID+=toMerge.getCasa(id).size();  incrementar o smartId;
             }
         }
 
@@ -73,8 +75,7 @@ public class SmartCity {
             }
         }
 
-        this.houseID=this.casas.size();
-        //TODO fazer o do smartID
+        this.houseID=this.casas.size()+1; //passa para o id seguinte
 
 
     }
@@ -99,11 +100,19 @@ public class SmartCity {
     }
 
     public void saveState(String nameOfFile) throws FileNotFoundException,IOException{
-        FileOutputStream fos = new FileOutputStream(nameOfFile);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(this);
-        oos.flush();
-        oos.close();
+        try{
+            FileOutputStream fos = new FileOutputStream(nameOfFile);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(this);
+            oos.flush();
+            oos.close();
+        }
+        catch(FileNotFoundException e){
+            System.out.println("File not found!\n");
+        }
+        catch(IOException e){
+            System.out.println("Something went wrong while saving the state!\n");
+        }
     }
 
     public SmartCity(int houseID, int deviceID){
@@ -160,40 +169,44 @@ public class SmartCity {
         return this.casas.get(id);
     }
 
-    public void createHouse(int id, String nome, int nif, String morada, String comercializadorDeEnergia){
+    public void createHouse(String nome, int nif, String morada, String comercializadorDeEnergia){
+        int id = this.houseID;
         if(getCasa(id)!=null){
-            if (getComercializador(comercializadorDeEnergia)!=null){
+            if (getComercializador(comercializadorDeEnergia)==null){
                 ComercializadoresEnergia comer = getComercializador(comercializadorDeEnergia);
-                if(comer!=null){
                     SmartHouse casa = new SmartHouse(id,nome,nif,morada,comer);
                     this.casas.put(this.houseID,casa);
-                    this.houseID++;
-                }
+                    this.houseID+=1;
+            }
+            else{
+                ComercializadoresEnergia comer = new ComercializadoresEnergia(comercializadorDeEnergia);
+                SmartHouse casa = new SmartHouse(id,nome,nif,morada,comer);
+                this.casas.put(this.houseID,casa);
+                this.houseID++;
             }
         }
     }
 
     public void createHouse(SmartHouse house){this.casas.put(this.houseID,house); this.houseID++;}
 
-    public void criaDivisao(int id, String divisao){
-        SmartHouse temp = getCasa(id);
+    public void criaDivisao(String divisao){
+        SmartHouse temp = getCasa(this.houseID-1);
+        //System.out.println(temp==null);
         if(temp!=null){
-            if(!temp.hasDivisao(divisao)){
-                temp.addDivisao(divisao);
-            }
+            temp.addDivisao(divisao);
         }
     }
 
-    public void addDeviceToDivisao(int houseID, String divisao, SmartDevice sd){
+    public void addDeviceToDivisao(String divisao, SmartDevice sd){
+        int houseID = this.houseID-1;
         SmartHouse temp = getCasa(houseID);
         if(temp!=null){
-            if(!temp.hasDivisao(divisao)){
-                temp.addDevice(divisao, sd);
-            }
+            temp.addDevice(divisao, sd);
         }
     }
 
-    public void addDeviceToDivisao(int houseID, String divisao, String preset){
+    public void addDeviceToDivisao(String divisao, String preset){
+        int houseID = this.houseID-1;
         SmartHouse temp = getCasa(houseID);
         if(temp!=null){
             if(!temp.hasDivisao(divisao)){

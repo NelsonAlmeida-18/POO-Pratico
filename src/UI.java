@@ -3,11 +3,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 import java.lang.InterruptedException;
-import java.time.*;
-import java.util.Map;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.List;
 import java.util.ListIterator;
 
 
@@ -151,7 +148,7 @@ public class UI {
         }
     }
 
-    public void createMenu(SmartCity city){
+    public void createMenu(SmartCity city) throws IOException{
         int res;
         Scanner sc = new Scanner(System.in);
         System.out.println("Selecione uma das opções abaixo:");
@@ -244,7 +241,7 @@ public class UI {
         printComercializadoresList(city);
         String fornecedor = sc.next();
                 
-        city.createHouse(house_id, nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
+        city.createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
 
         System.out.println("Pretende adicionar divisões na casa?");
         int res = response();
@@ -261,7 +258,7 @@ public class UI {
         System.out.println("Insira o nome da divisão:");
         String nome_divisao = sc.next();
         sc.close();
-        city.criaDivisao(house_id, nome_divisao);
+        city.criaDivisao(nome_divisao);
 
         System.out.println("Pretende adicionar dispositivos na divisão?");
         int res = response();
@@ -309,7 +306,7 @@ public class UI {
     
                 case 2:
                     //abrir o menu de criação de um smart device que no fim devolve um smartDevice que é colocado na divisão por uma função da smartCity
-                    city.addDeviceToDivisao(house_id, nome_divisao, createSmartDeviceMenu(city)); //adiciona um dispositivo criado no momento
+                    city.addDeviceToDivisao(nome_divisao, createSmartDeviceMenu(city)); //adiciona um dispositivo criado no momento
                 break;
             }
                   
@@ -327,7 +324,7 @@ public class UI {
         String preset_selection = sc.next();
         sc.close();
 
-        city.addDeviceToDivisao(house_id, nome_divisao, preset_selection);
+        city.addDeviceToDivisao(nome_divisao, preset_selection);
         
     }
 
