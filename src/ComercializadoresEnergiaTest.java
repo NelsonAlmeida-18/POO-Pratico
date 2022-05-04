@@ -1,17 +1,37 @@
-public ComercializadoresEnergiaTest{
+import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions.*;
 
-    @Test 
-    public void ComercializadoresEnergiaTest(ComercializadoresEnergia ce){
-        this.nome = ce.getNome();
-        this.precoBaseKW = ce.getPrecoBaseKW();
-        this.fatorImposto = ce.getFatorImposto();
-        this.casas= ce.getCasas();
-        assertSame("são iguais",ComercializadoresEnergia(ComercializadoresEnergia(ce),this));
+public class ComercializadoresEnergiaTest{
+
+    @BeforeEach
+    public void setUp(){
+    }
+
+    @AfterEach
+    public void tearDown(){
     }
 
     @Test
-    public void getCasasTest(){
-        
+    public void geraFaturaTest(){
+    }
+
+
+    @Test
+    public void getFaturasTest(){
+    }
+
+    @Test
+    public void terminaContratoTest(){
+    }
+
+    @Test
+    public void getFaturacaoTest(){
+    }
+
+    @Test
+    public void casaMaisGastadoraTest(){
     }
 
 
