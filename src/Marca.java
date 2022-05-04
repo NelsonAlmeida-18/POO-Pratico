@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class Marca {
+public class Marca implements Serializable {
 
     private String nome;
     private double consumoDiario;

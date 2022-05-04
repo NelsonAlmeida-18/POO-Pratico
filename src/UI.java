@@ -9,6 +9,8 @@ import java.util.ListIterator;
 
 
 //import static com.intellij.openapi.util.text.Strings.toUpperCase;
+//mudar o ui para um to string e passamos ao parser para construir tudo de uma vez, just an idea
+
 
 public class UI {
 
