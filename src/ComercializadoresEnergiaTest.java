@@ -48,7 +48,7 @@ public class ComercializadoresEnergiaTest{
         Fatura fatura1 = new Fatura(LocalDateTime.now(),LocalDateTime.of(2022,6,5,11,36), 51.4f, 60.53);
         faturas.add(1,fatura1);
         casa1.mudaDeFornecedor(nce);
-        assertEquals(nce,casa1.getCompanhia_eletrica(),"Deveria ter trocador de fornecedor");
+        assertEquals(nce,casa1.getCompanhia_eletrica(),"Deveria ter trocador de fornecedor (!=null)");
         nce.terminaContrato(casa1);
         nce.addCasa(casa1,faturas);
         assertEquals(nce,casa1.getCompanhia_eletrica(),"Deveria ter como fornecedor ELETRO");
@@ -68,26 +68,24 @@ public class ComercializadoresEnergiaTest{
     }
 
     @Test
-    public void casaMaisGastadoraTest(){
+    public void casaMaisGastadoraTest() {
         ComercializadoresEnergia ce = new ComercializadoresEnergia("EDP");
-        SmartHouse casa1 = new SmartHouse(1,"joão", 123123,"Rua da rua", ce);
-        SmartHouse casa2 = new SmartHouse(2,"rui",231231, "Rua sem rua", ce);
-        SmartHouse casa3 = new SmartHouse(3, "adalberto", 321321, "Rua com rua",ce);
+        SmartHouse casa1 = new SmartHouse(1, "joão", 123123, "Rua da rua", ce);
+        SmartHouse casa2 = new SmartHouse(2, "rui", 231231, "Rua sem rua", ce);
+        SmartHouse casa3 = new SmartHouse(3, "adalberto", 321321, "Rua com rua", ce);
         SmartHouse casa4 = new SmartHouse(4, "joaquim", 312312, "Rua na rua", ce);
         SmartBulb ds = new SmartBulb(11);
         ds.setConsumo(11.11f);
-        casa1.addDevice("sala",ds);
-        Map<SmartHouse,List<Fatura>> casas = new HashMap<>();
-        List<Fatura> faturas= new ArrayList<>();
-        Fatura fatura1 = new Fatura(LocalDateTime.now(),LocalDateTime.of(2022,6,5,11,36), 51.4f, 60.53);
-        faturas.add(1,fatura1);
-        casas.put(casa1.clone(),faturas);
-        casas.put(casa2.clone(),null);
-        casas.put(casa3.clone(),null);
-        casas.put(casa4.clone(),null);
+        casa1.addDevice("sala", ds);
+        Map<SmartHouse, List<Fatura>> casas = new HashMap<>();
+        List<Fatura> faturas = new ArrayList<>();
+        Fatura fatura1 = new Fatura(LocalDateTime.now(), LocalDateTime.of(2022, 6, 5, 11, 36), 51.4f, 60.53);
+        faturas.add(1, fatura1);
+        casas.put(casa1.clone(), faturas);
+        casas.put(casa2.clone(), null);
+        casas.put(casa3.clone(), null);
+        casas.put(casa4.clone(), null);
         ce.setCasas(casas);
-        assertEquals(casa1, ce.getCasaMaisGastadora(), "Esta não é a casa mais gastadora" );
+        assertEquals(casa1, ce.getCasaMaisGastadora(), "Esta não é a casa mais gastadora");
     }
-
-
 }
