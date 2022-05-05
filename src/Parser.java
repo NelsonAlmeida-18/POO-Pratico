@@ -13,9 +13,6 @@ import java.nio.file.Files;
 
 public class Parser {
 
-    public Parser(){
-    }
-
     public SmartCity parse(int houseID, int deviceID) throws IOException{
         Path path = Path.of("/Users/rkeat/Desktop/POO-Pratico/src/logs.txt");
         String content = Files.readString(path);

@@ -3,11 +3,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
 
-public class ComercializadoresEnergia {
+public class ComercializadoresEnergia implements Serializable {
 
     private String nome;
     private double precoBaseKW;

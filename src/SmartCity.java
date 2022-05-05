@@ -110,9 +110,18 @@ public class SmartCity implements Serializable {
         catch(FileNotFoundException e){
             System.out.println("File not found!\n");
         }
-        catch(IOException e){
-            System.out.println("Something went wrong while saving the state!\n");
-        }
+        // catch(IOException e){
+        //     System.out.println("Something went wrong while saving the state!\n");
+        //     e.printStackTrace();
+        // }
+    }
+
+    public SmartCity loadState(String nameOfFile) throws FileNotFoundException,IOException, ClassNotFoundException{
+        FileInputStream fis = new FileInputStream(nameOfFile);
+        ObjectInputStream oos = new ObjectInputStream(fis);
+        SmartCity cit =(SmartCity) oos.readObject();
+        oos.close();
+        return cit;
     }
 
     public SmartCity(int houseID, int deviceID){

@@ -248,8 +248,6 @@ public class SmartBulb extends SmartDevice {
             case ("OFF"):
                 ret = SmartBulb.state.OFF;
             break;
-
-            default:
             
         }
 
