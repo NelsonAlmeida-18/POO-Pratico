@@ -22,6 +22,13 @@ public class ComercializadoresEnergia implements Serializable {
         this.casas = new HashMap<>();
     }
 
+    public ComercializadoresEnergia(String nome,SmartHouse casa,List<Fatura> fat){
+        this.nome=nome;
+        this.precoBaseKW= 0.142;
+        this.fatorImposto= 0.001;
+        this.casas = new HashMap<>();
+        this.casas.putIfAbsent(casa,fat);
+    }
     public ComercializadoresEnergia(String nome,double precoBaseKW, double fatorImposto){
         this.nome=nome;
         this.precoBaseKW=precoBaseKW;
@@ -68,7 +75,6 @@ public class ComercializadoresEnergia implements Serializable {
         }
         return casinhasNovas;
     }
-
     public void setCasas(Map<SmartHouse,List<Fatura>> casas){
         Map<SmartHouse,List<Fatura>> casinhasNovas=new HashMap<>();
         for(SmartHouse casa:casas.keySet()){
@@ -97,6 +103,9 @@ public class ComercializadoresEnergia implements Serializable {
 
     public void removeCasa(SmartHouse casa){
         this.casas.remove(casa);
+        // casa fica sem luz
+        casa.setHouseOFF();
+        casa.setCompanhia_eletrica(null);
     }
 
     public void removeCasa(String morada){
@@ -134,6 +143,12 @@ public class ComercializadoresEnergia implements Serializable {
         }
     }
 
+    public void addFatura(Fatura fat, SmartHouse casa){
+        try{
+            this.casas.get(casa).add(fat);
+        } catch(Exception e){System.out.println("Não existe casa, erro "+e); }
+
+    }
     public List<Fatura> getFaturas(SmartHouse casa){
         List<Fatura> faturas = new ArrayList<>();
         if(this.casas.containsKey(casa)){
