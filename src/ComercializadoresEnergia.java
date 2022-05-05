@@ -14,7 +14,6 @@ public class ComercializadoresEnergia implements Serializable {
     private double precoBaseKW;
     private double fatorImposto;
     private Map<SmartHouse,List<Fatura>> casas;
-    //private List<SmartHouse> casas;
 
     public ComercializadoresEnergia(String nome){
         this.nome=nome;
@@ -156,12 +155,12 @@ public class ComercializadoresEnergia implements Serializable {
     public SmartHouse getCasaMaisGastadora(){
         SmartHouse casaMaisGastadora=null;
         double maxConsumo=0;
-        for(SmartHouse casa:this.casas.keySet()){
-            double consumo=casa.getConsumoDaCasa();
-            if (consumo>maxConsumo  ||  casaMaisGastadora==null){
-                maxConsumo=consumo;
-                casaMaisGastadora=casa;
-            }  
+        for(SmartHouse casa:this.casas.keySet()) {
+            double consumo = casa.getConsumoDaCasa();
+            if ((consumo > maxConsumo) || (casaMaisGastadora == null)) {
+                maxConsumo = consumo;
+                casaMaisGastadora = casa;
+            }
         }
         return casaMaisGastadora;
     }
