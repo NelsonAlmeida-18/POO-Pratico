@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.lang.StringBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * A SmartHouse faz a gestão dos SmartDevices que existem e dos
@@ -56,7 +55,7 @@ public class SmartHouse implements Serializable{
     }
 
     public SmartHouse(int id, SmartHouse sh){ //o id tem sempre de ser passado pela cidade para
-        this.id = sh.getID();
+        this.id = id;
         this.nome_prop=sh.getNome_prop();
         this.NIF_prop = sh.getNIF_prop();
         this.morada= sh.getMorada();
@@ -110,8 +109,7 @@ public class SmartHouse implements Serializable{
         for (String div:this.devices.keySet()){
             Map<Integer, SmartDevice> devi = new HashMap<>();
             for(SmartDevice sd:this.devices.get(div).values()){
-                //falta clonar
-                devi.put(sd.getID(), sd);
+                devi.put(sd.getID(), sd.clone());
             }
             newHouse.put(div, devi);
         }
@@ -193,22 +191,29 @@ public class SmartHouse implements Serializable{
     
     public void addDevice(String divisao,SmartDevice s) {
         if (this.devices.containsKey(divisao)){
-            //falta clonar
-            this.devices.get(divisao).put(s.getID(),s);
+            this.devices.get(divisao).put(s.getID(),s.clone());
         }
         else{//criar a divisao 
             Map<Integer, SmartDevice> disp = new HashMap<>();
-            //falta clonar
-            disp.put(s.getID(),s);
+            disp.put(s.getID(),s.clone());
             this.devices.put(divisao, disp);
         }
     }
-    
+
+    public void addDevice(String divisao,int id) {
+        if (this.devices.containsKey(divisao)){
+            this.devices.get(divisao).put(id,getDevice(id).clone());
+        }
+        else{//criar a divisao
+            Map<Integer, SmartDevice> disp = new HashMap<>();
+            disp.put(id,getDevice(id).clone());
+            this.devices.put(divisao, disp);
+        }
+    }
     public SmartDevice getDevice(Integer s) {
         for(Map<Integer, SmartDevice> devices: this.devices.values()){
             if(devices.containsKey(s))
-                //falta clonar
-                return devices.get(s);
+                return devices.get(s).clone();
         }
         return null;
     }
@@ -296,7 +301,7 @@ public class SmartHouse implements Serializable{
 
     public ArrayList<String> getDivisaoList(){
         
-        ArrayList<String> divs_list = new ArrayList<String>();
+        ArrayList<String> divs_list = new ArrayList<>();
         int index = 0;
 
         for (Map.Entry<String,Map<Integer, SmartDevice>> devices : devices.entrySet()) {
@@ -305,6 +310,11 @@ public class SmartHouse implements Serializable{
         }
 
         return divs_list;
+    }
+
+    public Map<Integer,SmartDevice> getDevicesDivisao(String divisao){
+        return this.devices.get(divisao);
+
     }
 
     public String getDivisaoByIndex(int index){return this.getDivisaoList().get(index);}

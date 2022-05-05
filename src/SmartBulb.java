@@ -45,6 +45,17 @@ public class SmartBulb extends SmartDevice {
         this.dataFin=LocalDateTime.now();
     }
 
+    public SmartBulb(int id,state estado) {
+        // initialise instance variables
+        this.id = id;
+        this.mode=modo.NEUTRAL;
+        this.estado=estado;
+        this.consumo=0;
+        this.dimensions=1;  // não existem lampadas "inexistentes"
+        this.ligadoInit=LocalDateTime.now();
+        this.dataFin=LocalDateTime.now();
+    }
+
     public SmartBulb(int id, modo mode,int dimensions, double consumo) {
         // initialise instance variables
         this.id = id;
