@@ -36,6 +36,15 @@ public class SmartHouse implements Serializable{
         //this.companhia_eletrica = new ComercializadoresEnergia();
     //}
 
+    // casa sem luz
+    public SmartHouse(int id, String nome, int NIF, String Morada){
+        this.id = id;
+        this.nome_prop = nome;
+        this.NIF_prop = NIF;
+        this.morada = Morada;
+        this.companhia_eletrica = null;
+
+    }
     public SmartHouse(int id,String nome, int NIF, String morada, ComercializadoresEnergia comp) {
         // initialise instance variables
         this.id=id;
@@ -119,25 +128,31 @@ public class SmartHouse implements Serializable{
 
     
     public void setDeviceOn(int devCode) {
-        for (Map<Integer, SmartDevice> dispositivos: this.devices.values()){
-            if (dispositivos.containsKey(devCode)){
-                dispositivos.get(devCode).turnOn();
+        if(this.companhia_eletrica != null) {
+            for (Map<Integer, SmartDevice> dispositivos : this.devices.values()) {
+                if (dispositivos.containsKey(devCode)) {
+                    dispositivos.get(devCode).turnOn();
+                }
             }
         }
     }
 
     public void setDivisaoOn(String div){
-        if (this.devices.containsKey(div)){
-            Map <Integer, SmartDevice> divisao = this.devices.get(div);
-            for (SmartDevice sd:divisao.values()){
-                sd.turnOn();
+        if(this.companhia_eletrica != null) {
+            if (this.devices.containsKey(div)) {
+                Map<Integer, SmartDevice> divisao = this.devices.get(div);
+                for (SmartDevice sd : divisao.values()) {
+                    sd.turnOn();
+                }
             }
         }
     }
 
     public void setHouseOn(){
-        for (String divisao:this.devices.keySet()){
-            setDivisaoOn(divisao);
+        if(this.companhia_eletrica != null) {
+            for (String divisao : this.devices.keySet()) {
+                setDivisaoOn(divisao);
+            }
         }
     }
     
@@ -269,12 +284,10 @@ public class SmartHouse implements Serializable{
 
     public void mudaDeFornecedor(ComercializadoresEnergia novoComercializadoresEnergia){
         this.companhia_eletrica.geraFatura(this);
-        List<Fatura> faturasAnteriores = this.companhia_eletrica.getFaturas(this); //ir buscar as faturas anteriores para passar para a nova empresa não sei se é pertinente
         this.companhia_eletrica.terminaContrato(this);//terminar contrato
         this.companhia_eletrica=novoComercializadoresEnergia;
-        this.companhia_eletrica=novoComercializadoresEnergia;
         this.companhia_eletrica.addCasa(this);
-        //não sei se passar as faturas anteriores é pertinente
+
     }
 
     //funções sobre o map<divisions, devices>

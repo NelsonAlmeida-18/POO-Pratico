@@ -1,7 +1,7 @@
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ParserTest{
 
@@ -17,4 +17,35 @@ public class ParserTest{
     public void parseTest(){
     }
 
+    @Test
+    void parse() {
+    }
+
+    @Test
+    void readFile() {
+    }
+
+    @Test
+    void parseCasa() {
+    }
+
+    @Test
+    void parseSmartBulb() {
+    }
+
+    @Test
+    void parseSmartCamera() {
+    }
+
+    @Test
+    void parseSmartSpeaker() {
+    }
+
+    @Test
+    void parseComercializadoresEnergia() {
+    }
+
+    @Test
+    void parseMarca() {
+    }
 }
