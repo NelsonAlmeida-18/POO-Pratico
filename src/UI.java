@@ -6,6 +6,7 @@ import java.lang.InterruptedException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ListIterator;
+import java.lang.ProcessBuilder;
 
 
 //import static com.intellij.openapi.util.text.Strings.toUpperCase;
@@ -13,16 +14,22 @@ import java.util.ListIterator;
 
 
 public class UI {
+    Scanner sc;
 
-    public UI(){
+    public UI(SmartCity city, Scanner scanner){
+        this.sc = scanner;
+        try {
+            clearConsole();
+            menuInicial(city, sc);
+        }catch(Exception e){
+            System.out.print(e.toString());
+        }
     }
 
-    public static int response(){
+    public static int response(Scanner sc){
 
-        Scanner sc = new Scanner(System.in);
         System.out.print("[y/n] ");
-        String res = sc.next();
-        sc.close();
+        String res = sc.nextLine();
         res = res.toLowerCase();
         int ret;
 
@@ -33,24 +40,22 @@ public class UI {
             ret = 1;
         }else{
             System.out.println("Resposta inválida");
-            ret = response();
+            ret = response(sc);
         }
         
         return ret;
     }
 
-    public void saveState(SmartCity city){
+    public void saveState(SmartCity city, Scanner sc){
        try{
            System.out.println("Dá um nome ao teu ficheiro de estado:");
-           Scanner scan = new Scanner(System.in);
-           String nameOfFile = scan.next();
+           String nameOfFile = sc.nextLine();
            File f = new File("./output/"+nameOfFile);
            while(f.exists()){
                 System.out.println("Dá um nome válido ao teu ficheiro");
-                nameOfFile = scan.next();
-                f = new File("./output/"+nameOfFile);    
+                nameOfFile = sc.nextLine();
+                f = new File("./output/"+nameOfFile);
            }
-           scan.close();
            city.saveState(nameOfFile);
        } 
        catch(FileNotFoundException e){
@@ -60,13 +65,36 @@ public class UI {
            System.out.println("Error saving state!");
        }
     }
+/*
+    public static void clearConsole(){
+        try{
+            String operatingSystem = System.getProperty("os.name") //Check the current operating system
+
+            if(operatingSystem.contains("Windows")){
+                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "cls");
+                Process startProcess = pb.inheritIO.start();
+                startProcess.waitFor();
+            } else {
+                ProcessBuilder pb = new ProcessBuilder("clear");
+                Process startProcess = pb.inheritIO.start();
+
+                startProcess.waitFor();
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+*/
 
     public static void clearConsole() throws IOException {
        try {
             if (System.getProperty("os.name").contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                //System.out.print("\033\143");
+
             }
             else {
+                //System.out.print("\033\143");
                 System.out.print("\033\143");
             }
         } catch (IOException | InterruptedException ex) { System.out.println(ex.getMessage());}
@@ -80,62 +108,57 @@ public class UI {
         }
     }
     
-    public void menuInicial(SmartCity city) throws IOException {
+    public void menuInicial(SmartCity city, Scanner sc) throws IOException {
         int res;
-        Scanner sc = new Scanner(System.in);
-        System.out.println();
+        System.out.print("\n");
         System.out.println("Selecione uma das opções abaixo:\n");
         System.out.println("1 - Criar uma cidade");
         System.out.println("2 - Carregar a partir de um estado de programa");
         System.out.println("3 - Carregar a partir de um ficheiro log");
         System.out.println("4 - Sair");
         res = sc.nextInt();
-        sc.close();
+        sc.nextLine();
         switch(res){
             case 1:
-             clearConsole();
-                createMenu(city);
+                clearConsole();
+                createMenu(city, sc);
                 break;
 
             case 2:
                 clearConsole();
-                loadMenu(city);
+                loadMenu(city, sc);
                 break;
-            
+
             case 3:
                 clearConsole();
                 Parser p = new Parser();
                 city = p.parse(city.getHouseId(), city.getDeviceId());
+                menuInicial(city, sc);
                 break;
-            
+
             case 4:
+                clearConsole();
                 System.out.println("Tem a certeza que quer sair?");
-                if(response() == 1){
-                    System.out.println("Saindo");
-                    try{
-                        Thread.sleep(2000);
-                    }catch(Exception e){
-                        System.out.println("[DEBUG] erro: computador impaciente");
-                    }
+                if(response(sc) == 1){
+                    System.out.println("That's all, folks!.");
                 }
-                else{menuInicial(city);}
+                else{createMenu(city, sc);}
             break;
 
             default:
+                clearConsole();
                 System.out.println("Opção inválida.");
-                menuInicial(city);
+                menuInicial(city, sc);
             break;
-            
+
         }
     }
  
-    public void loadMenu(SmartCity city) {
-        Scanner sc = new Scanner(System.in);
+    public void loadMenu(SmartCity city, Scanner sc) {
         System.out.println("Insira o path para o ficheiro que pretende carregar:");
-        String path = sc.next();
+        String path = sc.nextLine();
         System.out.println("Insira o nome do ficheiro com a extensão (e.g. ficheiro.txt):");
-        String file = sc.next();
-        sc.close();
+        String file = sc.nextLine();
         path.concat(file);
         try {
             BufferedReader reader = new BufferedReader(new FileReader(path));
@@ -150,9 +173,8 @@ public class UI {
         }
     }
 
-    public void createMenu(SmartCity city) throws IOException{
+    public void createMenu(SmartCity city, Scanner sc) throws IOException{
         int res;
-        Scanner sc = new Scanner(System.in);
         System.out.println("Selecione uma das opções abaixo:");
         System.out.println();
         System.out.println("1 - Criar SmartHouse");
@@ -166,44 +188,44 @@ public class UI {
         System.out.println("9 - Salvar para um ficheiro");
         System.out.println("10 - Ir para a simulação");
         res = sc.nextInt();
-        sc.close();
+        sc.nextLine();
 
         switch(res){
             case 1:
-                createSmartHouseMenu(city);
-                createMenu(city);
+                createSmartHouseMenu(city, sc);
+                createMenu(city, sc);
             break;
 
             case 2:
-                createComercializadorMenu(city);
-                createMenu(city);
+                createComercializadorMenu(city, sc);
+                createMenu(city, sc);
             break;
 
             case 3:
-                createMarcaMenu(city);
-                createMenu(city);
+                createMarcaMenu(city, sc);
+                createMenu(city, sc);
             break;
 
             case 4:
-                createSmartDevicePresetMenu(city);
-                createMenu(city);
+                createSmartDevicePresetMenu(city, sc);
+                createMenu(city, sc);
             break;
 
             case 5:
                 //deleteSmartDevicePresetMenu(city);
-                createMenu(city);
+                createMenu(city, sc);
             break;
 
             case 6:
                 city.listSmartHouses();
                 //listSmartHousesMenu(city);
-                createMenu(city);
+                createMenu(city, sc);
             break;
 
             case 7:
                 city.listSmartDevicesPresets();
                 //listSmartDevicesPresetsMenu(city);
-                createMenu(city);
+                createMenu(city, sc);
             break;
 
             case 8:
@@ -212,66 +234,63 @@ public class UI {
             break;
 
             case 9:
-                saveState(city); //função save, não tem menu, simplesmente guarda na pasta save
+                saveState(city, sc); //função save, não tem menu, simplesmente guarda na pasta save
                 System.out.println("Estado do programa guardado");
-                createMenu(city);
+                createMenu(city, sc);
             break;
 
             case 10:
                 //simulationMenu(city);
-                try{menuInicial(city);}
+                try{menuInicial(city, sc);}
                 catch(Exception e){System.out.println("Failed to load menuInicial");}
             break;
         }
     }
 
-    public void createSmartHouseMenu(SmartCity city){
+    public void createSmartHouseMenu(SmartCity city, Scanner sc){
         
         int house_id = city.giveDeviceId();
-        Scanner sc = new Scanner(System.in);
-        
+
         System.out.println("Insira o nome do proprietário:");
-        String nome_prop = sc.next();
-        
+        String nome_prop = sc.nextLine();
+
         System.out.println("Insira o NIF do proprietário:");
         int nif = sc.nextInt();
-        
+        sc.nextLine();
+
         System.out.println("Insira a morada:");
-        String morada = sc.next();
-        
+        String morada = sc.nextLine();
+
         System.out.println("Insira o fornecedor:");
         printComercializadoresList(city);
-        String fornecedor = sc.next();
-                
+        String fornecedor = sc.nextLine();
+
         city.createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
 
         System.out.println("Pretende adicionar divisões na casa?");
-        int res = response();
-        sc.close();
+        int res = response(sc);
 
-        if(res == 1) addDivisoesToHouseMenu(house_id, city);
+        if(res == 1) addDivisoesToHouseMenu(house_id, city, sc);
 
     }
 
-    public void addDivisoesToHouseMenu(int house_id, SmartCity city){ //reviewed
-        
-        Scanner sc = new Scanner(System.in);
-        
+    public void addDivisoesToHouseMenu(int house_id, SmartCity city, Scanner sc){ //reviewed
+
         System.out.println("Insira o nome da divisão:");
-        String nome_divisao = sc.next();
-        sc.close();
+        String nome_divisao = sc.nextLine();
+
         city.criaDivisao(nome_divisao);
 
         System.out.println("Pretende adicionar dispositivos na divisão?");
-        int res = response();
+        int res = response(sc);
         if(res == 1){
             addDivisionDevicesMenu(city, house_id, nome_divisao);
         }
 
         System.out.println("Pretende adicionar mais divisões?");
-        res = response();
+        res = response(sc);
         if(res == 1){
-            addDivisoesToHouseMenu(house_id, city);
+            addDivisoesToHouseMenu(house_id, city, sc);
         }
 
         
@@ -279,192 +298,173 @@ public class UI {
  
     public void addDivisionDevicesMenu(SmartCity city, int house_id, String nome_divisao){ //reviewed
         
-        addDeviceToDivisaoMenu(city, house_id, nome_divisao); //adiciona um dispositivo a uma divisão
+        addDeviceToDivisaoMenu(city, house_id, nome_divisao, sc); //adiciona um dispositivo a uma divisão
         System.out.println("Pretende adicionar mais um dispositivo na divisão?");
-        int res = response();
+        int res = response(sc);
         if(res == 1){
             addDivisionDevicesMenu(city, house_id, nome_divisao);
         }
         
     }
 
-    public void addDeviceToDivisaoMenu(SmartCity city, int house_id, String nome_divisao){
- 
-            Scanner sc = new Scanner(System.in);
-            
-            System.out.println("Adicionar SmartDevice em "+ nome_divisao);
-            System.out.println("(escolha uma das seguintes opções)\n");
-            System.out.println("1 - Adicionar preset");
-            System.out.println("2 - Criar SmartDevice");
+    public void addDeviceToDivisaoMenu(SmartCity city, int house_id, String nome_divisao, Scanner sc){
+
+        System.out.println("Adicionar SmartDevice em "+ nome_divisao);
+        System.out.println("(escolha uma das seguintes opções)\n");
+        System.out.println("1 - Adicionar preset");
+        System.out.println("2 - Criar SmartDevice");
 
         int res = sc.nextInt();
-        sc.close();
+        sc.nextLine();
 
             switch(res){
                 case 1:
-                    //neste menu aparece uma lista dos presets existentes e a pessoa escolhe qual quer para dar clone para a divisão da casa
-                    addPresetToDivisaoMenu(city, house_id, nome_divisao);
+                    addPresetToDivisaoMenu(city, house_id, nome_divisao, sc);
                 break;
     
                 case 2:
-                    //abrir o menu de criação de um smart device que no fim devolve um smartDevice que é colocado na divisão por uma função da smartCity
-                    city.addDeviceToDivisao(nome_divisao, createSmartDeviceMenu(city)); //adiciona um dispositivo criado no momento
+                    city.addDeviceToDivisao(nome_divisao, createSmartDeviceMenu(city, sc)); //adiciona um dispositivo criado no momento
                 break;
             }
                   
     }
     
-    public void addPresetToDivisaoMenu(SmartCity city, int house_id, String nome_divisao){
-
-        Scanner sc = new Scanner(System.in);
-        
-        //lista os presets
+    public void addPresetToDivisaoMenu(SmartCity city, int house_id, String nome_divisao, Scanner sc){
 
         System.out.println("Eis os presets existentes:");
         printComercializadoresList(city);
         
-        String preset_selection = sc.next();
-        sc.close();
+        String preset_selection = sc.nextLine();
 
         city.addDeviceToDivisao(nome_divisao, preset_selection);
         
     }
 
-    public SmartDevice createSmartDeviceMenu(SmartCity city){
+    public SmartDevice createSmartDeviceMenu(SmartCity city, Scanner sc){
 
-        Scanner sc = new Scanner(System.in);
-        
         System.out.println("Escolha o tipo de SmartDevice para criar:");
         System.out.println("1 - SmartSpeaker");
         System.out.println("2 - SmartCamera");
         System.out.println("3 - SmartBulb");
 
         int res = sc.nextInt();
-        sc.close();
+        sc.nextLine();
 
         SmartDevice sd;
         
         switch(res){
             case 1:
-                sd = createSmartSpeakerMenu(city);
+                sd = createSmartSpeakerMenu(city, sc);
             break;
 
             case 2:
-                sd = createSmartCameraMenu(city);
+                sd = createSmartCameraMenu(city, sc);
             break;
 
             case 3:
-                sd = createSmartBulbMenu(city);
+                sd = createSmartBulbMenu(city, sc);
             break;
 
             default:
                 System.out.println("Opção inexistente");
-                sd = createSmartDeviceMenu(city);
+                sd = createSmartDeviceMenu(city, sc);
             break;
         }
         
         return sd;
     }
 
-    public SmartSpeaker createSmartSpeakerMenu(SmartCity city){
+    public SmartSpeaker createSmartSpeakerMenu(SmartCity city, Scanner sc){
 
-        Scanner sc = new Scanner(System.in);
-    
         System.out.println("Insira a marca:");
         city.marcasListToString();
-        String nome_marca = sc.next();
+        String nome_marca = sc.nextLine();
         Marca marca = city.getMarca(nome_marca);
 
         System.out.println("Insira o consumo diário: (kWh)");
         float consumo = sc.nextFloat();
+        sc.nextLine();
         
         System.out.println("Insira o nome da estação de rádio:");
-        String estacao = sc.next();
+        String estacao = sc.nextLine();
 
         System.out.println("Insira o volume (0 a 20):");
         int volume = sc.nextInt();
+        sc.nextLine();
 
         System.out.println("Insira o estado (ON/OFF):");
-        String estado = sc.next();
+        String estado = sc.nextLine();
 
-        sc.close();
         return new SmartSpeaker(city.giveDeviceId(),volume, estacao, estado, marca, consumo);
-      
+
     }
 
-    public SmartCamera createSmartCameraMenu(SmartCity city){
-
-        Scanner sc = new Scanner(System.in);
+    public SmartCamera createSmartCameraMenu(SmartCity city, Scanner sc){
 
         System.out.println("Insira a altura em pixeis desejada: ");
         float heigth = sc.nextFloat();
+        sc.nextLine();
 
         System.out.println("Insira a largura em pixeis desejada: ");
         float width = sc.nextFloat();
+        sc.nextLine();
     
         System.out.println("Insira o tamanho máximo dos ficheiros:");
         int tamanho = sc.nextInt();
+        sc.nextLine();
     
         System.out.println("Insira o estado (ON/OFF):");
-        String estado = sc.next();
-
-        sc.close();
+        String estado = sc.nextLine();
 
         return new SmartCamera(city.giveDeviceId(), width, heigth, tamanho, estado);
-
     }
 
-    public SmartBulb createSmartBulbMenu(SmartCity city){
-
-        Scanner sc = new Scanner(System.in);
+    public SmartBulb createSmartBulbMenu(SmartCity city, Scanner sc){
 
         System.out.println("Insira as dimensões da lâmpada:");
         int dimensions = sc.nextInt();
+        sc.nextLine();
 
         System.out.println("Insira o consumo diário da lâmpada: (kWh)");
         float consumo = sc.nextFloat();
+        sc.nextLine();
     
         System.out.println("Insira o modo em que se encontra a lâmpada (COLD, NEUTRAL, WARM):");
-        String modo = sc.next();
-    
+        String modo = sc.nextLine();
+
         System.out.println("Insira o estado (ON/OFF):");
-        String estado = sc.next();
-        sc.close();
+        String estado = sc.nextLine();
 
         return new SmartBulb(city.giveDeviceId(), modo, dimensions, consumo, estado);
         
     }
 
-    public void createComercializadorMenu(SmartCity city){
+    public void createComercializadorMenu(SmartCity city, Scanner sc){
 
-        Scanner sc = new Scanner(System.in);
-        
         System.out.println("Insira o nome do comercializador:");
-        String nome = sc.next();
-        
+        String nome = sc.nextLine();
+
         System.out.println("Insira o preço base (KW):");
         int preco = sc.nextInt();
+        sc.nextLine();
         
         System.out.println("Insira o fator imposto:");
         int imposto = sc.nextInt();
-        sc.close();
-        
+        sc.nextLine();
+
         city.createComercializadorEnergia(nome, preco, imposto);
         System.out.println("Comercializador "+ nome +" criado");
         
     }
     
-    public void createMarcaMenu(SmartCity city){
+    public void createMarcaMenu(SmartCity city, Scanner sc){
 
-        Scanner sc = new Scanner(System.in);
-        
         System.out.println("Insira o nome da marca:");
-        String nome = sc.next();
-        
+        String nome = sc.nextLine();
+
         System.out.println("Insira o consumo diário associado ao uso dos dispostivos:");
         double consumo = sc.nextInt();
-        
-        sc.close();
+        sc.nextLine();
         
         city.createMarca(nome, consumo);
         System.out.println("Marca "+ nome +" criada. Consumo diário dos dispositivos: "+ consumo);
@@ -472,24 +472,20 @@ public class UI {
     }
 
     
-    public void createSmartDevicePresetMenu(SmartCity city){
-        Scanner sc = new Scanner(System.in);
-        
-        System.out.println("Insira o nome do preset:");
-        String nome = sc.next();
+    public void createSmartDevicePresetMenu(SmartCity city,Scanner sc){
 
-        sc.close();
-        city.addDevicePreset(nome, createSmartDeviceMenu(city));
+        System.out.println("Insira o nome do preset:");
+        String nome = sc.nextLine();
+
+        city.addDevicePreset(nome, createSmartDeviceMenu(city, sc));
     }
 
    /*  public void deleteSmartDevicePresetMenu(SmartCity city){ //falta adicionar opções de voltar atrás ou cancelar
 
         city.listSmartDevicesPresets(); //lista os presets existentes
-        Scanner sc = new Scanner(System.in);
-        
+
         System.out.println("Insira o nome do preset que pretende eliminar:");
-        String preset_name = sc.next();
-        sc.close();
+        String preset_name = sc.nextLine();
 
         city.deleteSmartDevicePreset(preset_name);
 
@@ -498,11 +494,9 @@ public class UI {
     public void listSmartHousesMenu(SmartCity city){ //falta adicionar opções de voltar atrás ou cancelar
 
         city.listSmartHouses(); //lista das existentes
-        Scanner sc = new Scanner(System.in);
-        
+
         System.out.println("Insira o id da casa para ver mais detalhes:");
         int id_casa = sc.nextInt();
-        sc.close();
 
         city.getSmartHouseDetails(id_casa);
 
@@ -511,11 +505,10 @@ public class UI {
     public void listSmartDevicesPresetsMenu(SmartCity city){ //falta adicionar opções de voltar atrás ou cancelar
 
         printPresetsList(city); //lista das existentes
-        Scanner sc = new Scanner(System.in);
-        
+
         System.out.println("Insira o nome do SmartDevice para ver mais detalhes:");
-        String nome = sc.next();
-        sc.close();
+        String nome = sc.nextLine();
+        sc.nextLine();
 
         city.getSmartDevicePresetDetails(nome);
 

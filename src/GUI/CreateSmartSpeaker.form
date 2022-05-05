@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.CreateSmartSpeaker">
+  <grid id="27dc6" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="534c3" binding="createSpeaker" layout-manager="GridLayoutManager" row-count="15" column-count="9" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="0">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="3ec36" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="2" row-span="1" col-span="6" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Novo SmartSpeaker"/>
+            </properties>
+          </component>
+          <component id="65b26" class="javax.swing.JSeparator">
+            <constraints>
+              <grid row="2" column="2" row-span="1" col-span="6" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <maximum-size width="-1" height="10"/>
+              </grid>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="5bb2b" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Marca:"/>
+            </properties>
+          </component>
+          <component id="7ba7" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+            <constraints>
+              <grid row="3" column="4" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="4eb3d" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Estação rádio:"/>
+            </properties>
+          </component>
+          <component id="79820" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Volume:"/>
+            </properties>
+          </component>
+          <component id="9881d" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="9" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Estado"/>
+            </properties>
+          </component>
+          <component id="6c685" class="javax.swing.JRadioButton" binding="presetRadioButton" default-binding="true">
+            <constraints>
+              <grid row="11" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Preset"/>
+            </properties>
+          </component>
+          <hspacer id="96ec1">
+            <constraints>
+              <grid row="7" column="8" row-span="7" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <minimum-size width="10" height="-1"/>
+                <maximum-size width="10" height="-1"/>
+              </grid>
+            </constraints>
+          </hspacer>
+          <hspacer id="7399">
+            <constraints>
+              <grid row="3" column="0" row-span="7" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <minimum-size width="10" height="-1"/>
+                <maximum-size width="10" height="-1"/>
+              </grid>
+            </constraints>
+          </hspacer>
+          <vspacer id="7eef0">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="6" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <minimum-size width="-1" height="10"/>
+                <maximum-size width="-1" height="10"/>
+              </grid>
+            </constraints>
+          </vspacer>
+          <vspacer id="7cf5e">
+            <constraints>
+              <grid row="14" column="7" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <minimum-size width="-1" height="10"/>
+                <maximum-size width="-1" height="10"/>
+              </grid>
+            </constraints>
+          </vspacer>
+          <component id="cf78" class="javax.swing.JButton" binding="criarButton" default-binding="true">
+            <constraints>
+              <grid row="13" column="5" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Criar"/>
+            </properties>
+          </component>
+          <component id="c93ea" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="11" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Nome:"/>
+            </properties>
+          </component>
+          <vspacer id="f9f13">
+            <constraints>
+              <grid row="12" column="7" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <minimum-size width="-1" height="3"/>
+                <maximum-size width="-1" height="10"/>
+              </grid>
+            </constraints>
+          </vspacer>
+          <component id="fd592" class="javax.swing.JButton" binding="button1" default-binding="true">
+            <constraints>
+              <grid row="5" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="+"/>
+            </properties>
+          </component>
+          <component id="dd161" class="javax.swing.JComboBox" default-binding="true">
+            <constraints>
+              <grid row="5" column="4" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="8a6c1" class="javax.swing.JSlider" binding="slider1" default-binding="true">
+            <constraints>
+              <grid row="7" column="4" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <maximum value="20"/>
+              <minorTickSpacing value="1"/>
+              <snapToTicks value="true"/>
+              <value value="10"/>
+            </properties>
+          </component>
+          <component id="b456e" class="javax.swing.JComboBox" default-binding="true">
+            <constraints>
+              <grid row="9" column="4" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="4d735" class="javax.swing.JTextField" binding="textField3" default-binding="true">
+            <constraints>
+              <grid row="11" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="108" height="30"/>
+              </grid>
+            </constraints>
+            <properties>
+              <enabled value="false"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <hspacer id="9bdb1">
+            <constraints>
+              <grid row="5" column="6" row-span="7" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+          <hspacer id="685fb">
+            <constraints>
+              <grid row="7" column="1" row-span="6" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+          <hspacer id="7d6e2">
+            <constraints>
+              <grid row="7" column="3" row-span="4" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+          <vspacer id="dc8ce">
+            <constraints>
+              <grid row="4" column="5" row-span="1" col-span="3" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <minimum-size width="-1" height="3"/>
+                <maximum-size width="-1" height="10"/>
+              </grid>
+            </constraints>
+          </vspacer>
+          <vspacer id="c6496">
+            <constraints>
+              <grid row="6" column="7" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <minimum-size width="-1" height="3"/>
+                <maximum-size width="-1" height="10"/>
+              </grid>
+            </constraints>
+          </vspacer>
+          <vspacer id="b54ba">
+            <constraints>
+              <grid row="8" column="7" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <minimum-size width="-1" height="10"/>
+                <maximum-size width="-1" height="10"/>
+              </grid>
+            </constraints>
+          </vspacer>
+          <vspacer id="42c02">
+            <constraints>
+              <grid row="10" column="7" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <minimum-size width="-1" height="3"/>
+                <maximum-size width="-1" height="10"/>
+              </grid>
+            </constraints>
+          </vspacer>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>
