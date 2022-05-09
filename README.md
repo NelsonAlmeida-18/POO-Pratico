@@ -1,16 +1,17 @@
 <h1>POO-Pratico</h1>
-(REFAZER .md)
+
 <h2>Funcionamento e Desenvolvimento do Trabalho</h2>
     <p>Neste repositório é visível a existência de 2(duas) diretorias, sendo elas as library utilizadas (lib) e
 respetiva diretoria com o conteúdo e código de desenvolvimento (src).</p>
 <p>Todo este projeto é possível ser executado através do ficheiro Main.java</p>
+<p>Neste projeto obtém uma parte de Frontend realizada no GUI(View), e uma parte de backend geral em UI(Code)</p>
 <p>Para ajudar no planeamento e desenvolvimento do projeto recorremos ao Trello de modo a seguirmos um plano de forma mais ordeira.</p>
 
 
 <h2>API da Smart City</h2>
 
 <h3>Cidade</h3>
-    <p>Cada casa contém o comercializador de energia, proprietário com o respetivo nome e NIF.</p>
+    <p>Cada casa contém o comercializador de energia, proprietário com o respetivo nome e NIF, Map de dispositivos por divisão.</p>
 <h4>Casa</h4>
     <p>Cada smartDevice deve ser identificado por um código do fabricante proveniente de um HashMap.</p>
     <p>Vários smartDevices e todos eles foram pagos para instalar quer sejam usados ou não.</p>
@@ -24,7 +25,8 @@ respetiva diretoria com o conteúdo e código de desenvolvimento (src).</p>
     Métodos de cada casa:
         Ligar e desligar todos os dispositivos
         Ligar e desligar dispositivos especificos
-        Relacionar e verificar comercializador de energia
+        Adicionar dispostivo a divisão
+        Obter consumo por divisão
 
     SmartDevices:
 
