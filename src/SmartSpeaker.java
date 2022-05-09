@@ -171,8 +171,19 @@ public class SmartSpeaker extends SmartDevice {
 
     @Override
     public String toString(){
-        //"\nMarca: \n"+this.marca+
-        return "\nEstado atual: \n" + this.estado + "Estação atual: \n" + this.estacao + "\nVolume: " + this.volume + "\n";
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n[SmartSpeaker]");
+        sb.append("\nID: ");
+        sb.append(this.id);
+        sb.append("\nEstado: ");
+        sb.append(this.estado);
+        sb.append("\nEstação: ");
+        sb.append(this.estacao);
+        sb.append("\nVolume: ");
+        sb.append(this.volume);
+        sb.append("\n");
+
+        return sb.toString();
     }
 
     public void setState(SmartSpeaker.state est) {

@@ -257,32 +257,33 @@ public class SmartHouse implements Serializable{
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("PROPIETÁRTIO: ");
+        sb.append("\nPROPRIETÁRIO: ");
         sb.append(this.nome_prop);
         sb.append("\tNIF: ");
         sb.append(this.NIF_prop);
         sb.append("\tMORADA: ");
         sb.append(this.morada);
-        sb.append("Numero de divisãoes: ");
+        sb.append("\nCOMERCIALIZADOR DE ENERGIA:\n");
+        sb.append(this.companhia_eletrica.toString());
+        sb.append("\n");
+        sb.append("TOTAL DIVISÕES: ");
         sb.append(this.devices.size());
-        sb.append("\tDispositivos por divisão: \n");
+        sb.append("\nDISPOSITIVOS POR DIVISÃO:\n");
         if (this.devices!=null){
             for(String divisao:this.devices.keySet()){
+                sb.append("\n");
                 sb.append(divisao);
                 sb.append("\n");
                 for(SmartDevice sd:this.devices.get(divisao).values()){
-                    sb.append("Id do dispositivo: ");
-                    sb.append(sd.getID());
-                    sb.append("\n");
+                    //sb.append("Id do dispositivo: ");
+                    //sb.append(sd.getID());
+                    //sb.append("\n");
                     sb.append(sd.toString());
                     sb.append("\n");
                 }
-                sb.append("\n");
             } 
         }
-        sb.append("\tCompanhia elétrica: ");
-        sb.append(this.companhia_eletrica.toString());
-        //sb.append("\n");
+        sb.append("\n");
         return sb.toString();
     }
 

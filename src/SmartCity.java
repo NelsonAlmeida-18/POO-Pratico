@@ -167,11 +167,10 @@ public class SmartCity implements Serializable {
 
     public void createComercializadorEnergia(String nome, double preco, double imposto){ 
         ComercializadoresEnergia com = new ComercializadoresEnergia(nome, preco, imposto);
-        //System.out.println(com.toString());
-        this.comercializadores.add(com);
+        createComercializadorEnergia(com);
     }
 
-    public void createComercializadorEnergia(ComercializadoresEnergia com){ 
+    public void createComercializadorEnergia(ComercializadoresEnergia com){
         this.comercializadores.add(com);
     }
 
@@ -179,28 +178,34 @@ public class SmartCity implements Serializable {
         return this.casas.get(id);
     }
 
-    public void createHouse(String nome, int nif, String morada, String comercializadorDeEnergia){
+    public int createHouse(String nome, int nif, String morada, String comercializadorDeEnergia){
         int id = this.houseID;
         if(getCasa(id)!=null){
             if (getComercializador(comercializadorDeEnergia)==null){
                 ComercializadoresEnergia comer = getComercializador(comercializadorDeEnergia);
-                    SmartHouse casa = new SmartHouse(id,nome,nif,morada,comer);
-                    this.casas.put(this.houseID,casa);
-                    this.houseID+=1;
+                createHouse(new SmartHouse(id,nome,nif,morada,comer));
             }
             else{
                 ComercializadoresEnergia comer = new ComercializadoresEnergia(comercializadorDeEnergia);
-                SmartHouse casa = new SmartHouse(id,nome,nif,morada,comer);
-                this.casas.put(this.houseID,casa);
-                this.houseID++;
+                createComercializadorEnergia(comer);
+                createHouse(new SmartHouse(id,nome,nif,morada,comer));
             }
         }
+        return id;
     }
 
     public void createHouse(SmartHouse house){this.casas.put(this.houseID,house); this.houseID++;}
 
     public void criaDivisao(String divisao){
         SmartHouse temp = getCasa(this.houseID-1);
+        //System.out.println(temp==null);
+        if(temp!=null){
+            temp.addDivisao(divisao);
+        }
+    }
+
+    public void criaDivisao(int houseID, String divisao){
+        SmartHouse temp = getCasa(houseID);
         //System.out.println(temp==null);
         if(temp!=null){
             temp.addDivisao(divisao);
@@ -243,15 +248,23 @@ public class SmartCity implements Serializable {
         }
     }
 
+    public void listComercializadoresEnergia(){
+        System.out.println(this.comercializadores.toString());
+    }
+
     public void listSmartDevicesPresets(){
         StringBuilder sb = new StringBuilder();
         for(String name : this.presets.keySet()){
-            sb.append("Nome do preset: ");
+            sb.append("\nNome do preset: ");
             sb.append(name);
             sb.append("\n");
             sb.append(this.presets.get(name).toString());
         }
         System.out.println(sb.toString());
+    }
+
+    public void listMarcas(){
+        System.out.println(this.marcasListToString());
     }
 
     public void listSmartHouses(){

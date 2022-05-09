@@ -232,18 +232,20 @@ public class ComercializadoresEnergia implements Serializable {
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("NOME: ");
+        sb.append("\nNOME: ");
         sb.append(this.nome);
-        sb.append("\tPREÇO BASE KWH: ");
+        sb.append("\tPREÇO BASE: ");
         sb.append(this.precoBaseKW);
         sb.append("\tIMPOSTO ENERGÉTICO: ");
         sb.append(this.fatorImposto);
-        sb.append("\tNo. CLIENTES: ");
+        sb.append("\tTOTAL CLIENTES: ");
+        /*
         for(SmartHouse casa:this.casas.keySet()){
             sb.append(casa.getID());
             sb.append(this.casas.get(casa).toString());
-        }
+        }*/
         sb.append(this.casas.size());
+        //sb.append("\n");
         return sb.toString();
     }
 

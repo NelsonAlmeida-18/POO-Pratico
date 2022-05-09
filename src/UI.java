@@ -81,7 +81,7 @@ public class UI {
 */
 
     public static void clearConsole() {
-       try {
+       /*try {
             if (System.getProperty("os.name").contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
                 //System.out.print("\033\143");
@@ -91,55 +91,81 @@ public class UI {
                 //System.out.print("\033\143");
                 System.out.print("\033\143");
             }
-        } catch (IOException | InterruptedException ex) { System.out.println(ex.getMessage());}
-    }
-
-    public void printComercializadoresList(SmartCity city){
-
-        System.out.println("Comercializadores de energia disponíveis:");
-        for (ComercializadoresEnergia comercializadoresEnergia : city.getComercializadores()) {
-            comercializadoresEnergia.toString();
-        }
-        System.out.println("Comercializadores de energia disponíveis");
-        for (ComercializadoresEnergia comercializadoresEnergia : city.getComercializadores()) {
-            System.out.print("\t");
-            System.out.print(comercializadoresEnergia.toString());
-
-        }
+        } catch (IOException | InterruptedException ex) { System.out.println(ex.getMessage());}*/
+        System.out.println("limpo");
     }
     
     public void menuInicial(SmartCity city, Scanner sc) throws IOException {
         int res;
         System.out.print("\n");
         System.out.println("Selecione uma das opções abaixo:\n");
-        System.out.println("1 - Criar uma cidade");
-        System.out.println("2 - Carregar a partir de um estado de programa");
-        System.out.println("3 - Carregar a partir de um ficheiro log");
-        System.out.println("4 - Sair");
+        System.out.println("1 - Editar cidade");
+        System.out.println("2 - Consultar SmartHouses existentes");
+        System.out.println("3 - Consultar comercializadores de energia existentes");
+        System.out.println("4 - Consultar marcas existentes");
+        System.out.println("5 - Consultar SmartDevices presets");
+        System.out.println("6 - Carregar um estado de programa");
+        System.out.println("7 - Carregar um ficheiro log");
+        System.out.println("8 - Guardar estado");
+        System.out.println("9 - Começar Simulação");
+        System.out.println("10 - Sair");
         res = sc.nextInt();
         sc.nextLine();
         switch (res) {
-            case 1 -> {
+            case 1 -> { //Editar cidade
                 clearConsole();
                 createMenu(city, sc);
             }
-            case 2 -> {
+            case 2 -> { //Consultar SmartHouses existentes
                 clearConsole();
-                loadMenu(city, sc);
-            }
-            case 3 -> {
-                clearConsole();
-                Parser p = new Parser();
-                city = p.parse(city.getHouseId(), city.getDeviceId());
+                city.listSmartHouses();
                 menuInicial(city, sc);
             }
-            case 4 -> {
+            case 3 -> { //Consultar comercializadores de energia existentes
+                clearConsole();
+                city.listComercializadoresEnergia();
+                menuInicial(city, sc);
+            }
+            case 4 -> { //Consultar marcas existentes
+                clearConsole();
+                city.listMarcas();
+                menuInicial(city, sc);
+            }
+            case 5 -> { //Consultar SmartDevices presets
+                clearConsole();
+                city.listSmartDevicesPresets();
+                menuInicial(city, sc);
+            }
+            case 6 -> { //Carregar um estado de programa
+                clearConsole();
+                loadMenu(city, sc);
+                menuInicial(city, sc);
+            }
+            case 7 -> { //Carregar um ficheiro log
+                clearConsole();
+                Parser p = new Parser();
+                //city = p.parse(city.getHouseId(), city.getDeviceId());
+                p.parse(city);
+                menuInicial(city, sc);
+            }
+            case 8 -> { //Guardar estado
+                clearConsole();
+                saveState(city, sc); //função save, não tem menu, simplesmente guarda na pasta save
+                System.out.println("Estado do programa guardado");
+                menuInicial(city, sc);
+            }
+            case 9 -> { //Começar Simulação
+                clearConsole();
+                //simulationMenu(city);
+                menuInicial(city, sc);
+            }
+            case 10 -> { //Sair
                 clearConsole();
                 System.out.println("Tem a certeza que quer sair?");
                 if (response(sc) == 1) {
                     System.out.println("That's all, folks!.");
                 } else {
-                    createMenu(city, sc);
+                    menuInicial(city, sc);
                 }
             }
             default -> {
@@ -152,11 +178,11 @@ public class UI {
 
     public void loadMenu(SmartCity city, Scanner sc) {
         System.out.println("Insira o path para o ficheiro que pretende carregar:");
-        String path = sc.nextLine();
+        StringBuilder path = new StringBuilder();
+        path.append(sc.nextLine());
         System.out.println("Insira o nome do ficheiro com a extensão (e.g. ficheiro.txt):");
-        String file = sc.nextLine();
-        path.concat(file);
-        city = (SmartCity) ReadObjectFromFile(path); //createMenuLine devolve a cidade guardada no ficheiro
+        path.append(sc.nextLine());
+        city = (SmartCity) ReadObjectFromFile(path.toString()); //createMenuLine devolve a cidade guardada no ficheiro
     }
     public Object ReadObjectFromFile(String filepath) {
 
@@ -186,65 +212,45 @@ public class UI {
         System.out.println("3 - Criar marca de SmartSpeaker");
         System.out.println("4 - Criar preset de SmartDevice");
         System.out.println("5 - Eliminar um preset de SmartDevice");
-        System.out.println("6 - Consultar SmartHouses existentes");
-        System.out.println("7 - Consultar SmartDevices presets");
-        System.out.println("8 - Carregar de um ficheiro");
-        System.out.println("9 - Salvar para um ficheiro");
-        System.out.println("10 - Ir para a simulação");
+        System.out.println("6 - Adicionar apartir de log");
+        System.out.println("7 - Retroceder");
         res = sc.nextInt();
         sc.nextLine();
 
         switch(res){
-            case 1:
+            case 1: //Criar SmartHouse
                 createSmartHouseMenu(city, sc);
                 createMenu(city, sc);
             break;
 
-            case 2:
+            case 2: //Criar Comercializador de Energia
                 createComercializadorMenu(city, sc);
                 createMenu(city, sc);
             break;
 
-            case 3:
+            case 3: //Criar marca de SmartSpeaker
                 createMarcaMenu(city, sc);
                 createMenu(city, sc);
             break;
 
-            case 4:
+            case 4: //Criar preset de SmartDevice
                 createSmartDevicePresetMenu(city, sc);
                 createMenu(city, sc);
             break;
 
-            case 5:
+            case 5: //Eliminar um preset de SmartDevice
                 //deleteSmartDevicePresetMenu(city);
                 createMenu(city, sc);
             break;
 
-            case 6:
-                city.listSmartHouses();
-                //listSmartHousesMenu(city);
-                createMenu(city, sc);
-            break;
-
-            case 7:
-                city.listSmartDevicesPresets();
-                //listSmartDevicesPresetsMenu(city);
-                createMenu(city, sc);
-            break;
-
-            case 8:
+            case 6: //Adicionar apartir de log
+                clearConsole();
                 Parser p = new Parser();
                 city.merge(p.parse(city.getHouseId(), city.getDeviceId())); //carregar faz gestão de conflitos para dar merge à cidade já existente e à cidade que se está a carregar do log
             break;
 
-            case 9:
-                saveState(city, sc); //função save, não tem menu, simplesmente guarda na pasta save
-                System.out.println("Estado do programa guardado");
-                createMenu(city, sc);
-            break;
-
-            case 10:
-                //simulationMenu(city);
+            case 7: //Retroceder
+                clearConsole();
                 try{menuInicial(city, sc);}
                 catch(Exception e){System.out.println("Failed to load menuInicial");}
             break;
@@ -252,8 +258,6 @@ public class UI {
     }
 
     public void createSmartHouseMenu(SmartCity city, Scanner sc){
-        
-        int house_id = city.giveHouseId();
 
         System.out.println("Insira o nome do proprietário:");
         String nome_prop = sc.nextLine();
@@ -266,10 +270,10 @@ public class UI {
         String morada = sc.nextLine();
 
         System.out.println("Insira o fornecedor:");
-        printComercializadoresList(city);
+        city.listComercializadoresEnergia();
         String fornecedor = sc.nextLine();
 
-        city.createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
+        int house_id = city.createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
 
         System.out.println("Pretende adicionar divisões na casa?");
         int res = response(sc);

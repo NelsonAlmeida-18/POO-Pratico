@@ -78,6 +78,7 @@ public class SmartCamera extends SmartDevice {
     }
 
     public SmartCamera(SmartCamera sc){
+        this.id=sc.getID();
         this.resolucao=sc.getResolucao();
         this.tamanho_ficheiros=sc.getFileSize();
         this.estado = sc.getState();
@@ -154,11 +155,14 @@ public class SmartCamera extends SmartDevice {
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Resolução da camera: \n");
+        sb.append("\n[SmartCamera]");
+        sb.append("\nID: ");
+        sb.append(this.id);
+        sb.append("\nResolução: ");
         sb.append(this.resolucao);
-        sb.append("\nTamanho dos ficheiros: \n");
+        sb.append("\nTamanho dos ficheiros:");
         sb.append(this.tamanho_ficheiros);
-        sb.append("\nEstado da camera: ");
+        sb.append("\nEstado: ");
         sb.append(this.estado);
         sb.append("\n");
         return sb.toString();

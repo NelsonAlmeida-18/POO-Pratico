@@ -199,14 +199,15 @@ public class SmartBulb extends SmartDevice {
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("ID da lâmpada: ");
+        sb.append("\n[SmartBulb]");
+        sb.append("\nID: ");
         sb.append(this.id);
-        sb.append("Estado da lâmpada: ");
+        sb.append("\nEstado: ");
         sb.append(this.estado);
-        sb.append("\nModo de Funcionamento da lâmpada: ");
+        sb.append("\nModo: ");
         sb.append(this.mode);
         //sb.append(super(getOn())); // help on this
-        sb.append("\nDimensões da lâmpada: ");
+        sb.append("\nDimensões: ");
         sb.append(this.dimensions);
         sb.append(" cm");
         sb.append("\nÚltima vez ligada: ");
