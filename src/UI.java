@@ -333,7 +333,7 @@ public class UI {
     public void addPresetToDivisaoMenu(SmartCity city, int house_id, String nome_divisao, Scanner sc){
 
         System.out.println("Eis os presets existentes:");
-        printComercializadoresList(city);
+        city.listSmartDevicesPresets();
         
         String preset_selection = sc.nextLine();
 
