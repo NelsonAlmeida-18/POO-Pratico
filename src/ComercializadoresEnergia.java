@@ -121,7 +121,8 @@ public class ComercializadoresEnergia implements Serializable {
     public String getNome(){return this.nome;}
 
     public void setNome(String nome){ this.nome=nome;}
-
+    public void setPrecoBaseKW(double preco){ this.precoBaseKW = preco; }
+    public void setFatorImposto(double fator){ this.fatorImposto = fator; }
     public double getFatorImposto(){return this.fatorImposto;}
 
     public ComercializadoresEnergia clone(){

@@ -250,7 +250,7 @@ public class UI {
 
     public void createSmartHouseMenu(SmartCity city, Scanner sc){
         
-        int house_id = city.giveDeviceId();
+        int house_id = city.giveHouseId();
 
         System.out.println("Insira o nome do proprietário:");
         String nome_prop = sc.nextLine();
