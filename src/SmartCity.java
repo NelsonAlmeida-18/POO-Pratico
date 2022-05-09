@@ -22,7 +22,7 @@ public class SmartCity implements Serializable {
     public SmartCity(){
         this.deviceID = 0;
         this.houseID = 0;
-        this.comercializadores=new ArrayList<ComercializadoresEnergia>();
+        this.comercializadores=new ArrayList<>();
         this.marcas = new ArrayList<>();
         this.presets=new HashMap<>();
     }
@@ -55,16 +55,12 @@ public class SmartCity implements Serializable {
             }
         }
 
-        ListIterator<ComercializadoresEnergia> iter = toMerge.getComercializadores().listIterator();
-        while(iter.hasNext()){
-            ComercializadoresEnergia temp = iter.next();
+        for (ComercializadoresEnergia temp : toMerge.getComercializadores()) {
             if (!this.comercializadores.contains(temp))
                 this.comercializadores.add(temp);
         }
 
-        ListIterator<Marca> iterMarcas = toMerge.getMarcas().listIterator();
-        while(iterMarcas.hasNext()){
-            Marca temp = iterMarcas.next();
+        for (Marca temp : toMerge.getMarcas()) {
             if (!this.marcas.contains(temp))
                 this.marcas.add(temp);
         }
@@ -82,7 +78,7 @@ public class SmartCity implements Serializable {
 
     public Marca getMarca(String nome){
         for(Marca x : this.marcas){
-            if(x.getNome().equals(nome)){Marca marca = x; return marca;}
+            if(x.getNome().equals(nome)){return x;}
         }
         return null;
     }
@@ -150,6 +146,11 @@ public class SmartCity implements Serializable {
     }
 
     public Map<Integer,SmartHouse> getCasas(){return this.casas;}
+
+    public boolean hasComercializador(String id){
+        List<ComercializadoresEnergia> ret = listComercializadores();
+        return ret.stream().map(ComercializadoresEnergia::clone).anyMatch(c->c.getNome().equals(id));
+    }
 
     public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
 
@@ -259,6 +260,10 @@ public class SmartCity implements Serializable {
             sb.append(casa.toString());
         }
         System.out.println(sb.toString());
+    }
+
+    public boolean hasSmartHouse(int id){
+        return this.casas.containsKey(id);
     }
 
     public String toString(){
