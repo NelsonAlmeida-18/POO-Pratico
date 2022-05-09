@@ -10,6 +10,7 @@ import java.nio.charset.*;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Files;
+import java.util.Scanner;
 
 public class Parser {
 
@@ -25,41 +26,34 @@ public class Parser {
         for (String linha : contentSplited) {
             
             linhaPartida = linha.split(":", 2);
-            
-            switch(linhaPartida[0]){
-                case "Casa":
-                    city.createHouse(parseCasa(linhaPartida[1],city));
 
-                    break;
-                case "Divisao":
+            switch (linhaPartida[0]) {
+                case "Casa" -> city.createHouse(parseCasa(linhaPartida[1], city));
+                case "Divisao" -> {
                     //if (casaMaisRecente == null) System.out.println("Linha inválida.");
                     divisao = linhaPartida[1];
                     city.criaDivisao(divisao);
-                    break;
-                case "SmartBulb":
+                }
+                case "SmartBulb" -> {
                     if (divisao == null) System.out.println("Linha inválida.");
                     SmartBulb sd1 = parseSmartBulb(linhaPartida[1], city);
                     city.addDeviceToDivisao(divisao, sd1); // FAZER FUNÇÃO
-                    break;
-                case "SmartCamera":
+                }
+                case "SmartCamera" -> {
                     if (divisao == null) System.out.println("Linha inválida.");
                     SmartCamera sd2 = parseSmartCamera(linhaPartida[1], city);
                     city.addDeviceToDivisao(divisao, sd2);
-                    break;
-                case "SmartSpeaker":
+                }
+                case "SmartSpeaker" -> {
                     if (divisao == null) System.out.println("Linha inválida.");
                     SmartSpeaker sd3 = parseSmartSpeaker(linhaPartida[1], city);
                     city.addDeviceToDivisao(divisao, sd3);
-                    break;
-                case "Fornecedor":
-                    city.createComercializadorEnergia(parseComercializadoresEnergia(linhaPartida[1]));
-                    break;
-                case "Marca":
-                    city.createMarca(parseMarca(linhaPartida[1]));
-                    break;
-                default:
-                    //System.out.println("Linha inválida.");
-                    break;
+                }
+                case "Fornecedor" -> city.createComercializadorEnergia(parseComercializadoresEnergia(linhaPartida[1]));
+                case "Marca" -> city.createMarca(parseMarca(linhaPartida[1]));
+                default -> {
+                }
+                //System.out.println("Linha inválida.");
             }
         }
         System.out.println("done!");
@@ -75,6 +69,7 @@ public class Parser {
             List<String> lines = new ArrayList<>();
             return lines;
         }
+
     }
 
     public SmartHouse parseCasa(String input, SmartCity city){
@@ -131,5 +126,50 @@ public class Parser {
         String nome = campos[0];
         return new Marca(nome);
     }
+
+    public void simulation() throws IOException, ClassNotFoundException {
+        // load state
+        Scanner sc = new Scanner(System.in);
+        String line = sc.next();
+        String [] linha = line.split(",", 4);
+        /*
+         linha[0] data
+         linha[1] id_casa/id_fornecedor
+         linha[2] id_dispositivo/id_fornecedor/altera_atributo_fornecedor
+         linha[3] ação/novo_valor_atributo/null
+         */
+        // fazer com que o tempo avance e só depois pode efetuar ação
+        // FALTA TRATAR DOS FATORES QUE SÃO DEPENDENTES DA DATA
+        SmartCity city = new SmartCity();
+        city.loadState("path");
+        if(city.hasSmartHouse(Integer.parseInt(linha[1]))){ // house related
+            SmartHouse clonedhouse = city.getCasa(Integer.parseInt(linha[1])).clone();
+            if(clonedhouse.existsDevice(Integer.parseInt(linha[2]))){
+                SmartDevice sd = clonedhouse.getDevice(Integer.parseInt(linha[2]));
+                switch (linha[3].toUpperCase()) {
+                    case "SETON", "TURNON" -> sd.turnOn();
+                    case "SETOFF", "TURNOFF" -> sd.turnOff();
+                }
+            } else {
+                if(city.hasComercializador(linha[2])){ // try catch não pode ser utilizado dentro de ifs statements
+                    clonedhouse.mudaDeFornecedor(city.getComercializador(linha[2]));
+                } else {
+                    System.out.println("Não existe esse fornecedor na cidade");
+                }
+            }
+        } else if(city.hasComercializador(linha[1])){ // fornecedor related
+            ComercializadoresEnergia c = city.getComercializador(linha[1]);
+            switch (linha[2].toUpperCase()){
+                case "ALTERAPRECOBASE" -> c.setPrecoBaseKW(Double.parseDouble(linha[3]));
+                case "ALTERAVALORDESCONTO", "ALTERAIMPOSTO", "ALTERAFATORIMPOSTO" -> c.setFatorImposto(Double.parseDouble(linha[3]));
+            }
+        } else{
+            System.out.println("Não existe tal id, que rno fornecedor quer nos comercializadores");
+        }
+
+    }
+
+
+
 
 }
