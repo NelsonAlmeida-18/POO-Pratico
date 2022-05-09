@@ -6,6 +6,7 @@ import java.lang.InterruptedException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.ProcessBuilder;
+import java.util.ListIterator;
 
 
 //import static com.intellij.openapi.util.text.Strings.toUpperCase;
@@ -100,17 +101,17 @@ public class UI {
     }
 
     public void printComercializadoresList(SmartCity city){
-<<<<<<< HEAD
+
         System.out.println("Comercializadores de energia disponíveis:");
         for (ComercializadoresEnergia comercializadoresEnergia : city.getComercializadores()) {
             comercializadoresEnergia.toString();
-=======
+        }
         System.out.println("Comercializadores de energia disponíveis");
         ListIterator<ComercializadoresEnergia> iter = city.getComercializadores().listIterator();
         while(iter.hasNext()){
             System.out.print("\t");
             System.out.print(iter.next().toString());
->>>>>>> d596177f7b3b70999b1d958fe57e994a994989f5
+
         }
     }
     
