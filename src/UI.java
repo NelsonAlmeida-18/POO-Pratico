@@ -100,9 +100,17 @@ public class UI {
     }
 
     public void printComercializadoresList(SmartCity city){
+<<<<<<< HEAD
         System.out.println("Comercializadores de energia disponíveis:");
         for (ComercializadoresEnergia comercializadoresEnergia : city.getComercializadores()) {
             comercializadoresEnergia.toString();
+=======
+        System.out.println("Comercializadores de energia disponíveis");
+        ListIterator<ComercializadoresEnergia> iter = city.getComercializadores().listIterator();
+        while(iter.hasNext()){
+            System.out.print("\t");
+            System.out.print(iter.next().toString());
+>>>>>>> d596177f7b3b70999b1d958fe57e994a994989f5
         }
     }
     
@@ -363,7 +371,7 @@ public class UI {
         Marca marca = city.getMarca(nome_marca);
 
         System.out.println("Insira o consumo diário: (kWh)");
-        float consumo = sc.nextFloat();
+        double consumo = sc.nextDouble();
         sc.nextLine();
         
         System.out.println("Insira o nome da estação de rádio:");
@@ -407,7 +415,7 @@ public class UI {
         sc.nextLine();
 
         System.out.println("Insira o consumo diário da lâmpada: (kWh)");
-        float consumo = sc.nextFloat();
+        double consumo = sc.nextDouble();
         sc.nextLine();
     
         System.out.println("Insira o modo em que se encontra a lâmpada (COLD, NEUTRAL, WARM):");
@@ -426,11 +434,11 @@ public class UI {
         String nome = sc.nextLine();
 
         System.out.println("Insira o preço base (KW):");
-        int preco = sc.nextInt();
+        float preco = sc.nextFloat();
         sc.nextLine();
         
         System.out.println("Insira o fator imposto:");
-        int imposto = sc.nextInt();
+        float imposto = sc.nextFloat();
         sc.nextLine();
 
         city.createComercializadorEnergia(nome, preco, imposto);
