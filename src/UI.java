@@ -1,13 +1,7 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 import java.lang.InterruptedException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ListIterator;
 import java.lang.ProcessBuilder;
-
 
 //import static com.intellij.openapi.util.text.Strings.toUpperCase;
 //mudar o ui para um to string e passamos ao parser para construir tudo de uma vez, just an idea
@@ -86,7 +80,7 @@ public class UI {
     }
 */
 
-    public static void clearConsole() throws IOException {
+    public static void clearConsole() {
        try {
             if (System.getProperty("os.name").contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
@@ -101,11 +95,16 @@ public class UI {
     }
 
     public void printComercializadoresList(SmartCity city){
+
+        System.out.println("Comercializadores de energia disponíveis:");
+        for (ComercializadoresEnergia comercializadoresEnergia : city.getComercializadores()) {
+            comercializadoresEnergia.toString();
+        }
         System.out.println("Comercializadores de energia disponíveis");
-        ListIterator<ComercializadoresEnergia> iter = city.getComercializadores().listIterator();
-        while(iter.hasNext()){
+        for (ComercializadoresEnergia comercializadoresEnergia : city.getComercializadores()) {
             System.out.print("\t");
-            System.out.print(iter.next().toString());
+            System.out.print(comercializadoresEnergia.toString());
+
         }
     }
     
@@ -119,58 +118,62 @@ public class UI {
         System.out.println("4 - Sair");
         res = sc.nextInt();
         sc.nextLine();
-        switch(res){
-            case 1:
+        switch (res) {
+            case 1 -> {
                 clearConsole();
                 createMenu(city, sc);
-                break;
-
-            case 2:
+            }
+            case 2 -> {
                 clearConsole();
                 loadMenu(city, sc);
-                break;
-
-            case 3:
+            }
+            case 3 -> {
                 clearConsole();
                 Parser p = new Parser();
                 city = p.parse(city.getHouseId(), city.getDeviceId());
                 menuInicial(city, sc);
-                break;
-
-            case 4:
+            }
+            case 4 -> {
                 clearConsole();
                 System.out.println("Tem a certeza que quer sair?");
-                if(response(sc) == 1){
+                if (response(sc) == 1) {
                     System.out.println("That's all, folks!.");
+                } else {
+                    createMenu(city, sc);
                 }
-                else{createMenu(city, sc);}
-            break;
-
-            default:
+            }
+            default -> {
                 clearConsole();
                 System.out.println("Opção inválida.");
                 menuInicial(city, sc);
-            break;
-
+            }
         }
     }
- 
+
     public void loadMenu(SmartCity city, Scanner sc) {
         System.out.println("Insira o path para o ficheiro que pretende carregar:");
         String path = sc.nextLine();
         System.out.println("Insira o nome do ficheiro com a extensão (e.g. ficheiro.txt):");
         String file = sc.nextLine();
         path.concat(file);
+        city = (SmartCity) ReadObjectFromFile(path); //createMenuLine devolve a cidade guardada no ficheiro
+    }
+    public Object ReadObjectFromFile(String filepath) {
+
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(path));
-            String line = reader.readLine();
-            while (line != null) {
-                //createMenuLine(city,line); //createMenuLine devolve a cidade guardada no ficheiro
-                line = reader.readLine();
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            FileInputStream fileIn = new FileInputStream(filepath);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+
+            Object obj = objectIn.readObject();
+
+            System.out.println("Estado carregado com sucesso!");
+            objectIn.close();
+            return obj;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
         }
     }
 
@@ -318,15 +321,11 @@ public class UI {
         int res = sc.nextInt();
         sc.nextLine();
 
-            switch(res){
-                case 1:
-                    addPresetToDivisaoMenu(city, house_id, nome_divisao, sc);
-                break;
-    
-                case 2:
+        switch (res) {
+            case 1 -> addPresetToDivisaoMenu(city, house_id, nome_divisao, sc);
+            case 2 ->
                     city.addDeviceToDivisao(nome_divisao, createSmartDeviceMenu(city, sc)); //adiciona um dispositivo criado no momento
-                break;
-            }
+        }
                   
     }
     
@@ -352,24 +351,15 @@ public class UI {
         sc.nextLine();
 
         SmartDevice sd;
-        
-        switch(res){
-            case 1:
-                sd = createSmartSpeakerMenu(city, sc);
-            break;
 
-            case 2:
-                sd = createSmartCameraMenu(city, sc);
-            break;
-
-            case 3:
-                sd = createSmartBulbMenu(city, sc);
-            break;
-
-            default:
+        switch (res) {
+            case 1 -> sd = createSmartSpeakerMenu(city, sc);
+            case 2 -> sd = createSmartCameraMenu(city, sc);
+            case 3 -> sd = createSmartBulbMenu(city, sc);
+            default -> {
                 System.out.println("Opção inexistente");
                 sd = createSmartDeviceMenu(city, sc);
-            break;
+            }
         }
         
         return sd;

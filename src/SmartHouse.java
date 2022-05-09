@@ -218,7 +218,6 @@ public class SmartHouse implements Serializable{
         return null;
     }
 
-
     //rever esta
     public double getConsumoDivisao(Map<Integer,SmartDevice> div){
         double consumoDivisao=0;

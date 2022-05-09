@@ -144,32 +144,33 @@ public class Parser {
             // FALTA TRATAR DOS FATORES QUE SÃO DEPENDENTES DA DATA
             SmartCity city = new SmartCity();
             city.loadState("path");
-            if(city.hasSmartHouse(Integer.parseInt(linha[1]))){ // house related
+            if(city.hasSmartHouse(Integer.parseInt(linha[1]))) { // house related
                 SmartHouse clonedhouse = city.getCasa(Integer.parseInt(linha[1])).clone();
-                if(clonedhouse.existsDevice(Integer.parseInt(linha[2]))){
+                if (clonedhouse.existsDevice(Integer.parseInt(linha[2]))) {
                     SmartDevice sd = clonedhouse.getDevice(Integer.parseInt(linha[2]));
                     switch (linha[3].toUpperCase()) {
                         case "SETON", "TURNON" -> sd.turnOn();
                         case "SETOFF", "TURNOFF" -> sd.turnOff();
                     }
                 } else {
-                    if(city.hasComercializador(linha[2])){ // try catch não pode ser utilizado dentro de ifs statements
+                    if (city.hasComercializador(linha[2])) { // try catch não pode ser utilizado dentro de ifs statements
                         clonedhouse.mudaDeFornecedor(city.getComercializador(linha[2]));
-                    } else {
-                        System.out.println("Não existe esse fornecedor na cidade");
+                        throw new IOException(linha[2]);
                     }
                 }
-            } else if(city.hasComercializador(linha[1])){ // fornecedor related
-                ComercializadoresEnergia c = city.getComercializador(linha[1]);
-                switch (linha[2].toUpperCase()){
-                    case "ALTERAPRECOBASE" -> c.setPrecoBaseKW(Double.parseDouble(linha[3]));
-                    case "ALTERAVALORDESCONTO", "ALTERAIMPOSTO", "ALTERAFATORIMPOSTO" -> c.setFatorImposto(Double.parseDouble(linha[3]));
-                }
-            } else{
-                System.out.println("Não existe tal id, que rno fornecedor quer nos comercializadores");
-            }
-        }
 
-    }
+            } else{
+                if (city.hasComercializador(linha[1])) { // fornecedor related
+                    ComercializadoresEnergia c = city.getComercializador(linha[1]);
+                        switch (linha[2].toUpperCase()) {
+                            case "ALTERAPRECOBASE" -> c.setPrecoBaseKW(Double.parseDouble(linha[3]));
+                            case "ALTERAVALORDESCONTO", "ALTERAIMPOSTO", "ALTERAFATORIMPOSTO" -> c.setFatorImposto(Double.parseDouble(linha[3]));
+                        }
+                    throw new AccessDeniedException(linha[2]);
+                    }
+                }
+            }
+
+        }
 
 }

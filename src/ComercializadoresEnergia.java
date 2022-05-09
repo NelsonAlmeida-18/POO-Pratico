@@ -239,10 +239,10 @@ public class ComercializadoresEnergia implements Serializable {
         sb.append("\tIMPOSTO ENERGÉTICO: ");
         sb.append(this.fatorImposto);
         sb.append("\tNo. CLIENTES: ");
-        /* for(SmartHouse casa:this.casas.keySet()){
-            sb.append(casa.getMorada());  //TODO Mudar de get morada para get ID
+        for(SmartHouse casa:this.casas.keySet()){
+            sb.append(casa.getID());
             sb.append(this.casas.get(casa).toString());
-        } */
+        }
         sb.append(this.casas.size());
         return sb.toString();
     }
