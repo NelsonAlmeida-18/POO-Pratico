@@ -1,13 +1,7 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 import java.lang.InterruptedException;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.lang.ProcessBuilder;
-import java.util.ListIterator;
-
 
 //import static com.intellij.openapi.util.text.Strings.toUpperCase;
 //mudar o ui para um to string e passamos ao parser para construir tudo de uma vez, just an idea
@@ -107,10 +101,9 @@ public class UI {
             comercializadoresEnergia.toString();
         }
         System.out.println("Comercializadores de energia disponíveis");
-        ListIterator<ComercializadoresEnergia> iter = city.getComercializadores().listIterator();
-        while(iter.hasNext()){
+        for (ComercializadoresEnergia comercializadoresEnergia : city.getComercializadores()) {
             System.out.print("\t");
-            System.out.print(iter.next().toString());
+            System.out.print(comercializadoresEnergia.toString());
 
         }
     }
@@ -156,23 +149,31 @@ public class UI {
             }
         }
     }
- 
+
     public void loadMenu(SmartCity city, Scanner sc) {
         System.out.println("Insira o path para o ficheiro que pretende carregar:");
         String path = sc.nextLine();
         System.out.println("Insira o nome do ficheiro com a extensão (e.g. ficheiro.txt):");
         String file = sc.nextLine();
         path.concat(file);
+        city = (SmartCity) ReadObjectFromFile(path); //createMenuLine devolve a cidade guardada no ficheiro
+    }
+    public Object ReadObjectFromFile(String filepath) {
+
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(path));
-            String line = reader.readLine();
-            while (line != null) {
-                //createMenuLine(city,line); //createMenuLine devolve a cidade guardada no ficheiro
-                line = reader.readLine();
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            FileInputStream fileIn = new FileInputStream(filepath);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+
+            Object obj = objectIn.readObject();
+
+            System.out.println("Estado carregado com sucesso!");
+            objectIn.close();
+            return obj;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
         }
     }
 
