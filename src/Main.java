@@ -7,10 +7,12 @@ public class Main{
     public static void main(String[] args)throws IOException, ClassNotFoundException{
 
         SmartCity city = new SmartCity();
-        //Parser p = new Parser();
+
         //city = p.parse(city.getDeviceId(), city.getHouseId());
         //System.out.println(city.toString());
         //city.saveState("state");
+
+        Parser p = new Parser();
         Scanner scanner = new Scanner(System.in);
         new UI(city, scanner);
         scanner.close();

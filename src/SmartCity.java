@@ -165,6 +165,11 @@ public class SmartCity implements Serializable {
         return null;
     }
 
+    public void createComercializadorEnergia(String nome){
+        ComercializadoresEnergia com = new ComercializadoresEnergia(nome);
+        createComercializadorEnergia(com);
+    }
+
     public void createComercializadorEnergia(String nome, double preco, double imposto){ 
         ComercializadoresEnergia com = new ComercializadoresEnergia(nome, preco, imposto);
         createComercializadorEnergia(com);
@@ -180,21 +185,28 @@ public class SmartCity implements Serializable {
 
     public int createHouse(String nome, int nif, String morada, String comercializadorDeEnergia){
         int id = this.houseID;
-        if(getCasa(id)!=null){
+        //if(getCasa(id)!=null){
             if (getComercializador(comercializadorDeEnergia)==null){
-                ComercializadoresEnergia comer = getComercializador(comercializadorDeEnergia);
-                createHouse(new SmartHouse(id,nome,nif,morada,comer));
+                createComercializadorEnergia(comercializadorDeEnergia);
+                SmartHouse house = new SmartHouse(id,nome,nif,morada,getComercializador(comercializadorDeEnergia));
+                createHouse(house);
+                getComercializador(comercializadorDeEnergia).addCasa(house);
             }
             else{
-                ComercializadoresEnergia comer = new ComercializadoresEnergia(comercializadorDeEnergia);
-                createComercializadorEnergia(comer);
-                createHouse(new SmartHouse(id,nome,nif,morada,comer));
+                ComercializadoresEnergia comer = getComercializador(comercializadorDeEnergia);
+                //createComercializadorEnergia(comer);
+                SmartHouse house = new SmartHouse(id,nome,nif,morada,comer);
+                createHouse(house);
+                comer.addCasa(house);
             }
-        }
+        //}
         return id;
     }
 
-    public void createHouse(SmartHouse house){this.casas.put(this.houseID,house); this.houseID++;}
+    public void createHouse(SmartHouse house){
+        this.casas.put(this.houseID,house);
+        this.houseID++;
+    }
 
     public void criaDivisao(String divisao){
         SmartHouse temp = getCasa(this.houseID-1);

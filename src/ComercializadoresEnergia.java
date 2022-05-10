@@ -14,12 +14,14 @@ public class ComercializadoresEnergia implements Serializable {
     private double precoBaseKW;
     private double fatorImposto;
     private Map<SmartHouse,List<Fatura>> casas;
+    private int numeroDeClientes;
 
     public ComercializadoresEnergia(String nome){
         this.nome=nome;
         this.precoBaseKW= 0.142;
         this.fatorImposto= 0.001;
         this.casas = new HashMap<>();
+        this.numeroDeClientes=0;
     }
 
     public ComercializadoresEnergia(String nome,SmartHouse casa,List<Fatura> fat){
@@ -28,12 +30,22 @@ public class ComercializadoresEnergia implements Serializable {
         this.fatorImposto= 0.001;
         this.casas = new HashMap<>();
         this.casas.putIfAbsent(casa,fat);
+        this.numeroDeClientes=0;
     }
+    public ComercializadoresEnergia(String nome,double precoBaseKW, double fatorImposto, int numeroDeClientes){
+        this.nome=nome;
+        this.precoBaseKW=precoBaseKW;
+        this.fatorImposto=fatorImposto;
+        this.casas = new HashMap<>();
+        this.numeroDeClientes=numeroDeClientes;
+    }
+
     public ComercializadoresEnergia(String nome,double precoBaseKW, double fatorImposto){
         this.nome=nome;
         this.precoBaseKW=precoBaseKW;
         this.fatorImposto=fatorImposto;
         this.casas = new HashMap<>();
+        this.numeroDeClientes=0;
     }
 
     public ComercializadoresEnergia(String nome,double precoBaseKW, double fatorImposto,Map<SmartHouse,List<Fatura>> casas){
@@ -60,7 +72,10 @@ public class ComercializadoresEnergia implements Serializable {
         this.precoBaseKW = ce.getPrecoBaseKW();
         this.fatorImposto= ce.getFatorImposto();
         this.casas = ce.getCasas();
+        this.numeroDeClientes=ce.getNumeroDeCliente();
     }
+
+    public int getNumeroDeCliente(){return this.numeroDeClientes;}
 
     public Map<SmartHouse,List<Fatura>> getCasas(){
         Map<SmartHouse,List<Fatura>> casinhasNovas=new HashMap<>();
@@ -84,11 +99,12 @@ public class ComercializadoresEnergia implements Serializable {
     }
 
     public void addCasa(SmartHouse casa){
-        this.casas.put(casa.clone(),new ArrayList<Fatura>());
+        this.casas.put(casa,new ArrayList<Fatura>());
+        this.numeroDeClientes++;
     }
 
     public void addCasa(SmartHouse casa, List<Fatura> faturas){
-        this.casas.put(casa.clone(),clonaFaturas(faturas));
+        this.casas.put(casa,clonaFaturas(faturas)); this.numeroDeClientes++;
     }
 
     public List<Fatura> clonaFaturas(List<Fatura> faturas){
@@ -106,12 +122,14 @@ public class ComercializadoresEnergia implements Serializable {
         // casa fica sem luz
         casa.setHouseOFF();
         casa.setCompanhia_eletrica(null);
+        this.numeroDeClientes--;
     }
 
     public void removeCasa(String morada){
         for (SmartHouse casa:this.casas.keySet()){
             if(casa.getMorada().equals(morada)){
                 this.casas.remove(casa);
+                this.numeroDeClientes--;
             }
         }
     }
@@ -180,7 +198,8 @@ public class ComercializadoresEnergia implements Serializable {
         }
         return casaMaisGastadora;
     }
-
+    public void setNumerodeClientes(int numero){ this.numeroDeClientes = numero; }
+    public int getNumeroDeClientes(){ return this.numeroDeClientes;}
     public SmartHouse getCasaMaisGastadora(LocalDateTime dataInit, LocalDateTime dataFin){
         SmartHouse casaMaisGastadora=null;
         double maxConsumo=0;
@@ -244,7 +263,7 @@ public class ComercializadoresEnergia implements Serializable {
             sb.append(casa.getID());
             sb.append(this.casas.get(casa).toString());
         }*/
-        sb.append(this.casas.size());
+        sb.append(this.numeroDeClientes);
         //sb.append("\n");
         return sb.toString();
     }

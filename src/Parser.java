@@ -13,57 +13,61 @@ import java.nio.file.Files;
 import java.util.Scanner;
 
 public class Parser {
-
+    /*
     public SmartCity parse(int houseID, int deviceID) throws IOException{
-        //Path path = Path.of("./src/logs.txt");
-        Path path = FileSystems.getDefault().getPath("logs", "logs.txt");
-        String content = Files.readString(path);
-        SmartCity city = new SmartCity(houseID, deviceID);
-        //List<String> linhas = readFile("dados.csv");
-        String[] contentSplited = content.split("\n");
-        String[] linhaPartida;
-        String divisao = "";
-        
-        for (String linha : contentSplited) {
-            
-            linhaPartida = linha.split(":", 2);
+        try {
+            //Path path = Path.of("./src/logs.txt");
+            Path path = FileSystems.getDefault().getPath("logs", "logs.txt");
+            String content = Files.readString(path);
+            SmartCity city = new SmartCity(houseID, deviceID);
+            //List<String> linhas = readFile("dados.csv");
+            String[] contentSplited = content.split("\n");
+            String[] linhaPartida;
+            String divisao = "";
 
-            switch (linhaPartida[0]) {
-                case "Casa" -> city.createHouse(parseCasa(linhaPartida[1], city));
-                case "Divisao" -> {
-                    //if (casaMaisRecente == null) System.out.println("Linha inválida.");
-                    divisao = linhaPartida[1];
-                    city.criaDivisao(city.getHouseId()-1, divisao);
+            for (String linha : contentSplited) {
+
+                linhaPartida = linha.split(":", 2);
+
+                switch (linhaPartida[0]) {
+                    case "Casa" -> city.createHouse(parseCasa(linhaPartida[1], city));
+                    case "Divisao" -> {
+                        //if (casaMaisRecente == null) System.out.println("Linha inválida.");
+                        divisao = linhaPartida[1];
+                        city.criaDivisao(city.getHouseId() - 1, divisao);
+                    }
+                    case "SmartBulb" -> {
+                        if (divisao == null) System.out.println("Linha inválida.");
+                        SmartBulb sd1 = parseSmartBulb(linhaPartida[1], city);
+                        city.addDeviceToDivisao(divisao, sd1); // FAZER FUNÇÃO
+                    }
+                    case "SmartCamera" -> {
+                        if (divisao == null) System.out.println("Linha inválida.");
+                        SmartCamera sd2 = parseSmartCamera(linhaPartida[1], city);
+                        city.addDeviceToDivisao(divisao, sd2);
+                    }
+                    case "SmartSpeaker" -> {
+                        if (divisao == null) System.out.println("Linha inválida.");
+                        SmartSpeaker sd3 = parseSmartSpeaker(linhaPartida[1], city);
+                        city.addDeviceToDivisao(divisao, sd3);
+                    }
+                    case "Fornecedor" -> city.createComercializadorEnergia(parseComercializadoresEnergia(linhaPartida[1]));
+                    case "Marca" -> city.createMarca(parseMarca(linhaPartida[1]));
+                    default -> {
+                    }
+                    //System.out.println("Linha inválida.");
                 }
-                case "SmartBulb" -> {
-                    if (divisao == null) System.out.println("Linha inválida.");
-                    SmartBulb sd1 = parseSmartBulb(linhaPartida[1], city);
-                    city.addDeviceToDivisao(divisao, sd1); // FAZER FUNÇÃO
-                }
-                case "SmartCamera" -> {
-                    if (divisao == null) System.out.println("Linha inválida.");
-                    SmartCamera sd2 = parseSmartCamera(linhaPartida[1], city);
-                    city.addDeviceToDivisao(divisao, sd2);
-                }
-                case "SmartSpeaker" -> {
-                    if (divisao == null) System.out.println("Linha inválida.");
-                    SmartSpeaker sd3 = parseSmartSpeaker(linhaPartida[1], city);
-                    city.addDeviceToDivisao(divisao, sd3);
-                }
-                case "Fornecedor" -> city.createComercializadorEnergia(parseComercializadoresEnergia(linhaPartida[1]));
-                case "Marca" -> city.createMarca(parseMarca(linhaPartida[1]));
-                default -> {
-                }
-                //System.out.println("Linha inválida.");
             }
+            System.out.println("done!");
         }
-        System.out.println("done!");
-        return city;
-    }
+        catch(Exception e){
+            System.out.println("Something went wrong!");
+        }
+    }*/
 
     public void parse(SmartCity city) throws IOException{
-        //Path path = Path.of("./src/logs/logs.txt");
-        Path path = FileSystems.getDefault().getPath("logs", "logs.txt");
+        Path path = Path.of("./src/logs/logs.txt");
+        //Path path = FileSystems.getDefault().getPath("logs", "logs.txt");
         String content = Files.readString(path);
         //List<String> linhas = readFile("dados.csv");
         String[] contentSplited = content.split("\n");
@@ -96,7 +100,7 @@ public class Parser {
                     SmartSpeaker sd3 = parseSmartSpeaker(linhaPartida[1], city);
                     city.addDeviceToDivisao(divisao, sd3);
                 }
-                case "Fornecedor" -> city.createComercializadorEnergia(parseComercializadoresEnergia(linhaPartida[1]));
+                case "Fornecedor" -> city.createComercializadorEnergia(linhaPartida[1]);
                 case "Marca" -> city.createMarca(parseMarca(linhaPartida[1]));
                 default -> {
                 }
@@ -172,12 +176,12 @@ public class Parser {
         return new Marca(nome);
     }
 
-    public void simulation() throws IOException, ClassNotFoundException {
+    public void simulation(SmartCity city, Scanner sc) throws IOException, ClassNotFoundException {
         System.out.println("Especifique o número de linhas que pretende adicionar na simulação: ");
-        Scanner sc = new Scanner(System.in);
         int loop= sc.nextInt();
+        System.out.println("Insira os comandos: ");
         for(int i = 0;i<loop;i++){
-            String line = sc.next();
+            String line = sc.nextLine();
             String [] linha = line.split(",", 4);
         /*
          linha[0] data
@@ -187,8 +191,8 @@ public class Parser {
          */
             // fazer com que o tempo avance e só depois pode efetuar ação
             // FALTA TRATAR DOS FATORES QUE SÃO DEPENDENTES DA DATA
-            SmartCity city = new SmartCity();
-            city.loadState("path");
+            //SmartCity city = new SmartCity();
+            //city.loadState("path");
             if(city.hasSmartHouse(Integer.parseInt(linha[1]))) { // house related
                 SmartHouse clonedhouse = city.getCasa(Integer.parseInt(linha[1])).clone();
                 if (clonedhouse.existsDevice(Integer.parseInt(linha[2]))) {

@@ -157,6 +157,9 @@ public class UI {
             case 9 -> { //Começar Simulação
                 clearConsole();
                 //simulationMenu(city);
+                Parser p = new Parser();
+                try{p.simulation(city, sc);}
+                catch(Exception e){System.out.println("upsi");}
                 menuInicial(city, sc);
             }
             case 10 -> { //Sair
@@ -246,7 +249,9 @@ public class UI {
             case 6: //Adicionar apartir de log
                 clearConsole();
                 Parser p = new Parser();
-                city.merge(p.parse(city.getHouseId(), city.getDeviceId())); //carregar faz gestão de conflitos para dar merge à cidade já existente e à cidade que se está a carregar do log
+                //city.merge(p.parse(city.getHouseId(), city.getDeviceId())); //carregar faz gestão de conflitos para dar merge à cidade já existente e à cidade que se está a carregar do log
+                p.parse(city);
+                createMenu(city, sc);
             break;
 
             case 7: //Retroceder

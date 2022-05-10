@@ -36,7 +36,7 @@ public class SmartBulb extends SmartDevice {
      */
     public SmartBulb(int id) {
         // initialise instance variables
-        this.id = id;
+        this.id = id; //TODO meter id na superclass
         this.mode=modo.NEUTRAL;
         this.estado=state.OFF;
         this.consumo=0;
