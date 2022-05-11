@@ -1,12 +1,9 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
+import java.time.LocalDate;
+import java.util.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.Map;
 import java.lang.StringBuilder;
 import java.io.*;
 
@@ -18,8 +15,12 @@ public class SmartCity implements Serializable {
     private Map<String,SmartDevice> presets= new HashMap<>();
     private int houseID=0; //diz quantas casas tem na cidade e atribui o seu numero
     private int deviceID=0; //diz quantos devices tem na cidade e atribui o seu numero
+    private LocalDate data_inicial;
+    private LocalDate data_atual;
 
     public SmartCity(){
+        this.data_inicial = LocalDate.now();
+        this.data_atual = LocalDate.now();
         this.deviceID = 0;
         this.houseID = 0;
         this.comercializadores=new ArrayList<>();

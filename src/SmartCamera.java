@@ -1,7 +1,7 @@
 //package src;
 
 import java.lang.StringBuilder;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 
@@ -25,19 +25,19 @@ public class SmartCamera extends SmartDevice {
     }
     private state estado;
     private double consumo;
-    private LocalDateTime ligadoInit;
-    private LocalDateTime dataFin;
+    private LocalDate ligadoInit;
+    private LocalDate dataFin;
 
     // public SmartCamera(){
     //     this.resolucao=0;
     //     this.tamanho_ficheiros=0;
     //     this.estado=state.ON;
     //     this.consumo=0;
-    //     this.ligadoInit=LocalDateTime.now();
-    //     this.dataFin=LocalDateTime.now();
+    //     this.ligadoInit=LocalDate.now();
+    //     this.dataFin=LocalDate.now();
     // }
 
-    public SmartCamera(int id,float resolucao, int tamanhoFicheiros, state estado, float consumo, LocalDateTime ligadoI){
+    public SmartCamera(int id,float resolucao, int tamanhoFicheiros, state estado, float consumo, LocalDate ligadoI){
         this.id = id;
         this.resolucao=resolucao;
         this.tamanho_ficheiros= tamanhoFicheiros;
@@ -56,7 +56,7 @@ public class SmartCamera extends SmartDevice {
         this.tamanho_ficheiros= tamanhoFicheiros;
         this.estado=state.OFF;
         this.consumo=consumo;
-        this.ligadoInit=LocalDateTime.now();
+        this.ligadoInit=LocalDate.now();
     }
 
     public SmartCamera(int id, float width,float height, int tamanhoFicheiros, String estado){
@@ -65,7 +65,7 @@ public class SmartCamera extends SmartDevice {
         this.tamanho_ficheiros= tamanhoFicheiros;
         this.estado=toState(estado);
         this.consumo=resolucao*tamanhoFicheiros;
-        this.ligadoInit=LocalDateTime.now();
+        this.ligadoInit=LocalDate.now();
     }
 
     public SmartCamera(int id, float width,float height, int tamanhoFicheiros, state estado, float consumo){
@@ -74,7 +74,7 @@ public class SmartCamera extends SmartDevice {
         this.tamanho_ficheiros= tamanhoFicheiros;
         this.estado=estado;
         this.consumo=consumo;
-        this.ligadoInit=LocalDateTime.now();
+        this.ligadoInit=LocalDate.now();
     }
 
     public SmartCamera(SmartCamera sc){
@@ -89,7 +89,7 @@ public class SmartCamera extends SmartDevice {
     @Override
     public int getID() {return this.id;}
 
-    public LocalDateTime getLastLigado(){
+    public LocalDate getLastLigado(){
         return this.ligadoInit;
     }
 
@@ -128,7 +128,7 @@ public class SmartCamera extends SmartDevice {
     public void setState(state est){
         switch(est.toString()){
             case("ON"):
-                this.ligadoInit=LocalDateTime.now();
+                this.ligadoInit=LocalDate.now();
                 this.estado = est;  
             case("OFF"):                                                                                      //bitrate encoder random pois pode depender da quantidade de movimento e densidade populacional da imagem
                 this.consumo = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin)*this.resolucao*Math.random();
@@ -184,7 +184,7 @@ public class SmartCamera extends SmartDevice {
         setState(state.OFF);
     }
 
-    public void goToData(LocalDateTime data){
+    public void goToData(LocalDate data){
         this.dataFin=data;
     }
 

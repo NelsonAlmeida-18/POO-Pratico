@@ -1,7 +1,7 @@
 //package src; // idea necessarry
 
 import java.lang.StringBuilder;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -27,8 +27,8 @@ public class SmartBulb extends SmartDevice {
     private double consumo;
    // private int tone;
     private int dimensions;
-    private LocalDateTime ligadoInit;
-    private LocalDateTime dataFin;
+    private LocalDate ligadoInit;
+    private LocalDate dataFin;
 
 
     /**
@@ -41,8 +41,8 @@ public class SmartBulb extends SmartDevice {
         this.estado=state.OFF;
         this.consumo=0;
         this.dimensions=1;  // não existem lampadas "inexistentes"
-        this.ligadoInit=LocalDateTime.now();
-        this.dataFin=LocalDateTime.now();
+        this.ligadoInit=LocalDate.now();
+        this.dataFin=LocalDate.now();
     }
 
     public SmartBulb(int id,state estado) {
@@ -52,8 +52,8 @@ public class SmartBulb extends SmartDevice {
         this.estado=estado;
         this.consumo=0;
         this.dimensions=1;  // não existem lampadas "inexistentes"
-        this.ligadoInit=LocalDateTime.now();
-        this.dataFin=LocalDateTime.now();
+        this.ligadoInit=LocalDate.now();
+        this.dataFin=LocalDate.now();
     }
 
     public SmartBulb(int id, modo mode,int dimensions, double consumo) {
@@ -63,8 +63,8 @@ public class SmartBulb extends SmartDevice {
         this.estado = state.OFF;
         this.consumo=consumo;
         this.dimensions=dimensions;
-        this.ligadoInit=LocalDateTime.now();
-        this.dataFin=LocalDateTime.now();
+        this.ligadoInit=LocalDate.now();
+        this.dataFin=LocalDate.now();
     }
 
     public SmartBulb(int id, String mode,int dimensions, double consumo) {
@@ -87,8 +87,8 @@ public class SmartBulb extends SmartDevice {
         this.estado = state.OFF;
         this.consumo=consumo;
         this.dimensions=dimensions;
-        this.ligadoInit=LocalDateTime.now();
-        this.dataFin=LocalDateTime.now();
+        this.ligadoInit=LocalDate.now();
+        this.dataFin=LocalDate.now();
     }
 
     public SmartBulb(int id, String mode,int dimensions, double consumo, String estado) {
@@ -111,11 +111,11 @@ public class SmartBulb extends SmartDevice {
         this.estado = toState(estado);
         this.consumo=consumo;
         this.dimensions=dimensions;
-        this.ligadoInit=LocalDateTime.now();
-        this.dataFin=LocalDateTime.now();
+        this.ligadoInit=LocalDate.now();
+        this.dataFin=LocalDate.now();
     }
 
-    public SmartBulb(int id, modo mode, state estado, double consumo, int dimensions, LocalDateTime ligadoInit) {
+    public SmartBulb(int id, modo mode, state estado, double consumo, int dimensions, LocalDate ligadoInit) {
         // initialise instance variables
         this.id = id;
         this.mode = mode;
@@ -125,7 +125,7 @@ public class SmartBulb extends SmartDevice {
         this.ligadoInit=ligadoInit;
     }
 
-    public SmartBulb(int id, modo mode, state estado, double consumo, int dimensions, LocalDateTime ligadoInit, LocalDateTime dataFinal) {
+    public SmartBulb(int id, modo mode, state estado, double consumo, int dimensions, LocalDate ligadoInit, LocalDate dataFinal) {
         // initialise instance variables
         this.id = id;
         this.mode = mode;
@@ -157,11 +157,11 @@ public class SmartBulb extends SmartDevice {
 
     public state getEstado(){return this.estado;}
 
-    public LocalDateTime getDataFin(){return this.dataFin;}
+    public LocalDate getDataFin(){return this.dataFin;}
 
-    public void setLigadoInit(LocalDateTime ult){this.ligadoInit=ult;}
+    public void setLigadoInit(LocalDate ult){this.ligadoInit=ult;}
 
-    public LocalDateTime getLigadoInit(){return this.ligadoInit; }
+    public LocalDate getLigadoInit(){return this.ligadoInit; }
 
     public void setDimensions(int dimensions){this.dimensions=dimensions;}
 
@@ -170,10 +170,10 @@ public class SmartBulb extends SmartDevice {
     public void setState(state est){
         switch(est.toString()){
             case("ON"):
-                this.ligadoInit=LocalDateTime.now();
+                this.ligadoInit=LocalDate.now();
                 this.estado = est;
             case("OFF"):
-                this.consumo = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin)*this.dimensions*Math.random();
+                this.consumo = ChronoUnit.DAYS.between(this.ligadoInit, this.dataFin)*this.dimensions*Math.random();
                 this.estado = est;
         }
     }
@@ -224,7 +224,7 @@ public class SmartBulb extends SmartDevice {
         switch(this.estado.toString()){
             case("OFF"):
                 this.estado=state.ON;
-                this.ligadoInit=LocalDateTime.now();
+                this.ligadoInit=LocalDate.now();
         }
     }
 
@@ -245,7 +245,7 @@ public class SmartBulb extends SmartDevice {
         }
     }
 
-    public void goToData(LocalDateTime data){
+    public void goToData(LocalDate data){
         this.dataFin=data;
     }
 

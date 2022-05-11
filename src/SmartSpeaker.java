@@ -1,6 +1,6 @@
 //package src;// idea necessarry
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -26,8 +26,8 @@ public class SmartSpeaker extends SmartDevice {
     private SmartSpeaker.state estado;
     private Marca marca;
     private double consumo;
-    private LocalDateTime ligadoInit;
-    private LocalDateTime dataFin;
+    private LocalDate ligadoInit;
+    private LocalDate dataFin;
 
     //CLASS CONSTRUCTORS
 
@@ -37,8 +37,8 @@ public class SmartSpeaker extends SmartDevice {
         this.estacao = "";
         this.estado = state.OFF;
         this.consumo = 0;
-        this.ligadoInit = LocalDateTime.now();
-        this.dataFin = LocalDateTime.now();
+        this.ligadoInit = LocalDate.now();
+        this.dataFin = LocalDate.now();
     }
 
     public SmartSpeaker(int id,int volume, String estacao, Marca marca, double consumo) {
@@ -48,8 +48,8 @@ public class SmartSpeaker extends SmartDevice {
         this.marca = marca;
         this.estado = state.OFF;
         this.consumo = consumo;
-        this.ligadoInit = LocalDateTime.now();
-        this.dataFin = LocalDateTime.now();
+        this.ligadoInit = LocalDate.now();
+        this.dataFin = LocalDate.now();
     }
 
     public SmartSpeaker(int id,int volume, String estacao, String estado, Marca marca, double consumo) {
@@ -60,8 +60,8 @@ public class SmartSpeaker extends SmartDevice {
         this.marca = marca;
         this.estado = state.OFF;
         this.consumo = consumo;
-        this.ligadoInit = LocalDateTime.now();
-        this.dataFin = LocalDateTime.now();
+        this.ligadoInit = LocalDate.now();
+        this.dataFin = LocalDate.now();
     }
 
     public SmartSpeaker(SmartSpeaker speaker) {
@@ -115,19 +115,19 @@ public class SmartSpeaker extends SmartDevice {
         this.consumo = consumo;
     }
 
-    public LocalDateTime getLigadoInit() {
+    public LocalDate getLigadoInit() {
         return this.ligadoInit;
     }
 
-    public void setLigadoInit(LocalDateTime ligadoInit) {
+    public void setLigadoInit(LocalDate ligadoInit) {
         this.ligadoInit = ligadoInit;
     }
 
-    public LocalDateTime getDataFin() {
+    public LocalDate getDataFin() {
         return this.dataFin;
     }
 
-    public void setDataFin(LocalDateTime dataFin) {
+    public void setDataFin(LocalDate dataFin) {
         this.dataFin = dataFin;
     }
 
@@ -189,7 +189,7 @@ public class SmartSpeaker extends SmartDevice {
     public void setState(SmartSpeaker.state est) {
         switch (est.toString()) {
             case ("ON"):
-                this.ligadoInit = LocalDateTime.now();
+                this.ligadoInit = LocalDate.now();
                 this.estado = est;
             case ("OFF"):
                 this.consumo = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin) * this.volume;
@@ -197,7 +197,7 @@ public class SmartSpeaker extends SmartDevice {
         }
     }
 
-    public void goToData(LocalDateTime data){
+    public void goToData(LocalDate data){
         this.dataFin=data;
     }
 

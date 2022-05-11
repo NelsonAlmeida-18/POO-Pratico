@@ -18,6 +18,7 @@ public class SmartHouse implements Serializable{
     private int NIF_prop;
     private String morada;
     private ComercializadoresEnergia companhia_eletrica;
+    private int consumo_mensal;
     private Map<String,Map<Integer, SmartDevice>> devices = new HashMap<>();
                 //divisao, id,sd
     //Morada -> Map divisão -> devices) CONFIRMAR SE É ISTO

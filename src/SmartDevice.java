@@ -1,6 +1,7 @@
 //package src;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -35,7 +36,7 @@ public abstract class SmartDevice implements Serializable{
 
     public abstract int getID(); //para definir nas subclasses
 
-    public abstract void goToData(LocalDateTime data);
+    public abstract void goToData(LocalDate data);
 
     public abstract double getConsumo();
     public abstract void turnOn();
