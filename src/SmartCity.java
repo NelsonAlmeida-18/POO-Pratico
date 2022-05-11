@@ -1,4 +1,6 @@
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -6,6 +8,9 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.StringBuilder;
 import java.io.*;
+
+import static java.lang.Integer.valueOf;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class SmartCity implements Serializable {
     
@@ -26,6 +31,35 @@ public class SmartCity implements Serializable {
         this.comercializadores=new ArrayList<>();
         this.marcas = new ArrayList<>();
         this.presets=new HashMap<>();
+    }
+
+    public int simulation(String time){
+
+        String [] data = time.split("\\.", 3);  //separa a data dada
+        int no_days = 0;
+        LocalDate data_objetivo;
+
+        switch (data.length) {
+            case 1 -> { //apenas dado um dia
+                no_days = Integer.parseInt(data[0]);
+                data_objetivo = LocalDate.now().plus(no_days,DAYS);
+            }
+            case 3 -> { //dada uma data em formato DD.MM.YYYY
+                Parser p = new Parser();
+                data_objetivo = p.parseData(time);
+            }
+            default -> {
+                System.out.println("Data inválida.");
+                return 0;
+            }
+        }
+        for (SmartHouse casa : this.casas.values()){
+            casa.calculaConsumoDaCasa(data_objetivo);
+            casa.getConsumoDaCasa();
+        }
+
+
+        return 0;
     }
 
     public String readFromFile(String filename)throws Exception{

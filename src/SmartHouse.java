@@ -1,5 +1,6 @@
 //package src; // idea necessarry
 
+import java.time.LocalDate;
 import java.util.Map;
 import java.io.Serializable;
 import java.lang.StringBuilder;
@@ -18,7 +19,7 @@ public class SmartHouse implements Serializable{
     private int NIF_prop;
     private String morada;
     private ComercializadoresEnergia companhia_eletrica;
-    private int consumo_mensal;
+    private double consumo; //consumo em kWh
     private Map<String,Map<Integer, SmartDevice>> devices = new HashMap<>();
                 //divisao, id,sd
     //Morada -> Map divisão -> devices) CONFIRMAR SE É ISTO
@@ -228,6 +229,14 @@ public class SmartHouse implements Serializable{
         return consumoDivisao;
     }
 
+    public double getConsumoDivisao(Map<Integer,SmartDevice> div, LocalDate data){
+        double consumoDivisao=0;
+        for(SmartDevice disp:div.values()){
+            consumoDivisao+=disp.getConsumo(data);
+        }
+        return consumoDivisao;
+    }
+
     public void addDivisao(String div){
         if (this.devices ==null){
             Map<Integer,SmartDevice> disp = new HashMap<>();
@@ -246,10 +255,17 @@ public class SmartHouse implements Serializable{
 
     //isto é o consumo em KW's e não o consumo monetário
     public double getConsumoDaCasa(){
-        double consumoDaCasa=0;
+        this.consumo = 0;
         for(Map<Integer, SmartDevice> div: this.devices.values())
-            consumoDaCasa+=getConsumoDivisao(div);
-        return consumoDaCasa;
+            this.consumo+=getConsumoDivisao(div);
+        return this.consumo;
+    }
+
+    public double getConsumoDaCasa(LocalDate data){
+        this.consumo = 0;
+        for(Map<Integer, SmartDevice> div: this.devices.values())
+            this.consumo+=getConsumoDivisao(div, data);
+        return this.consumo;
     }
 
     public SmartHouse clone(){

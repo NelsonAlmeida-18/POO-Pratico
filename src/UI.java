@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.file.AccessDeniedException;
 import java.util.Scanner;
 import java.lang.InterruptedException;
 import java.lang.ProcessBuilder;
@@ -512,12 +513,19 @@ public class UI {
 
         city.getSmartDevicePresetDetails(nome);
 
-    } 
+    } */
         
-    public void simulationMenu(SmartCity city){
-        //pedir data
-        //calcula
-        //mostra
+    public void simulationMenu(SmartCity city, Scanner sc) {
+        System.out.println("Indique a data: (X dias ou DD.MM.YYYY)");
+        String time = sc.nextLine();
+
+        if(city.simulation(time) == 0) {
+            //mostra faturas passadas
+        } else {
+            System.out.println("Data inválida");
+            clearConsole();
+            simulationMenu(city, sc);
+        }
     }
- */
+
 }

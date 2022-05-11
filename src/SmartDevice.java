@@ -39,6 +39,9 @@ public abstract class SmartDevice implements Serializable{
     public abstract void goToData(LocalDate data);
 
     public abstract double getConsumo();
+
+    public abstract double getConsumo(LocalDate data);
+
     public abstract void turnOn();
 
     public abstract void turnOff();

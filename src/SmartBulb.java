@@ -184,6 +184,24 @@ public class SmartBulb extends SmartDevice {
 
     public double getConsumo() {return this.consumo;}
 
+    public double getConsumo(LocalDate dataSimulação){
+
+        switch(this.estado.toString()){
+            case("ON"):
+                /*
+                if(this.ligadoInit antes do início da simulação e this.ligadoFin depois da data da simulação){
+                    this.consumo = ChronoUnit.DAYS.between(city.getDataAtual(), dataSimulação)*this.dimensions*Math.random();
+                }else if(this.ligadoInit depois da data atual e this.ligadoFin depois da data da simulação){
+                 */
+                this.consumo = ChronoUnit.DAYS.between(this.ligadoInit, this.dataFin)*this.dimensions*Math.random();
+                 */
+            case("OFF"):
+                this.consumo = ChronoUnit.DAYS.between(this.ligadoInit, this.dataFin)*this.dimensions*Math.random();
+                this.estado = est;
+        }
+        return this.consumo;
+    }
+
     public boolean equals(Object obj){
         if (this==obj)
             return true;
