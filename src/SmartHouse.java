@@ -97,6 +97,9 @@ public class SmartHouse implements Serializable{
     public void setMorada(String morada){ this.morada = morada; }
     public String getMorada(){ return this.morada; }
 
+    public void setConsumo(double consumo){this.consumo = consumo;}
+    public double getConsumo(){return this.consumo;}
+
     //nao sei se vale a pena clonar visto que é pertinente que se uma empresa muda precos mude automaticamente se bem que só no ciclo seguinte
     public void setCompanhia_eletrica(ComercializadoresEnergia s){this.companhia_eletrica=s;}
     public ComercializadoresEnergia getCompanhia_eletrica(){return this.companhia_eletrica.clone();}
@@ -229,10 +232,10 @@ public class SmartHouse implements Serializable{
         return consumoDivisao;
     }
 
-    public double getConsumoDivisao(Map<Integer,SmartDevice> div, LocalDate data){
+    public double getConsumoDivisao(Map<Integer,SmartDevice> div,LocalDate data_atual, LocalDate data_sim){
         double consumoDivisao=0;
         for(SmartDevice disp:div.values()){
-            consumoDivisao+=disp.getConsumo(data);
+            consumoDivisao+=disp.getConsumo(data_atual, data_sim);
         }
         return consumoDivisao;
     }
@@ -261,10 +264,10 @@ public class SmartHouse implements Serializable{
         return this.consumo;
     }
 
-    public double getConsumoDaCasa(LocalDate data){
+    public double getConsumoDaCasa(LocalDate data_atual, LocalDate data_sim){
         this.consumo = 0;
         for(Map<Integer, SmartDevice> div: this.devices.values())
-            this.consumo+=getConsumoDivisao(div, data);
+            this.consumo+=getConsumoDivisao(div, data_atual, data_sim);
         return this.consumo;
     }
 

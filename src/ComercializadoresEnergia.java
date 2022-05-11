@@ -148,18 +148,21 @@ public class ComercializadoresEnergia implements Serializable {
     }
 
 
-    public void geraFatura(SmartHouse casa){
+    public Fatura geraFatura(SmartHouse casa){
+        Fatura newFatura;
         if (this.casas.containsKey(casa)){
             List<Fatura> faturas = this.casas.get(casa);
-            Fatura newFatura = new Fatura(LocalDateTime.now(), LocalDateTime.now(), casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
+            newFatura = new Fatura(LocalDateTime.now(), LocalDateTime.now(), casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
             faturas.add(newFatura);
         }
         else{
             List<Fatura> faturas = new ArrayList<>();
-            Fatura newFatura = new Fatura(LocalDateTime.now(), LocalDateTime.now(), casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
+            newFatura = new Fatura(LocalDateTime.now(), LocalDateTime.now(), casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
             faturas.add(newFatura);
             this.casas.put(casa,faturas);
         }
+
+        return newFatura;
     }
 
     public void addFatura(Fatura fat, SmartHouse casa){
@@ -229,6 +232,13 @@ public class ComercializadoresEnergia implements Serializable {
                 faturacao+=iter.next().getValorDaFatura();
         }
         return faturacao;
+    }
+
+    public void faturacao(){
+        for(SmartHouse casa:this.casas.keySet()) {
+            geraFatura(casa);
+            casa.setConsumo(0);
+        }
     }
 
     public String listOfClientes(){

@@ -125,6 +125,7 @@ public class UI {
             case 3 -> { //Consultar comercializadores de energia existentes
                 clearConsole();
                 city.listComercializadoresEnergia();
+                city.listFaturas();
                 menuInicial(city, sc);
             }
             case 4 -> { //Consultar marcas existentes
@@ -157,10 +158,7 @@ public class UI {
             }
             case 9 -> { //Começar Simulação
                 clearConsole();
-                //simulationMenu(city);
-                Parser p = new Parser();
-                try{p.simulation(city, sc);}
-                catch(Exception e){System.out.println("upsi");}
+                simulationMenu(city, sc);
                 menuInicial(city, sc);
             }
             case 10 -> { //Sair
@@ -520,7 +518,7 @@ public class UI {
         String time = sc.nextLine();
 
         if(city.simulation(time) == 0) {
-            //mostra faturas passadas
+            city.listFaturas();
         } else {
             System.out.println("Data inválida");
             clearConsole();

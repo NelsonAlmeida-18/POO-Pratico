@@ -37,28 +37,37 @@ public class SmartCity implements Serializable {
 
         String [] data = time.split("\\.", 3);  //separa a data dada
         int no_days = 0;
-        LocalDate data_objetivo;
+        LocalDate data_sim;
+        double consumo_tmp;
 
         switch (data.length) {
             case 1 -> { //apenas dado um dia
                 no_days = Integer.parseInt(data[0]);
-                data_objetivo = LocalDate.now().plus(no_days,DAYS);
+                data_sim = LocalDate.now().plus(no_days,DAYS);
             }
             case 3 -> { //dada uma data em formato DD.MM.YYYY
                 Parser p = new Parser();
-                data_objetivo = p.parseData(time);
+                data_sim = p.parseData(time);
             }
             default -> {
-                System.out.println("Data inválida.");
+                System.out.println("\nData inválida.");
                 return 0;
             }
         }
+        System.out.println("\nDATA: "+data_sim.toString());
+        //calcula consumos no intervalo de datas da data atual à data da simulação
         for (SmartHouse casa : this.casas.values()){
-            casa.calculaConsumoDaCasa(data_objetivo);
-            casa.getConsumoDaCasa();
+            consumo_tmp = casa.getConsumoDaCasa(this.data_atual, data_sim);
+            System.out.println("\nCONSUMO CASA No."+ casa.getID() +": " + consumo_tmp);
         }
-
-
+        /*percorre comercializadores para tirarem faturas
+        guarda as faturas no seu map e manda para as casas guardarem
+         */
+        ListIterator<ComercializadoresEnergia> com = this.comercializadores.listIterator();
+        while(com.hasNext()) {
+            com.next().faturacao();
+        }
+        this.data_atual = data_sim;
         return 0;
     }
 
@@ -298,6 +307,17 @@ public class SmartCity implements Serializable {
     public void listComercializadoresEnergia(){
         System.out.println(this.comercializadores.toString());
     }
+
+    public void listFaturas(){
+        ListIterator<ComercializadoresEnergia> com = this.comercializadores.listIterator();
+        while(com.hasNext()) {
+            Map<SmartHouse,List<Fatura>> listaCasasCom = com.next().getCasas();
+            for(List<Fatura> faturas_casa : listaCasasCom.values()){
+                faturas_casa.toString();
+            }
+        }
+    }
+
 
     public void listSmartDevicesPresets(){
         StringBuilder sb = new StringBuilder();
