@@ -181,33 +181,43 @@ public class SmartCity implements Serializable {
         return presets.get(preset);
     }
 
-    public List<ComercializadoresEnergia> listComercializadores(){
-        List<ComercializadoresEnergia> ret = new ArrayList<>();
-        ListIterator<ComercializadoresEnergia> iter = this.comercializadores.listIterator();
-        while(iter.hasNext())
-            ret.add(iter.next().clone());
-        return ret;
-    }
 
     public Map<Integer,SmartHouse> getCasas(){return this.casas;}
 
     public boolean hasComercializador(String id){
-        List<ComercializadoresEnergia> ret = listComercializadores();
-        return ret.stream().map(ComercializadoresEnergia::clone).anyMatch(c->c.getNome().equals(id));
+        return this.comercializadores.stream().anyMatch(c->c.getNome().equals(id));
+    }
+
+    public String listComercializadores(){
+        List<ComercializadoresEnergia> comercializadoresDaCidade = this.comercializadores;
+        StringBuilder sb = new StringBuilder();
+        ListIterator<ComercializadoresEnergia> iter = comercializadoresDaCidade.listIterator();
+        sb.append("[");
+        int pos =0;
+        while(iter.hasNext()){
+            sb.append(iter.next().getNome());
+            if(pos<this.comercializadores.size()-1){
+                sb.append(",");
+            }
+            pos+=1;
+        }
+        sb.append("]");
+        return sb.toString();
+
     }
 
     public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
 
-    public ComercializadoresEnergia getComercializador(String id){
-        ListIterator<ComercializadoresEnergia> iter = this.comercializadores.listIterator();
-        while(iter.hasNext()){
-            ComercializadoresEnergia temp = iter.next();
-            if(temp.getNome().equals(id)){
-                return temp;
-            }
-        }
-        return null;
-    }
+    // public ComercializadoresEnergia getComercializador(String id){
+    //     ListIterator<ComercializadoresEnergia> iter = this.comercializadores.listIterator();
+    //     while(iter.hasNext()){
+    //         ComercializadoresEnergia temp = iter.next();
+    //         if(temp.getNome().equals(id)){
+    //             return temp;
+    //         }
+    //     }
+    //     return null;
+    // }
 
     public void createComercializadorEnergia(String nome){
         ComercializadoresEnergia com = new ComercializadoresEnergia(nome);
@@ -304,18 +314,28 @@ public class SmartCity implements Serializable {
         }
     }
 
-    public void listComercializadoresEnergia(){
-        System.out.println(this.comercializadores.toString());
-    }
-
-    public void listFaturas(){
+    public String listFaturas(){
+        List<String> listaDeFaturas = new ArrayList<>();
         ListIterator<ComercializadoresEnergia> com = this.comercializadores.listIterator();
         while(com.hasNext()) {
-            Map<SmartHouse,List<Fatura>> listaCasasCom = com.next().getCasas();
-            for(List<Fatura> faturas_casa : listaCasasCom.values()){
-                faturas_casa.toString();
+            ComercializadoresEnergia temp = com.next();
+            listaDeFaturas.add(temp.getNome());
+            listaDeFaturas.add(temp.getListaFaturacao());
+        }
+        return listaDeFaturas.toString();
+    }
+
+    public String listFaturas(String nomeComercializador){
+        return getComercializador(nomeComercializador).getListaFaturacao().toString();
+    }
+
+    public ComercializadoresEnergia getComercializador(String nomeComercializador){
+        for (ComercializadoresEnergia comer:this.comercializadores){
+            if (comer.getNome().equals(nomeComercializador)){
+                return comer;
             }
         }
+        return null;
     }
 
 

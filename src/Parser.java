@@ -68,7 +68,7 @@ public class Parser {
     }*/
 
     public void parse(SmartCity city) throws IOException{
-        Path path = Path.of("./src/logs/logs.txt");
+        Path path = Path.of("./logs/logs.txt");
         //Path path = FileSystems.getDefault().getPath("logs", "logs.txt");
         String content = Files.readString(path);
         //List<String> linhas = readFile("dados.csv");
@@ -109,7 +109,7 @@ public class Parser {
                 //System.out.println("Linha inválida.");
             }
         }
-        System.out.println("done!");
+        System.out.println("Ficheiro carregado com sucesso.");
     }
 
     public List<String> readFile(String nomeFich) {

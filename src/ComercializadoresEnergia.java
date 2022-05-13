@@ -143,9 +143,6 @@ public class ComercializadoresEnergia implements Serializable {
     public void setFatorImposto(double fator){ this.fatorImposto = fator; }
     public double getFatorImposto(){return this.fatorImposto;}
 
-    public ComercializadoresEnergia clone(){
-        return new ComercializadoresEnergia(this);
-    }
 
 
     public Fatura geraFatura(SmartHouse casa){
@@ -237,15 +234,28 @@ public class ComercializadoresEnergia implements Serializable {
     public void faturacao(){
         for(SmartHouse casa:this.casas.keySet()) {
             geraFatura(casa);
-            casa.setConsumo(0);
+            //casa.setConsumo(0);
         }
+    }
+
+    public String getListaFaturacao(){
+        StringBuilder sb = new StringBuilder();
+        for (SmartHouse casa:this.casas.keySet()){
+            sb.append(casa.getID());
+            sb.append("\n");
+            for (Fatura fatura:this.casas.get(casa)){
+                sb.append(fatura.toString());
+                sb.append("\n");
+            }
+        }
+        return sb.toString();
     }
 
     public String listOfClientes(){
         StringBuilder sb = new StringBuilder();
         
         for(SmartHouse casa:this.casas.keySet()){
-            sb.append(casa.getMorada());  //TODO Mudar de get morada para get ID
+            sb.append(casa.getID());  
             sb.append(this.casas.get(casa).toString());
         }
         
@@ -257,6 +267,10 @@ public class ComercializadoresEnergia implements Serializable {
         if (obj==null||this.getClass()!=obj.getClass()) return false;
         ComercializadoresEnergia ce = (ComercializadoresEnergia) obj;
         return (this.nome==ce.getNome()  &&  this.precoBaseKW== ce.getPrecoBaseKW() && this.fatorImposto==ce.getFatorImposto());
+    }
+
+    public ComercializadoresEnergia clone(){
+        return new ComercializadoresEnergia(this);
     }
 
     public String toString(){

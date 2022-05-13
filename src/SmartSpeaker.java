@@ -137,7 +137,8 @@ public class SmartSpeaker extends SmartDevice {
         if (this.estado == state.OFF) {
             result = this.consumo;
         } else {
-            result = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin) * this.volume;//função do consumo por definir
+            //result = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin) * this.volume;//função do consumo por definir
+            result = this.marca.getConsumoDiario()+0.3*this.volume;
         }
         return result;
     }
@@ -201,10 +202,10 @@ public class SmartSpeaker extends SmartDevice {
     public void setState(SmartSpeaker.state est) {
         switch (est.toString()) {
             case ("ON"):
-                this.ligadoInit = LocalDate.now();
+                //this.ligadoInit = LocalDate.now();
                 this.estado = est;
             case ("OFF"):
-                this.consumo = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin) * this.volume;
+                //this.consumo = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin) * this.volume;
                 this.estado = est;
         }
     }

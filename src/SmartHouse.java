@@ -2,10 +2,12 @@
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Set;
 import java.io.Serializable;
 import java.lang.StringBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * A SmartHouse faz a gestão dos SmartDevices que existem e dos
@@ -28,14 +30,13 @@ public class SmartHouse implements Serializable{
     /**
      * Constructor for objects of class SmartHouse
      */
-    //public SmartHouse() {
-        // initialise instance variables
-        //this.nome_prop = "";
-        //this.NIF_prop = "";
-        //this.morada = "";
-        //this.devices = new HashMap<String, Map<String, SmartDevice>>();
-        //this.companhia_eletrica = new ComercializadoresEnergia();
-    //}
+    public SmartHouse() {
+        this.nome_prop = "";
+        this.NIF_prop = 0;
+        this.morada = "";
+        this.devices = new HashMap<String, Map<Integer, SmartDevice>>();
+        this.companhia_eletrica = new ComercializadoresEnergia("EDP");
+    }
 
     // casa sem luz
     public SmartHouse(int id, String nome, int NIF, String Morada){
@@ -54,6 +55,8 @@ public class SmartHouse implements Serializable{
         this.morada = morada;
         this.companhia_eletrica=comp;
         this.devices = new HashMap<>();
+        this.companhia_eletrica=comp;
+        comp.addCasa(this);
     }
 
     public SmartHouse(int id, SmartHouse sh){ //o id tem sempre de ser passado pela cidade para
@@ -62,6 +65,7 @@ public class SmartHouse implements Serializable{
         this.NIF_prop = sh.getNIF_prop();
         this.morada= sh.getMorada();
         this.companhia_eletrica=sh.getCompanhia_eletrica();
+        this.companhia_eletrica.addCasa(this);
     }
 
     public SmartHouse(int houseID, String nome,int nif,ComercializadoresEnergia fornecedor){
@@ -70,6 +74,7 @@ public class SmartHouse implements Serializable{
         this.NIF_prop = nif;
         this.morada = "";
         this.companhia_eletrica = fornecedor;
+        fornecedor.addCasa(this);
     }
 
     public SmartHouse(SmartHouse sh){
@@ -78,6 +83,7 @@ public class SmartHouse implements Serializable{
         this.NIF_prop = sh.getNIF_prop();
         this.morada = sh.getMorada();
         this.companhia_eletrica = sh.getCompanhia_eletrica();
+        this.companhia_eletrica.addCasa(this);
     }
 
     public int getID(){
@@ -102,7 +108,7 @@ public class SmartHouse implements Serializable{
 
     //nao sei se vale a pena clonar visto que é pertinente que se uma empresa muda precos mude automaticamente se bem que só no ciclo seguinte
     public void setCompanhia_eletrica(ComercializadoresEnergia s){this.companhia_eletrica=s;}
-    public ComercializadoresEnergia getCompanhia_eletrica(){return this.companhia_eletrica.clone();}
+    public ComercializadoresEnergia getCompanhia_eletrica(){return this.companhia_eletrica;}
 
     // public boolean hasDivisao(String divisao){ return this.divisao.contains(divisao);}
     // public void addDivisao(String divisao){ if(!hasDivisao(divisao)) this.divisao.add(divisao);}
@@ -152,6 +158,7 @@ public class SmartHouse implements Serializable{
     }
 
     public void setHouseOn(){
+        System.out.println(this.companhia_eletrica);
         if(this.companhia_eletrica != null) {
             for (String divisao : this.devices.keySet()) {
                 setDivisaoOn(divisao);
@@ -251,6 +258,12 @@ public class SmartHouse implements Serializable{
         }
     }
 
+    public void removeDivisao(String div){
+        if( this.devices!=null && this.devices.containsKey(div)){
+            this.devices.remove(div);
+        }
+    }
+
     public boolean hasDivisao(String div){
         return this.devices.containsKey(div);
     }
@@ -312,12 +325,20 @@ public class SmartHouse implements Serializable{
         this.companhia_eletrica.terminaContrato(this);//terminar contrato
         this.companhia_eletrica=novoComercializadoresEnergia;
         this.companhia_eletrica.addCasa(this);
-
     }
 
+    public void terminaContrato(){
+        this.companhia_eletrica.removeCasa(this);
+        this.companhia_eletrica=null;
+    }
+
+    public Set<String> getNomeDivisoes(){
+        return this.devices.keySet();
+    }
     //funções sobre o map<divisions, devices>
 
     public int getTotalDivisions(){return this.devices.size();}
+
 
     public ArrayList<String> getDivisaoList(){
         
