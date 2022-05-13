@@ -1,4 +1,6 @@
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -6,6 +8,9 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.StringBuilder;
 import java.io.*;
+
+import static java.lang.Integer.valueOf;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class SmartCity implements Serializable {
     
@@ -26,6 +31,44 @@ public class SmartCity implements Serializable {
         this.comercializadores=new ArrayList<>();
         this.marcas = new ArrayList<>();
         this.presets=new HashMap<>();
+    }
+
+    public int simulation(String time){
+
+        String [] data = time.split("\\.", 3);  //separa a data dada
+        int no_days = 0;
+        LocalDate data_sim;
+        double consumo_tmp;
+
+        switch (data.length) {
+            case 1 -> { //apenas dado um dia
+                no_days = Integer.parseInt(data[0]);
+                data_sim = LocalDate.now().plus(no_days,DAYS);
+            }
+            case 3 -> { //dada uma data em formato DD.MM.YYYY
+                Parser p = new Parser();
+                data_sim = p.parseData(time);
+            }
+            default -> {
+                System.out.println("\nData inválida.");
+                return 0;
+            }
+        }
+        System.out.println("\nDATA: "+data_sim.toString());
+        //calcula consumos no intervalo de datas da data atual à data da simulação
+        for (SmartHouse casa : this.casas.values()){
+            consumo_tmp = casa.getConsumoDaCasa(this.data_atual, data_sim);
+            System.out.println("\nCONSUMO CASA No."+ casa.getID() +": " + consumo_tmp);
+        }
+        /*percorre comercializadores para tirarem faturas
+        guarda as faturas no seu map e manda para as casas guardarem
+         */
+        ListIterator<ComercializadoresEnergia> com = this.comercializadores.listIterator();
+        while(com.hasNext()) {
+            com.next().faturacao();
+        }
+        this.data_atual = data_sim;
+        return 0;
     }
 
     public String readFromFile(String filename)throws Exception{
@@ -138,33 +181,43 @@ public class SmartCity implements Serializable {
         return presets.get(preset);
     }
 
-    public List<ComercializadoresEnergia> listComercializadores(){
-        List<ComercializadoresEnergia> ret = new ArrayList<>();
-        ListIterator<ComercializadoresEnergia> iter = this.comercializadores.listIterator();
-        while(iter.hasNext())
-            ret.add(iter.next().clone());
-        return ret;
-    }
 
     public Map<Integer,SmartHouse> getCasas(){return this.casas;}
 
     public boolean hasComercializador(String id){
-        List<ComercializadoresEnergia> ret = listComercializadores();
-        return ret.stream().map(ComercializadoresEnergia::clone).anyMatch(c->c.getNome().equals(id));
+        return this.comercializadores.stream().anyMatch(c->c.getNome().equals(id));
+    }
+
+    public String listComercializadores(){
+        List<ComercializadoresEnergia> comercializadoresDaCidade = this.comercializadores;
+        StringBuilder sb = new StringBuilder();
+        ListIterator<ComercializadoresEnergia> iter = comercializadoresDaCidade.listIterator();
+        sb.append("[");
+        int pos =0;
+        while(iter.hasNext()){
+            sb.append(iter.next().getNome());
+            if(pos<this.comercializadores.size()-1){
+                sb.append(",");
+            }
+            pos+=1;
+        }
+        sb.append("]");
+        return sb.toString();
+
     }
 
     public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
 
-    public ComercializadoresEnergia getComercializador(String id){
-        ListIterator<ComercializadoresEnergia> iter = this.comercializadores.listIterator();
-        while(iter.hasNext()){
-            ComercializadoresEnergia temp = iter.next();
-            if(temp.getNome().equals(id)){
-                return temp;
-            }
-        }
-        return null;
-    }
+    // public ComercializadoresEnergia getComercializador(String id){
+    //     ListIterator<ComercializadoresEnergia> iter = this.comercializadores.listIterator();
+    //     while(iter.hasNext()){
+    //         ComercializadoresEnergia temp = iter.next();
+    //         if(temp.getNome().equals(id)){
+    //             return temp;
+    //         }
+    //     }
+    //     return null;
+    // }
 
     public void createComercializadorEnergia(String nome){
         ComercializadoresEnergia com = new ComercializadoresEnergia(nome);
@@ -261,9 +314,30 @@ public class SmartCity implements Serializable {
         }
     }
 
-    public void listComercializadoresEnergia(){
-        System.out.println(this.comercializadores.toString());
+    public String listFaturas(){
+        List<String> listaDeFaturas = new ArrayList<>();
+        ListIterator<ComercializadoresEnergia> com = this.comercializadores.listIterator();
+        while(com.hasNext()) {
+            ComercializadoresEnergia temp = com.next();
+            listaDeFaturas.add(temp.getNome());
+            listaDeFaturas.add(temp.getListaFaturacao());
+        }
+        return listaDeFaturas.toString();
     }
+
+    public String listFaturas(String nomeComercializador){
+        return getComercializador(nomeComercializador).getListaFaturacao().toString();
+    }
+
+    public ComercializadoresEnergia getComercializador(String nomeComercializador){
+        for (ComercializadoresEnergia comer:this.comercializadores){
+            if (comer.getNome().equals(nomeComercializador)){
+                return comer;
+            }
+        }
+        return null;
+    }
+
 
     public void listSmartDevicesPresets(){
         StringBuilder sb = new StringBuilder();

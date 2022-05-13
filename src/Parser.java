@@ -1,5 +1,7 @@
 //import com.intellij.util.containers.hash.HashMap;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +68,7 @@ public class Parser {
     }*/
 
     public void parse(SmartCity city) throws IOException{
-        Path path = Path.of("./src/logs/logs.txt");
+        Path path = Path.of("./logs/logs.txt");
         //Path path = FileSystems.getDefault().getPath("logs", "logs.txt");
         String content = Files.readString(path);
         //List<String> linhas = readFile("dados.csv");
@@ -107,7 +109,7 @@ public class Parser {
                 //System.out.println("Linha inválida.");
             }
         }
-        System.out.println("done!");
+        System.out.println("Ficheiro carregado com sucesso.");
     }
 
     public List<String> readFile(String nomeFich) {
@@ -174,6 +176,11 @@ public class Parser {
         String[] campos = input.split(",");
         String nome = campos[0];
         return new Marca(nome);
+    }
+
+    public LocalDate parseData(String data_string){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        return LocalDate.parse(data_string, formatter);
     }
 
     public void simulation(SmartCity city, Scanner sc) throws IOException, ClassNotFoundException {

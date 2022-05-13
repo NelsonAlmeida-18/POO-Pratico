@@ -184,6 +184,40 @@ public class SmartBulb extends SmartDevice {
 
     public double getConsumo() {return this.consumo;}
 
+
+    public double getConsumo(LocalDate data_atual, LocalDate dataSimulacao){
+        switch(this.estado.toString()){
+            case("ON"):
+                this.consumo = ChronoUnit.DAYS.between(data_atual, dataSimulacao)*this.dimensions*Math.random();
+            case("OFF"):
+                this.consumo = 0;
+        }
+        return this.consumo;
+    }
+
+    /*  esta vai calcular o consumo caso o dipositivo tenha sido
+    public double getConsumo(LocalDate data_atual, LocalDate dataSimulacao){
+
+        switch(this.estado.toString()){
+            case("ON"):
+                if(this.ligadoInit.isBefore(data_atual) && this.dataFin.isAfter(dataSimulacao)){
+                    this.consumo = ChronoUnit.DAYS.between(data_atual, dataSimulacao)*this.dimensions*Math.random();
+                }
+                else if(this.ligadoInit.isBefore(data_atual) && this.dataFin.isBefore(dataSimulacao)){
+                    this.consumo = ChronoUnit.DAYS.between(data_atual, this.dataFin)*this.dimensions*Math.random();
+                }
+                else if(this.ligadoInit.isAfter(data_atual) && this.dataFin.isAfter(dataSimulacao)){
+                    this.consumo = ChronoUnit.DAYS.between(this.ligadoInit, dataSimulacao)*this.dimensions*Math.random();
+                }
+                else{ this.consumo = 0;}
+
+            case("OFF"):
+                this.consumo = ChronoUnit.DAYS.between(this.ligadoInit, this.dataFin)*this.dimensions*Math.random();
+                this.estado = est;
+        }
+        return this.consumo;
+    }*/
+
     public boolean equals(Object obj){
         if (this==obj)
             return true;

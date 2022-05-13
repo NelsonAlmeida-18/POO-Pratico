@@ -86,6 +86,16 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=sc.getLastLigado();
     }
 
+    public double getConsumo(LocalDate data_atual, LocalDate dataSimulacao){
+        switch(this.estado.toString()){
+            case("ON"):
+                this.consumo = ChronoUnit.DAYS.between(data_atual, dataSimulacao)*this.resolucao*((Math.random()*2)+1);
+            case("OFF"):
+                this.consumo = 0;
+        }
+        return this.consumo;
+    }
+
     @Override
     public int getID() {return this.id;}
 
@@ -106,11 +116,13 @@ public class SmartCamera extends SmartDevice {
     }
 
     public double getConsumo(){
-        if (this.estado==state.OFF)
-            return this.consumo;
-        else{
-            return ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin)*this.resolucao*((Math.random()*2)+1);
-        }                                               //tempo de gravacao, resolucao, bitrate
+        // if (this.estado==state.OFF)
+        //     return this.consumo;
+        // else{
+        //     return ChronoUnit.HOURS.between(this.ligadoInit, this.dataFin)*this.resolucao*((Math.random()*2)+1);
+        // }       
+                                            //tempo de gravacao, resolucao, bitrate
+        return this.tamanho_ficheiros*resolucao;
     }
 
     public void setResolucao(float width, float height){
@@ -128,10 +140,10 @@ public class SmartCamera extends SmartDevice {
     public void setState(state est){
         switch(est.toString()){
             case("ON"):
-                this.ligadoInit=LocalDate.now();
+                //this.ligadoInit=LocalDate.now();
                 this.estado = est;  
             case("OFF"):                                                                                      //bitrate encoder random pois pode depender da quantidade de movimento e densidade populacional da imagem
-                this.consumo = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin)*this.resolucao*Math.random();
+                //this.consumo = ChronoUnit.HOURS.between(this.ligadoInit, this.dataFin)*this.resolucao*Math.random();
                 this.estado = est;
         }
     }

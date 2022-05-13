@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
  *
  */
 public abstract class SmartDevice implements Serializable{
+
 /* 
     public String getID() {return this.id;}
 
@@ -39,6 +40,9 @@ public abstract class SmartDevice implements Serializable{
     public abstract void goToData(LocalDate data);
 
     public abstract double getConsumo();
+
+    public abstract double getConsumo(LocalDate data_atual, LocalDate data_sim);
+
     public abstract void turnOn();
 
     public abstract void turnOff();

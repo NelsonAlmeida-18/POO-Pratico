@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.file.AccessDeniedException;
 import java.util.Scanner;
 import java.lang.InterruptedException;
 import java.lang.ProcessBuilder;
@@ -81,7 +82,7 @@ public class UI {
 */
 
     public static void clearConsole() {
-       /*try {
+       try {
             if (System.getProperty("os.name").contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
                 //System.out.print("\033\143");
@@ -91,8 +92,8 @@ public class UI {
                 //System.out.print("\033\143");
                 System.out.print("\033\143");
             }
-        } catch (IOException | InterruptedException ex) { System.out.println(ex.getMessage());}*/
-        System.out.println("limpo");
+        } catch (IOException | InterruptedException ex) { System.out.println(ex.getMessage());}
+       // System.out.println("limpo");
     }
     
     public void menuInicial(SmartCity city, Scanner sc) throws IOException {
@@ -123,7 +124,8 @@ public class UI {
             }
             case 3 -> { //Consultar comercializadores de energia existentes
                 clearConsole();
-                city.listComercializadoresEnergia();
+                System.out.println(city.listComercializadores());
+                //city.listFaturas();
                 menuInicial(city, sc);
             }
             case 4 -> { //Consultar marcas existentes
@@ -156,10 +158,7 @@ public class UI {
             }
             case 9 -> { //Começar Simulação
                 clearConsole();
-                //simulationMenu(city);
-                Parser p = new Parser();
-                try{p.simulation(city, sc);}
-                catch(Exception e){System.out.println("upsi");}
+                simulationMenu(city, sc);
                 menuInicial(city, sc);
             }
             case 10 -> { //Sair
@@ -211,12 +210,13 @@ public class UI {
         System.out.println("Selecione uma das opções abaixo:");
         System.out.println();
         System.out.println("1 - Criar SmartHouse");
-        System.out.println("2 - Criar Comercializador de Energia");
-        System.out.println("3 - Criar marca de SmartSpeaker");
-        System.out.println("4 - Criar preset de SmartDevice");
-        System.out.println("5 - Eliminar um preset de SmartDevice");
-        System.out.println("6 - Adicionar apartir de log");
-        System.out.println("7 - Retroceder");
+        System.out.println("2 - Editar SmartHouse");
+        System.out.println("3 - Criar Comercializador de Energia");
+        System.out.println("4 - Criar marca de SmartSpeaker");
+        System.out.println("5 - Criar preset de SmartDevice");
+        System.out.println("6 - Eliminar um preset de SmartDevice");
+        System.out.println("7 - Adicionar apartir de log");
+        System.out.println("8 - Retroceder");
         res = sc.nextInt();
         sc.nextLine();
 
@@ -225,28 +225,32 @@ public class UI {
                 createSmartHouseMenu(city, sc);
                 createMenu(city, sc);
             break;
-
-            case 2: //Criar Comercializador de Energia
+            case 2: //Editar uma smartHouse(Ligar e desligar todos os dispostivios/dispostivos individuais)
+                
+                editSmartHouse(city,sc);
+                createMenu(city, sc);
+            break;
+            case 3: //Criar Comercializador de Energia
                 createComercializadorMenu(city, sc);
                 createMenu(city, sc);
             break;
 
-            case 3: //Criar marca de SmartSpeaker
+            case 4: //Criar marca de SmartSpeaker
                 createMarcaMenu(city, sc);
                 createMenu(city, sc);
             break;
 
-            case 4: //Criar preset de SmartDevice
+            case 5: //Criar preset de SmartDevice
                 createSmartDevicePresetMenu(city, sc);
                 createMenu(city, sc);
             break;
 
-            case 5: //Eliminar um preset de SmartDevice
+            case 6: //Eliminar um preset de SmartDevice
                 //deleteSmartDevicePresetMenu(city);
                 createMenu(city, sc);
             break;
 
-            case 6: //Adicionar apartir de log
+            case 7: //Adicionar apartir de log
                 clearConsole();
                 Parser p = new Parser();
                 //city.merge(p.parse(city.getHouseId(), city.getDeviceId())); //carregar faz gestão de conflitos para dar merge à cidade já existente e à cidade que se está a carregar do log
@@ -254,7 +258,7 @@ public class UI {
                 createMenu(city, sc);
             break;
 
-            case 7: //Retroceder
+            case 8: //Retroceder
                 clearConsole();
                 try{menuInicial(city, sc);}
                 catch(Exception e){System.out.println("Failed to load menuInicial");}
@@ -275,7 +279,7 @@ public class UI {
         String morada = sc.nextLine();
 
         System.out.println("Insira o fornecedor:");
-        city.listComercializadoresEnergia();
+        city.listComercializadores();
         String fornecedor = sc.nextLine();
 
         int house_id = city.createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
@@ -512,12 +516,151 @@ public class UI {
 
         city.getSmartDevicePresetDetails(nome);
 
-    } 
+    } */
         
-    public void simulationMenu(SmartCity city){
-        //pedir data
-        //calcula
-        //mostra
+    public void simulationMenu(SmartCity city, Scanner sc) {
+        System.out.println("Indique a data: (X dias ou DD.MM.YYYY)");
+        String time = sc.nextLine();
+
+        if(city.simulation(time) == 0) {
+            System.out.println(city.listFaturas());
+        } else {
+            System.out.println("Data inválida");
+            clearConsole();
+            simulationMenu(city, sc);
+        }
     }
- */
+
+    public void editSmartHouse(SmartCity city, Scanner sc){
+        System.out.println("Indique o ID da casa que pertende editar(0-"+(city.getHouseId()-1)+"):");
+        Integer id=sc.nextInt();
+        sc.nextLine();
+        SmartHouse casa = city.getCasa(id);
+        while(casa==null){
+            System.out.println("Por favor indique um ID válido(0-"+(city.getHouseId()-1)+"):"); 
+            id=sc.nextInt();
+            sc.nextLine();
+            casa = city.getCasa(id);
+        }
+        clearConsole();
+        menuInteracaoCasas(city, casa, sc);
+    }
+
+    public void menuInteracaoCasas(SmartCity city, SmartHouse casa, Scanner sc){
+    //Menu de edições possíveis
+        System.out.println("1 - Listar divisões. ");
+        System.out.println("2 - Editar divisões. "); 
+        System.out.println("3 - Ligar/Desligar a Casa. ");
+        System.out.println("4 - Ligar/Desligar uma divisão.");
+        System.out.println("5 - Alterar Comercializador de energia.");
+        System.out.println("6 - Retroceder");
+        int choice = sc.nextInt();
+        sc.nextLine();
+
+        switch(choice){
+            case(1):
+                System.out.println(casa.getNomeDivisoes().toString());
+                menuInteracaoCasas(city, casa, sc);
+            break;
+            case(2):
+                clearConsole();
+                editaDivisoes(city, casa, sc);
+                menuInteracaoCasas(city, casa, sc);
+            break;
+            case(3):
+                System.out.println("0 - Desligar");
+                System.out.println("1 - Ligar");
+                choice = sc.nextInt();
+                sc.nextLine();
+                switch (choice){
+                    case(0):
+                        casa.setHouseOFF();
+                        System.out.println("Energia da Casa desligada com sucesso.");
+                    break;
+                    case(1):
+                        casa.setHouseOn();
+                        System.out.println("Energia da Casa ligada com sucesso.");
+                    break;
+                    default:
+                        menuInteracaoCasas(city, casa, sc);
+                    break;
+                }
+                menuInteracaoCasas(city, casa, sc);
+            case(4):
+                System.out.println(casa.getDivisaoList());
+                System.out.println("Seleciona o nome da divisão: ");
+                String escolha = sc.nextLine();
+                while(casa.getDivisao(escolha)==null){
+                    System.out.println("Seleciona uma divisão válida: ");
+                    escolha = sc.nextLine();
+                }
+                clearConsole();
+                System.out.println("0 - Desligar");
+                System.out.println("1 - Ligar");
+                choice = sc.nextInt();
+                sc.nextLine();
+                switch (choice){
+                    case(0):
+                        casa.setDivisaoOFF(escolha);
+                        clearConsole();
+                        System.out.println("Energia da divisão desligada com sucesso.");
+                        menuInteracaoCasas(city, casa, sc);
+                    break;
+                    case(1):
+                        casa.setDivisaoOn(escolha);
+                        clearConsole();
+                        System.out.println("Energia da divisão ligada com sucesso.");
+                        menuInteracaoCasas(city, casa, sc);
+                    break;
+                    default:
+                        menuInteracaoCasas(city, casa, sc);
+                    break;
+                }
+            case(5):
+                System.out.println("Comercializador Atual: "+casa.getCompanhia_eletrica());
+                System.out.println("Escolha um comercializador dos listados abaixo: ");
+                System.out.println(city.listComercializadores());
+                String nome = sc.nextLine();
+                while(city.getComercializador(nome)==null){
+                    System.out.println("Comercializador inválido, por favor selecione um nome válido entre os listados.");
+                    nome = sc.nextLine();
+                }
+                clearConsole();
+                casa.mudaDeFornecedor(city.getComercializador(nome));
+                System.out.println("Comercializador de energia mudado com sucesso.");
+                menuInteracaoCasas(city, casa, sc);
+            break;
+            case(6):
+                clearConsole();
+                editSmartHouse(city, sc);
+            break;
+        }
+    }
+
+    public void editaDivisoes(SmartCity city, SmartHouse casa, Scanner sc){
+        System.out.println("1 - Adicionar divisão");
+        System.out.println("2 - Remover divisão");
+        System.out.println("3 - Retroceder");
+        int option = sc.nextInt();
+        sc.nextLine();
+        switch(option){
+            case(1):
+                System.out.println("Nome da divisão a adicionar");
+                String divisao = sc.nextLine();
+                casa.addDivisao(divisao);
+                System.out.println("Divisão adicionada com sucesso");
+            break;
+            case(2):
+                System.out.println("Nome da divisão a remover");
+                divisao =  sc.nextLine();
+                casa.removeDivisao(divisao);
+                System.out.println("Divisão removida com sucesso");
+            break;
+            case(3):
+                menuInteracaoCasas(city, casa, sc);
+            break;
+        }
+
+    }
+
 }

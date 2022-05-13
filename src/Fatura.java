@@ -52,11 +52,11 @@ public class Fatura {
         StringBuilder sb = new StringBuilder();
         sb.append("Data Inicial da Faturação: ");
         sb.append(this.dataInit.toString());
-        sb.append("\nData Final da Faturação: ");
+        sb.append("\tData Final da Faturação: ");
         sb.append(this.dataFim.toString());
-        sb.append("\nKws Consumidos nesta casa: ");
+        sb.append("\tKws Consumidos nesta casa: ");
         sb.append(this.KwsConsumidos);
-        sb.append("\nTotal a pagar (IVA incl.): ");
+        sb.append("\tTotal a pagar (IVA incl.): ");
         sb.append(this.valorDaFatura);
         sb.append("\n");
         return sb.toString();

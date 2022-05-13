@@ -143,23 +143,23 @@ public class ComercializadoresEnergia implements Serializable {
     public void setFatorImposto(double fator){ this.fatorImposto = fator; }
     public double getFatorImposto(){return this.fatorImposto;}
 
-    public ComercializadoresEnergia clone(){
-        return new ComercializadoresEnergia(this);
-    }
 
 
-    public void geraFatura(SmartHouse casa){
+    public Fatura geraFatura(SmartHouse casa){
+        Fatura newFatura;
         if (this.casas.containsKey(casa)){
             List<Fatura> faturas = this.casas.get(casa);
-            Fatura newFatura = new Fatura(LocalDateTime.now(), LocalDateTime.now(), casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
+            newFatura = new Fatura(LocalDateTime.now(), LocalDateTime.now(), casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
             faturas.add(newFatura);
         }
         else{
             List<Fatura> faturas = new ArrayList<>();
-            Fatura newFatura = new Fatura(LocalDateTime.now(), LocalDateTime.now(), casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
+            newFatura = new Fatura(LocalDateTime.now(), LocalDateTime.now(), casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
             faturas.add(newFatura);
             this.casas.put(casa,faturas);
         }
+
+        return newFatura;
     }
 
     public void addFatura(Fatura fat, SmartHouse casa){
@@ -231,11 +231,31 @@ public class ComercializadoresEnergia implements Serializable {
         return faturacao;
     }
 
+    public void faturacao(){
+        for(SmartHouse casa:this.casas.keySet()) {
+            geraFatura(casa);
+            //casa.setConsumo(0);
+        }
+    }
+
+    public String getListaFaturacao(){
+        StringBuilder sb = new StringBuilder();
+        for (SmartHouse casa:this.casas.keySet()){
+            sb.append(casa.getID());
+            sb.append("\n");
+            for (Fatura fatura:this.casas.get(casa)){
+                sb.append(fatura.toString());
+                sb.append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
     public String listOfClientes(){
         StringBuilder sb = new StringBuilder();
         
         for(SmartHouse casa:this.casas.keySet()){
-            sb.append(casa.getMorada());  //TODO Mudar de get morada para get ID
+            sb.append(casa.getID());  
             sb.append(this.casas.get(casa).toString());
         }
         
@@ -247,6 +267,10 @@ public class ComercializadoresEnergia implements Serializable {
         if (obj==null||this.getClass()!=obj.getClass()) return false;
         ComercializadoresEnergia ce = (ComercializadoresEnergia) obj;
         return (this.nome==ce.getNome()  &&  this.precoBaseKW== ce.getPrecoBaseKW() && this.fatorImposto==ce.getFatorImposto());
+    }
+
+    public ComercializadoresEnergia clone(){
+        return new ComercializadoresEnergia(this);
     }
 
     public String toString(){
