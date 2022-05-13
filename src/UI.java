@@ -532,12 +532,12 @@ public class UI {
     }
 
     public void editSmartHouse(SmartCity city, Scanner sc){
-        System.out.println("Indique o ID da casa que pertende editar(0-"+city.getHouseId()+"):"); //retirar um 
+        System.out.println("Indique o ID da casa que pertende editar(0-"+(city.getHouseId()-1)+"):");
         Integer id=sc.nextInt();
         sc.nextLine();
         SmartHouse casa = city.getCasa(id);
         while(casa==null){
-            System.out.println("Por favor indique um ID válido(0-"+city.getHouseId()+"):"); //retirar um
+            System.out.println("Por favor indique um ID válido(0-"+(city.getHouseId()-1)+"):"); 
             id=sc.nextInt();
             sc.nextLine();
             casa = city.getCasa(id);
