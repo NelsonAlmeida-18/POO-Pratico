@@ -1,14 +1,14 @@
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Fatura {
-    private LocalDateTime dataInit;
-    private LocalDateTime dataFim;
+    private LocalDate dataInit;
+    private LocalDate dataFim;
     private double KwsConsumidos;
     private double valorDaFatura;
 
 
     //Não faz sentido criar uma fatura vazia
-    public Fatura(LocalDateTime dataInit, LocalDateTime dataFim, double KwsConsumidos, double valorDaFatura){
+    public Fatura(LocalDate dataInit, LocalDate dataFim, double KwsConsumidos, double valorDaFatura){
         this.dataInit=dataInit;
         this.dataFim=dataFim;
         this.KwsConsumidos=KwsConsumidos;
@@ -26,9 +26,9 @@ public class Fatura {
 
     public double getValorDaFatura(){return this.valorDaFatura;}
 
-    public LocalDateTime getDataInicial(){return this.dataInit;}
+    public LocalDate getDataInicial(){return this.dataInit;}
 
-    public LocalDateTime getDataFinal(){return this.dataFim;}
+    public LocalDate getDataFinal(){return this.dataFim;}
 
     public boolean equals(Object obj){
         if (this==obj)
@@ -50,11 +50,11 @@ public class Fatura {
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Data Inicial da Faturação: ");
+        sb.append("Início de contagem: ");
         sb.append(this.dataInit.toString());
-        sb.append("\tData Final da Faturação: ");
+        sb.append("\tTérmino de contagem: ");
         sb.append(this.dataFim.toString());
-        sb.append("\tKws Consumidos nesta casa: ");
+        sb.append("\tkWs Consumidos na casa: ");
         sb.append(this.KwsConsumidos);
         sb.append("\tTotal a pagar (IVA incl.): ");
         sb.append(this.valorDaFatura);

@@ -48,10 +48,11 @@ public class SmartCity implements Serializable {
             case 3 -> { //dada uma data em formato DD.MM.YYYY
                 Parser p = new Parser();
                 data_sim = p.parseData(time);
+                if(data_sim.isBefore(this.data_atual)) return 1; //data anterior portanto inválida
             }
             default -> {
-                System.out.println("\nData inválida.");
-                return 0;
+                //Data inválida
+                return 1;
             }
         }
         System.out.println("\nDATA: "+data_sim.toString());
@@ -65,7 +66,7 @@ public class SmartCity implements Serializable {
          */
         ListIterator<ComercializadoresEnergia> com = this.comercializadores.listIterator();
         while(com.hasNext()) {
-            com.next().faturacao();
+            com.next().faturacao(data_sim);
         }
         this.data_atual = data_sim;
         return 0;
@@ -168,6 +169,8 @@ public class SmartCity implements Serializable {
         this.deviceID = deviceID;
         this.houseID = houseID;
     }
+
+    public LocalDate getDataAtual(){return this.data_atual;}
 
     public int getHouseId(){return this.houseID;}
     

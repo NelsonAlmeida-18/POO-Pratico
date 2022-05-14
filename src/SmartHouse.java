@@ -320,8 +320,8 @@ public class SmartHouse implements Serializable{
         return sb.toString();
     }
 
-    public void mudaDeFornecedor(ComercializadoresEnergia novoComercializadoresEnergia){
-        this.companhia_eletrica.geraFatura(this);
+    public void mudaDeFornecedor(ComercializadoresEnergia novoComercializadoresEnergia, LocalDate data_mudança){
+        this.companhia_eletrica.geraFatura(this, data_mudança);
         this.companhia_eletrica.terminaContrato(this);//terminar contrato
         this.companhia_eletrica=novoComercializadoresEnergia;
         this.companhia_eletrica.addCasa(this);

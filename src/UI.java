@@ -467,7 +467,7 @@ public class UI {
         String nome = sc.nextLine();
 
         System.out.println("Insira o consumo diário associado ao uso dos dispostivos:");
-        double consumo = sc.nextInt();
+        double consumo = sc.nextDouble();
         sc.nextLine();
         
         city.createMarca(nome, consumo);
@@ -626,13 +626,13 @@ public class UI {
                     nome = sc.nextLine();
                 }
                 clearConsole();
-                casa.mudaDeFornecedor(city.getComercializador(nome));
+                casa.mudaDeFornecedor(city.getComercializador(nome), city.getDataAtual());
                 System.out.println("Comercializador de energia mudado com sucesso.");
                 menuInteracaoCasas(city, casa, sc);
             break;
             case(6):
                 clearConsole();
-                editSmartHouse(city, sc);
+                menuInteracaoCasas(city, casa, sc);
             break;
         }
     }
@@ -640,7 +640,8 @@ public class UI {
     public void editaDivisoes(SmartCity city, SmartHouse casa, Scanner sc){
         System.out.println("1 - Adicionar divisão");
         System.out.println("2 - Remover divisão");
-        System.out.println("3 - Retroceder");
+        System.out.println("3 - Adicionar dispositivo a divisão");
+        System.out.println("4 - Retroceder");
         int option = sc.nextInt();
         sc.nextLine();
         switch(option){
@@ -657,6 +658,11 @@ public class UI {
                 System.out.println("Divisão removida com sucesso");
             break;
             case(3):
+                System.out.println("Divisão a adicionar dispositivo:");
+                divisao =  sc.nextLine();
+                addDeviceToDivisaoMenu(city, casa.getID(), divisao, sc);
+                break;
+            case(4):
                 menuInteracaoCasas(city, casa, sc);
             break;
         }

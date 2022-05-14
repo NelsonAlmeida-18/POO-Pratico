@@ -168,13 +168,15 @@ public class SmartBulb extends SmartDevice {
     public int getDimensions(){return this.dimensions;}
 
     public void setState(state est){
-        switch(est.toString()){
-            case("ON"):
-                this.ligadoInit=LocalDate.now();
+        switch (est.toString()) {
+            case ("ON") -> {
+                this.ligadoInit = LocalDate.now();
                 this.estado = est;
-            case("OFF"):
-                this.consumo = ChronoUnit.DAYS.between(this.ligadoInit, this.dataFin)*this.dimensions*Math.random();
+            }
+            case ("OFF") -> {
+                this.consumo = ChronoUnit.DAYS.between(this.ligadoInit, this.dataFin) * this.dimensions * Math.random();
                 this.estado = est;
+            }
         }
     }
     /* possibly useful */
@@ -186,11 +188,10 @@ public class SmartBulb extends SmartDevice {
 
 
     public double getConsumo(LocalDate data_atual, LocalDate dataSimulacao){
-        switch(this.estado.toString()){
-            case("ON"):
-                this.consumo = ChronoUnit.DAYS.between(data_atual, dataSimulacao)*this.dimensions*Math.random();
-            case("OFF"):
-                this.consumo = 0;
+        switch (this.estado.toString()) {
+            case ("ON") ->
+                    this.consumo = ChronoUnit.DAYS.between(data_atual, dataSimulacao) * this.dimensions * Math.random();
+            case ("OFF") -> this.consumo = 0;
         }
         return this.consumo;
     }

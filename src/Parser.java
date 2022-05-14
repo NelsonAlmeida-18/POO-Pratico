@@ -210,7 +210,7 @@ public class Parser {
                     }
                 } else {
                     if (city.hasComercializador(linha[2])) { // try catch não pode ser utilizado dentro de ifs statements
-                        clonedhouse.mudaDeFornecedor(city.getComercializador(linha[2]));
+                        clonedhouse.mudaDeFornecedor(city.getComercializador(linha[2]), city.getDataAtual());
                         throw new IOException(linha[2]);
                     }
                 }

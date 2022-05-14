@@ -145,12 +145,10 @@ public class SmartSpeaker extends SmartDevice {
 
     public double getConsumo(LocalDate data_atual, LocalDate dataSimulacao){
 
-        switch(this.estado.toString()){
-            case("ON"):
-                this.consumo = ChronoUnit.DAYS.between(data_atual, dataSimulacao)*this.volume*this.marca.getConsumoDiario()*((Math.random()*2)+1);
-
-            case("OFF"):
-                this.consumo = 0;
+        switch (this.estado.toString()) {
+            case ("ON") ->
+                    this.consumo = ChronoUnit.DAYS.between(data_atual, dataSimulacao) * this.volume * this.marca.getConsumoDiario() * ((Math.random() * 2) + 1);
+            case ("OFF") -> this.consumo = 0;
         }
         return this.consumo;
     }

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 
 
@@ -145,16 +145,16 @@ public class ComercializadoresEnergia implements Serializable {
 
 
 
-    public Fatura geraFatura(SmartHouse casa){
+    public Fatura geraFatura(SmartHouse casa, LocalDate data_final){
         Fatura newFatura;
         if (this.casas.containsKey(casa)){
             List<Fatura> faturas = this.casas.get(casa);
-            newFatura = new Fatura(LocalDateTime.now(), LocalDateTime.now(), casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
+            newFatura = new Fatura(LocalDate.now(), data_final, casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
             faturas.add(newFatura);
         }
         else{
             List<Fatura> faturas = new ArrayList<>();
-            newFatura = new Fatura(LocalDateTime.now(), LocalDateTime.now(), casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
+            newFatura = new Fatura(LocalDate.now(), data_final, casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
             faturas.add(newFatura);
             this.casas.put(casa,faturas);
         }
@@ -200,7 +200,7 @@ public class ComercializadoresEnergia implements Serializable {
     }
     public void setNumerodeClientes(int numero){ this.numeroDeClientes = numero; }
     public int getNumeroDeClientes(){ return this.numeroDeClientes;}
-    public SmartHouse getCasaMaisGastadora(LocalDateTime dataInit, LocalDateTime dataFin){
+    public SmartHouse getCasaMaisGastadora(LocalDate dataInit, LocalDate dataFin){
         SmartHouse casaMaisGastadora=null;
         double maxConsumo=0;
         for(SmartHouse casa:this.casas.keySet()){
@@ -231,9 +231,9 @@ public class ComercializadoresEnergia implements Serializable {
         return faturacao;
     }
 
-    public void faturacao(){
+    public void faturacao(LocalDate data_final){
         for(SmartHouse casa:this.casas.keySet()) {
-            geraFatura(casa);
+            geraFatura(casa, data_final);
             //casa.setConsumo(0);
         }
     }

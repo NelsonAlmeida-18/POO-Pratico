@@ -137,14 +137,12 @@ public class SmartCamera extends SmartDevice {
         this.tamanho_ficheiros=file;
     }
 
-    public void setState(state est){
-        switch(est.toString()){
-            case("ON"):
-                //this.ligadoInit=LocalDate.now();
-                this.estado = est;  
-            case("OFF"):                                                                                      //bitrate encoder random pois pode depender da quantidade de movimento e densidade populacional da imagem
-                //this.consumo = ChronoUnit.HOURS.between(this.ligadoInit, this.dataFin)*this.resolucao*Math.random();
-                this.estado = est;
+    public void setState(state est){this.estado = est;}
+
+    public void switchState(){
+        switch (this.estado.toString()) {
+            case ("ON") -> this.estado = state.OFF;
+            case ("OFF") -> this.estado = state.ON;
         }
     }
 
@@ -202,18 +200,12 @@ public class SmartCamera extends SmartDevice {
 
     public SmartCamera.state toState(String state){
         SmartCamera.state ret = SmartCamera.state.OFF;
-        
-        switch(state){
-            case ("ON"):
-                ret = SmartCamera.state.ON;
-            break;
 
-            case ("OFF"):
-                ret = SmartCamera.state.OFF;
-            break;
-
-            default:
-            
+        switch (state) {
+            case ("ON") -> ret = SmartCamera.state.ON;
+            case ("OFF") -> ret = SmartCamera.state.OFF;
+            default -> {
+            }
         }
 
         return ret;

@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +24,9 @@ public class ComercializadoresEnergiaTest{
     public void getFaturasTest(){
         ComercializadoresEnergia ce = new ComercializadoresEnergia("EDP");
         SmartHouse casa1 = new SmartHouse(1,"joão", 123123,"Rua da rua", ce);
-        Fatura fatura1 = new Fatura(LocalDateTime.now(),LocalDateTime.of(2022,6,5,11,36), 51.4f, 60.53);
-        Fatura fatura2 = new Fatura(LocalDateTime.now(),LocalDateTime.of(2022,7,5,11,36), 53.4f, 63.53);
-        Fatura fatura3 = new Fatura(LocalDateTime.now(),LocalDateTime.of(2022,8,5,11,36), 48.4f, 55.53);
+        Fatura fatura1 = new Fatura(LocalDate.now(),LocalDate.of(2022,6,5), 51.4f, 60.53);
+        Fatura fatura2 = new Fatura(LocalDate.now(),LocalDate.of(2022,7,5), 53.4f, 63.53);
+        Fatura fatura3 = new Fatura(LocalDate.now(),LocalDate.of(2022,8,5), 48.4f, 55.53);
         List<Fatura> faturas = new ArrayList<>();
         faturas.add(1,fatura1);
         faturas.add(2,fatura2);
@@ -45,9 +45,9 @@ public class ComercializadoresEnergiaTest{
         ce.terminaContrato(casa1);
         assertNull(casa1.getCompanhia_eletrica(), "A casa não deveria ter fornecedor de energia");
         List<Fatura> faturas= new ArrayList<>();
-        Fatura fatura1 = new Fatura(LocalDateTime.now(),LocalDateTime.of(2022,6,5,11,36), 51.4f, 60.53);
+        Fatura fatura1 = new Fatura(LocalDate.now(),LocalDate.of(2022,6,5), 51.4f, 60.53);
         faturas.add(1,fatura1);
-        casa1.mudaDeFornecedor(nce);
+        casa1.mudaDeFornecedor(nce, LocalDate.now());
         assertEquals(nce,casa1.getCompanhia_eletrica(),"Deveria ter trocador de fornecedor (!=null)");
         nce.terminaContrato(casa1);
         nce.addCasa(casa1,faturas);
@@ -60,7 +60,7 @@ public class ComercializadoresEnergiaTest{
         ComercializadoresEnergia ce = new ComercializadoresEnergia("EDP");
         SmartHouse casa1 = new SmartHouse(1,"joão", 123123,"Rua da rua", ce);
         List<Fatura> faturas= new ArrayList<>();
-        Fatura fatura1 = new Fatura(LocalDateTime.now(),LocalDateTime.of(2022,6,5,11,36), 51.4f, 60.53);
+        Fatura fatura1 = new Fatura(LocalDate.now(),LocalDate.of(2022,6,5), 51.4f, 60.53);
         faturas.add(1,fatura1);
         ce.addCasa(casa1,faturas);
         ce.addFatura(fatura1,casa1);
@@ -79,7 +79,7 @@ public class ComercializadoresEnergiaTest{
         casa1.addDevice("sala", ds);
         Map<SmartHouse, List<Fatura>> casas = new HashMap<>();
         List<Fatura> faturas = new ArrayList<>();
-        Fatura fatura1 = new Fatura(LocalDateTime.now(), LocalDateTime.of(2022, 6, 5, 11, 36), 51.4f, 60.53);
+        Fatura fatura1 = new Fatura(LocalDate.now(), LocalDate.of(2022, 6, 5), 51.4f, 60.53);
         faturas.add(1, fatura1);
         casas.put(casa1.clone(), faturas);
         casas.put(casa2.clone(), null);
