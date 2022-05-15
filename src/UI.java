@@ -1,5 +1,4 @@
 import java.io.*;
-import java.nio.file.AccessDeniedException;
 import java.util.Scanner;
 import java.lang.InterruptedException;
 import java.lang.ProcessBuilder;
@@ -140,7 +139,7 @@ public class UI {
             }
             case 6 -> { //Carregar um estado de programa
                 clearConsole();
-                loadMenu(city, sc);
+                loadMenu(city,sc);
                 menuInicial(city, sc);
             }
             case 7 -> { //Carregar um ficheiro log
@@ -182,10 +181,16 @@ public class UI {
         System.out.println("Insira o path para o ficheiro que pretende carregar:");
         StringBuilder path = new StringBuilder();
         path.append(sc.nextLine());
-        //System.out.println("Insira o nome do ficheiro com a extensão (e.g. ficheiro.txt):");
-        //path.append(sc.nextLine());
-        city = (SmartCity) ReadObjectFromFile(path.toString()); //createMenuLine devolve a cidade guardada no ficheiro
+        System.out.println("Insira o nome do ficheiro com a extensão (e.g. ficheiro.txt):");
+        path.append(sc.nextLine());
+        city.merge((SmartCity)ReadObjectFromFile(path.toString())); //createMenuLine devolve a cidade guardada no ficheiro
+        /*try {menuInicial(city,sc);}
+        catch(Exception e){
+            System.out.println("Erro a carregar estado.");
+        }*/
+
     }
+
     public Object ReadObjectFromFile(String filepath) {
 
         try {
