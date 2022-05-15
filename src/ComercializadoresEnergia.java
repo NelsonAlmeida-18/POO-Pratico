@@ -161,6 +161,9 @@ public class ComercializadoresEnergia implements Serializable {
 
     public void terminaContrato(SmartHouse casa){
         removeCasa(casa);
+        this.numeroDeClientes--;
+        casa.setCompanhia_eletrica(null);
+        casa.setHouseOFF();
     }
 
     public double getPrecoPerDevice(SmartDevice sd){
@@ -181,6 +184,8 @@ public class ComercializadoresEnergia implements Serializable {
     }
     public void setNumerodeClientes(int numero){ this.numeroDeClientes = numero; }
     public int getNumeroDeClientes(){ return this.numeroDeClientes;}
+
+
     public SmartHouse getCasaMaisGastadora(LocalDate dataInit, LocalDate dataFin){
         SmartHouse casaMaisGastadora=null;
         double maxConsumo=0;
