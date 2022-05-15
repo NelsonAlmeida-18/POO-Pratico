@@ -198,9 +198,12 @@ public class SmartCity implements Serializable {
         sb.append("[");
         int pos =0;
         while(iter.hasNext()){
-            sb.append(iter.next().getNome());
+            ComercializadoresEnergia temp = iter.next();
+            sb.append(temp.getNome());
+            sb.append("     Preço p/KWh: ");
+            sb.append(temp.getPrecoBaseKW());
             if(pos<this.comercializadores.size()-1){
-                sb.append(",");
+                sb.append(",  ");
             }
             pos+=1;
         }
