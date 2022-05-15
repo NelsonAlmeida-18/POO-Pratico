@@ -16,7 +16,7 @@ public class UI {
             clearConsole();
             menuInicial(city, sc);
         }catch(Exception e){
-            System.out.print(e.toString());
+            System.out.println(e.toString());
         }
     }
 
@@ -225,49 +225,46 @@ public class UI {
         res = sc.nextInt();
         sc.nextLine();
 
-        switch(res){
-            case 1: //Criar SmartHouse
+        switch (res) {
+            case 1 -> { //Criar SmartHouse
                 createSmartHouseMenu(city, sc);
                 createMenu(city, sc);
-            break;
-            case 2: //Editar uma smartHouse(Ligar e desligar todos os dispostivios/dispostivos individuais)
-                
-                editSmartHouse(city,sc);
+            }
+            case 2 -> { //Editar uma smartHouse(Ligar e desligar todos os dispostivios/dispostivos individuais)
+
+                editSmartHouse(city, sc);
                 createMenu(city, sc);
-            break;
-            case 3: //Criar Comercializador de Energia
+            }
+            case 3 -> { //Criar Comercializador de Energia
                 createComercializadorMenu(city, sc);
                 createMenu(city, sc);
-            break;
-
-            case 4: //Criar marca de SmartSpeaker
+            }
+            case 4 -> { //Criar marca de SmartSpeaker
                 createMarcaMenu(city, sc);
                 createMenu(city, sc);
-            break;
-
-            case 5: //Criar preset de SmartDevice
+            }
+            case 5 -> { //Criar preset de SmartDevice
                 createSmartDevicePresetMenu(city, sc);
                 createMenu(city, sc);
-            break;
-
-            case 6: //Eliminar um preset de SmartDevice
+            }
+            case 6 -> //Eliminar um preset de SmartDevice
                 //deleteSmartDevicePresetMenu(city);
-                createMenu(city, sc);
-            break;
-
-            case 7: //Adicionar apartir de log
+                    createMenu(city, sc);
+            case 7 -> { //Adicionar apartir de log
                 clearConsole();
                 Parser p = new Parser();
                 //city.merge(p.parse(city.getHouseId(), city.getDeviceId())); //carregar faz gestão de conflitos para dar merge à cidade já existente e à cidade que se está a carregar do log
                 p.parse(city);
                 createMenu(city, sc);
-            break;
-
-            case 8: //Retroceder
+            }
+            case 8 -> { //Retroceder
                 clearConsole();
-                try{menuInicial(city, sc);}
-                catch(Exception e){System.out.println("Failed to load menuInicial");}
-            break;
+                try {
+                    menuInicial(city, sc);
+                } catch (Exception e) {
+                    System.out.println("Failed to load menuInicial");
+                }
+            }
         }
     }
 
@@ -546,7 +543,7 @@ public class UI {
 
     public void editSmartHouse(SmartCity city, Scanner sc){
         System.out.println("Indique o ID da casa que pertende editar(0-"+(city.getHouseId()-1)+"):");
-        Integer id=sc.nextInt();
+        int id=sc.nextInt();
         sc.nextLine();
         SmartHouse casa = city.getCasa(id);
         while(casa==null){
@@ -585,18 +582,16 @@ public class UI {
                 System.out.println("1 - Ligar");
                 choice = sc.nextInt();
                 sc.nextLine();
-                switch (choice){
-                    case(0):
+                switch (choice) {
+                    case (0) -> {
                         casa.setHouseOFF();
                         System.out.println("Energia da Casa desligada com sucesso.");
-                    break;
-                    case(1):
+                    }
+                    case (1) -> {
                         casa.setHouseOn();
                         System.out.println("Energia da Casa ligada com sucesso.");
-                    break;
-                    default:
-                        menuInteracaoCasas(city, casa, sc);
-                    break;
+                    }
+                    default -> menuInteracaoCasas(city, casa, sc);
                 }
                 menuInteracaoCasas(city, casa, sc);
             case(4):
@@ -612,22 +607,20 @@ public class UI {
                 System.out.println("1 - Ligar");
                 choice = sc.nextInt();
                 sc.nextLine();
-                switch (choice){
-                    case(0):
+                switch (choice) {
+                    case (0) -> {
                         casa.setDivisaoOFF(escolha);
                         clearConsole();
                         System.out.println("Energia da divisão desligada com sucesso.");
                         menuInteracaoCasas(city, casa, sc);
-                    break;
-                    case(1):
+                    }
+                    case (1) -> {
                         casa.setDivisaoOn(escolha);
                         clearConsole();
                         System.out.println("Energia da divisão ligada com sucesso.");
                         menuInteracaoCasas(city, casa, sc);
-                    break;
-                    default:
-                        menuInteracaoCasas(city, casa, sc);
-                    break;
+                    }
+                    default -> menuInteracaoCasas(city, casa, sc);
                 }
             case(5):
                 System.out.println("Comercializador Atual: "+casa.getCompanhia_eletrica());

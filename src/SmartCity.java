@@ -1,6 +1,4 @@
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -9,7 +7,6 @@ import java.io.ObjectOutputStream;
 import java.lang.StringBuilder;
 import java.io.*;
 
-import static java.lang.Integer.valueOf;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class SmartCity implements Serializable {
@@ -78,15 +75,14 @@ public class SmartCity implements Serializable {
         /*percorre comercializadores para tirarem faturas
         guarda as faturas no seu map e manda para as casas guardarem
          */
-        ListIterator<ComercializadoresEnergia> com = this.comercializadores.listIterator();
-        while(com.hasNext()) {
-            com.next().faturacao(data_sim);
+        for (ComercializadoresEnergia comercializadore : this.comercializadores) {
+            comercializadore.faturacao(data_sim);
         }
         this.data_atual = data_sim;
         return 0;
     }
 
-    public String readFromFile(String filename)throws Exception{
+    public String readFromFile(String filename) {
         try{
             File f = new File(filename);
             BufferedReader br = new BufferedReader(new FileReader(f));
@@ -100,7 +96,7 @@ public class SmartCity implements Serializable {
             return sb.toString();
         }
         catch(Exception e){
-            System.out.println("File name/path are not reachable!\n");
+            System.out.println("File name/path are not reachable!");
         }
 
         return "";
@@ -154,7 +150,7 @@ public class SmartCity implements Serializable {
         return sb.toString();
     }
 
-    public void saveState(String nameOfFile) throws FileNotFoundException,IOException{
+    public void saveState(String nameOfFile) throws IOException {
         try{
             FileOutputStream fos = new FileOutputStream(nameOfFile);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -163,15 +159,11 @@ public class SmartCity implements Serializable {
             oos.close();
         }
         catch(FileNotFoundException e){
-            System.out.println("File not found!\n");
+            System.out.println("File not found! "+e);
         }
-        // catch(IOException e){
-        //     System.out.println("Something went wrong while saving the state!\n");
-        //     e.printStackTrace();
-        // }
     }
 
-    public SmartCity loadState(String nameOfFile) throws FileNotFoundException,IOException, ClassNotFoundException{
+    public SmartCity loadState(String nameOfFile) throws IOException, ClassNotFoundException{
         FileInputStream fis = new FileInputStream(nameOfFile);
         ObjectInputStream oos = new ObjectInputStream(fis);
         SmartCity cit =(SmartCity) oos.readObject();
@@ -333,9 +325,7 @@ public class SmartCity implements Serializable {
 
     public String listFaturas(){
         List<String> listaDeFaturas = new ArrayList<>();
-        ListIterator<ComercializadoresEnergia> com = this.comercializadores.listIterator();
-        while(com.hasNext()) {
-            ComercializadoresEnergia temp = com.next();
+        for (ComercializadoresEnergia temp : this.comercializadores) {
             listaDeFaturas.add(temp.getNome());
             listaDeFaturas.add(temp.getListaFaturacao());
         }
@@ -385,7 +375,6 @@ public class SmartCity implements Serializable {
 
     public String toString(){
         StringBuilder bd = new StringBuilder();
-        
         bd.append("\nCASAS:\n");
         bd.append(this.casas.toString());
         bd.append("\nCOMERCIALIZADORES:\n");
@@ -395,7 +384,6 @@ public class SmartCity implements Serializable {
         bd.append("\nPRESETS:\n");
         bd.append(this.presets.toString());
         bd.append("\n");
-        
         return bd.toString();
     }
 

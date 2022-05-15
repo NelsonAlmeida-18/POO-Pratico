@@ -114,12 +114,11 @@ public class Parser {
 
     public List<String> readFile(String nomeFich) {
         try {
-            List<String> lines = Files.readAllLines(Paths.get(nomeFich), StandardCharsets.UTF_8);
-            return lines;
+            return Files.readAllLines(Paths.get(nomeFich), StandardCharsets.UTF_8);
+
         }
         catch(IOException exc) {
-            List<String> lines = new ArrayList<>();
-            return lines;
+            return new ArrayList<>();
         }
 
     }
@@ -183,7 +182,7 @@ public class Parser {
         return LocalDate.parse(data_string, formatter);
     }
 
-    public void simulation(SmartCity city, Scanner sc) throws IOException, ClassNotFoundException {
+    public void simulation(SmartCity city, Scanner sc) throws IOException {
         System.out.println("Especifique o número de linhas que pretende adicionar na simulação: ");
         int loop= sc.nextInt();
         System.out.println("Insira os comandos: ");

@@ -1,10 +1,9 @@
-import java.util.Map;
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
-import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Map;
 
 
 
@@ -54,12 +53,7 @@ public class ComercializadoresEnergia implements Serializable {
         this.fatorImposto=fatorImposto;
         Map<SmartHouse,List<Fatura>> casinhasNovas=new HashMap<>();
         for(SmartHouse casa:casas.keySet()){
-            List<Fatura> casinhas=new ArrayList<>();
-            ListIterator<Fatura> iter = casas.get(casa).listIterator();
-            while(iter.hasNext()){
-                Fatura faturaTemp=iter.next();
-                casinhas.add(faturaTemp);
-            }
+            List<Fatura> casinhas = new ArrayList<>(casas.get(casa));
             casinhasNovas.put(casa.clone(), casinhas);
         }
         this.casas=casinhasNovas;
@@ -80,12 +74,7 @@ public class ComercializadoresEnergia implements Serializable {
     public Map<SmartHouse,List<Fatura>> getCasas(){
         Map<SmartHouse,List<Fatura>> casinhasNovas=new HashMap<>();
         for(SmartHouse casa:casas.keySet()){
-            List<Fatura> casinhas=new ArrayList<>();
-            ListIterator<Fatura> iter = casas.get(casa).listIterator();
-            while(iter.hasNext()){
-                Fatura faturaTemp=iter.next();
-                casinhas.add(faturaTemp);
-            }
+            List<Fatura> casinhas = new ArrayList<>(casas.get(casa));
             casinhasNovas.put(casa.clone(), casinhas);
         }
         return casinhasNovas;
@@ -99,7 +88,7 @@ public class ComercializadoresEnergia implements Serializable {
     }
 
     public void addCasa(SmartHouse casa){
-        this.casas.put(casa,new ArrayList<Fatura>());
+        this.casas.put(casa, new ArrayList<>());
         this.numeroDeClientes++;
     }
 
@@ -108,13 +97,7 @@ public class ComercializadoresEnergia implements Serializable {
     }
 
     public List<Fatura> clonaFaturas(List<Fatura> faturas){
-        List<Fatura> casinhas=new ArrayList<>();
-        ListIterator<Fatura> iter = faturas.listIterator();
-        while(iter.hasNext()){
-            Fatura faturaTemp=iter.next();
-            casinhas.add(faturaTemp);
-        }
-        return casinhas;
+        return new ArrayList<>(faturas);
     }
 
     public void removeCasa(SmartHouse casa){
@@ -171,9 +154,7 @@ public class ComercializadoresEnergia implements Serializable {
     public List<Fatura> getFaturas(SmartHouse casa){
         List<Fatura> faturas = new ArrayList<>();
         if(this.casas.containsKey(casa)){
-            ListIterator<Fatura> iter = this.casas.get(casa).listIterator();
-            while(iter.hasNext())
-                faturas.add(iter.next().clone());
+            for (Fatura fatura : this.casas.get(casa)) faturas.add(fatura.clone());
         }
         return faturas;
     }
@@ -205,13 +186,11 @@ public class ComercializadoresEnergia implements Serializable {
         double maxConsumo=0;
         for(SmartHouse casa:this.casas.keySet()){
             List<Fatura> faturas = this.casas.get(casa);
-            ListIterator<Fatura> iter = faturas.listIterator();
-            while(iter.hasNext()){
-                Fatura faturaTemp = iter.next();
-                if(faturaTemp.getDataInicial().isBefore(dataInit)  &&  faturaTemp.getDataFinal().isAfter(dataFin)){//falta ver se as datas coincidem
-                    if(faturaTemp.getKwsConsumidos()>maxConsumo ||  casaMaisGastadora==null){//será que é assim? assim estou a comparar consumos de kws e não em euros
-                        casaMaisGastadora=casa;
-                        maxConsumo=faturaTemp.getKwsConsumidos();
+            for (Fatura faturaTemp : faturas) {
+                if (faturaTemp.getDataInicial().isBefore(dataInit) && faturaTemp.getDataFinal().isAfter(dataFin)) {//falta ver se as datas coincidem
+                    if (faturaTemp.getKwsConsumidos() > maxConsumo || casaMaisGastadora == null) {//será que é assim? assim estou a comparar consumos de kws e não em euros
+                        casaMaisGastadora = casa;
+                        maxConsumo = faturaTemp.getKwsConsumidos();
                     }
                 }
             }
@@ -224,9 +203,7 @@ public class ComercializadoresEnergia implements Serializable {
     public double getFaturacao(){
         double faturacao=0;
         for(List<Fatura> faturasDeCadaCasa:this.casas.values()){
-            ListIterator<Fatura> iter = faturasDeCadaCasa.listIterator();
-            while(iter.hasNext())
-                faturacao+=iter.next().getValorDaFatura();
+            for (Fatura fatura : faturasDeCadaCasa) faturacao += fatura.getValorDaFatura();
         }
         return faturacao;
     }
@@ -266,7 +243,7 @@ public class ComercializadoresEnergia implements Serializable {
         if (this==obj) return true;
         if (obj==null||this.getClass()!=obj.getClass()) return false;
         ComercializadoresEnergia ce = (ComercializadoresEnergia) obj;
-        return (this.nome==ce.getNome()  &&  this.precoBaseKW== ce.getPrecoBaseKW() && this.fatorImposto==ce.getFatorImposto());
+        return (this.nome.equals(ce.getNome())  &&  this.precoBaseKW == (ce.getPrecoBaseKW()) && this.fatorImposto == (ce.getFatorImposto()));
     }
 
     public ComercializadoresEnergia clone(){

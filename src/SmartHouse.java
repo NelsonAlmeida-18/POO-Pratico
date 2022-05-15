@@ -1,13 +1,11 @@
 //package src; // idea necessarry
 
-import java.time.LocalDate;
-import java.util.Map;
-import java.util.Set;
 import java.io.Serializable;
-import java.lang.StringBuilder;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A SmartHouse faz a gestão dos SmartDevices que existem e dos
@@ -34,7 +32,7 @@ public class SmartHouse implements Serializable{
         this.nome_prop = "";
         this.NIF_prop = 0;
         this.morada = "";
-        this.devices = new HashMap<String, Map<Integer, SmartDevice>>();
+        this.devices = new HashMap<>();
         this.companhia_eletrica = new ComercializadoresEnergia("EDP");
     }
 
@@ -53,7 +51,6 @@ public class SmartHouse implements Serializable{
         this.nome_prop = nome;
         this.NIF_prop = NIF;
         this.morada = morada;
-        this.companhia_eletrica=comp;
         this.devices = new HashMap<>();
         this.companhia_eletrica=comp;
         comp.addCasa(this);
@@ -130,8 +127,7 @@ public class SmartHouse implements Serializable{
 
     //ver se isto mantem o encapsulamento
     public Map<Integer, SmartDevice> getDivisao(String divisao){
-        Map<Integer, SmartDevice> nova = new HashMap<>();
-        nova.putAll(this.devices.get(divisao));
+        Map<Integer, SmartDevice> nova = new HashMap<>(this.devices.get(divisao));
         return nova;
     }
 
@@ -250,6 +246,7 @@ public class SmartHouse implements Serializable{
     public void addDivisao(String div){
         if (this.devices ==null){
             Map<Integer,SmartDevice> disp = new HashMap<>();
+            assert false;
             this.devices.put(div,disp);
         }
         if(!this.devices.containsKey(div)){
@@ -302,26 +299,24 @@ public class SmartHouse implements Serializable{
         sb.append("TOTAL DIVISÕES: ");
         sb.append(this.devices.size());
         sb.append("\nDISPOSITIVOS POR DIVISÃO:\n");
-        if (this.devices!=null){
-            for(String divisao:this.devices.keySet()){
+        for(String divisao:this.devices.keySet()){
+            sb.append("\n");
+            sb.append(divisao);
+            sb.append("\n");
+            for(SmartDevice sd:this.devices.get(divisao).values()){
+                //sb.append("Id do dispositivo: ");
+                //sb.append(sd.getID());
+                //sb.append("\n");
+                sb.append(sd.toString());
                 sb.append("\n");
-                sb.append(divisao);
-                sb.append("\n");
-                for(SmartDevice sd:this.devices.get(divisao).values()){
-                    //sb.append("Id do dispositivo: ");
-                    //sb.append(sd.getID());
-                    //sb.append("\n");
-                    sb.append(sd.toString());
-                    sb.append("\n");
-                }
-            } 
+            }
         }
         sb.append("\n");
         return sb.toString();
     }
 
-    public void mudaDeFornecedor(ComercializadoresEnergia novoComercializadoresEnergia, LocalDate data_mudança){
-        this.companhia_eletrica.geraFatura(this, data_mudança);
+    public void mudaDeFornecedor(ComercializadoresEnergia novoComercializadoresEnergia, LocalDate data_mudanca){
+        this.companhia_eletrica.geraFatura(this, data_mudanca);
         this.companhia_eletrica.terminaContrato(this);//terminar contrato
         this.companhia_eletrica=novoComercializadoresEnergia;
         this.companhia_eletrica.addCasa(this);
