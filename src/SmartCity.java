@@ -13,7 +13,9 @@ import static java.lang.Integer.valueOf;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class SmartCity implements Serializable {
-    
+
+    @Serial
+    private static final long serialVersionUID = 1732799934;
     private Map<Integer,SmartHouse> casas=new HashMap<>();
     private List<ComercializadoresEnergia> comercializadores=new ArrayList<>();
     private List<Marca> marcas = new ArrayList<>(); 
@@ -31,6 +33,18 @@ public class SmartCity implements Serializable {
         this.comercializadores=new ArrayList<>();
         this.marcas = new ArrayList<>();
         this.presets=new HashMap<>();
+        this.casas = new HashMap<>();
+    }
+
+    public SmartCity(SmartCity state){
+        this.data_inicial = state.getDataAtual();
+        this.data_atual = state.getDataAtual();
+        this.deviceID = state.getDeviceId();
+        this.houseID = state.getHouseId();
+        this.comercializadores= state.getComercializadores();
+        this.marcas = state.getMarcas();
+        this.presets= state.getPresets();
+        this.casas = state.getCasas();
     }
 
     public int simulation(String time){
