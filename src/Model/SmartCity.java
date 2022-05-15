@@ -1,3 +1,5 @@
+package Model;
+
 import java.time.LocalDate;
 import java.util.*;
 import java.io.FileNotFoundException;
@@ -6,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.StringBuilder;
 import java.io.*;
+import Controller.*;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 

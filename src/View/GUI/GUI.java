@@ -1,6 +1,8 @@
+package View.GUI;
+
 import javax.swing.*;
 import java.awt.*;
-
+import Controller.*;
 public class GUI {  
     
     public GUI(){

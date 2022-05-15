@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Files;
+import Controller.*;
+import Model.*;
+import View.*;
 
 public class teste {
     public static void main(String[] args) throws IOException {  
