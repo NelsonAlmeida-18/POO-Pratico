@@ -1,4 +1,4 @@
-//package src; // idea necessarry
+package Model;
 
 import java.lang.StringBuilder;
 import java.time.LocalDate;

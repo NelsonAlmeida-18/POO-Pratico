@@ -1,3 +1,7 @@
+import Controller.*;
+import Model.*;
+import View.*;
+
 import java.util.Scanner;
 
 public class Main{

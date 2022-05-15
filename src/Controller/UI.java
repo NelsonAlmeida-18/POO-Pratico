@@ -1,7 +1,10 @@
+package Controller;
+
 import java.io.*;
 import java.util.Scanner;
 import java.lang.InterruptedException;
 import java.lang.ProcessBuilder;
+import Model.*;
 
 //import static com.intellij.openapi.util.text.Strings.toUpperCase;
 //mudar o ui para um to string e passamos ao parser para construir tudo de uma vez, just an idea
