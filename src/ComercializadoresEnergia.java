@@ -54,7 +54,8 @@ public class ComercializadoresEnergia implements Serializable {
         Map<SmartHouse,List<Fatura>> casinhasNovas=new HashMap<>();
         for(SmartHouse casa:casas.keySet()){
             List<Fatura> casinhas = new ArrayList<>(casas.get(casa));
-            casinhasNovas.put(casa.clone(), casinhas);
+            casinhasNovas.putIfAbsent(casa.clone(), casinhas);
+            this.numeroDeClientes+=1;
         }
         this.casas=casinhasNovas;
     }
@@ -83,6 +84,7 @@ public class ComercializadoresEnergia implements Serializable {
         Map<SmartHouse,List<Fatura>> casinhasNovas=new HashMap<>();
         for(SmartHouse casa:casas.keySet()){
             casinhasNovas.put(casa.clone(), clonaFaturas(casas.get(casa)));
+            this.numeroDeClientes+=1;
         }
         this.casas=casinhasNovas;
     }

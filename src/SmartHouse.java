@@ -33,7 +33,7 @@ public class SmartHouse implements Serializable{
         this.NIF_prop = 0;
         this.morada = "";
         this.devices = new HashMap<>();
-        this.companhia_eletrica = new ComercializadoresEnergia("EDP");
+        this.companhia_eletrica = new ComercializadoresEnergia("");
     }
 
     // casa sem luz
@@ -104,7 +104,7 @@ public class SmartHouse implements Serializable{
     public double getConsumo(){return this.consumo;}
 
     //nao sei se vale a pena clonar visto que é pertinente que se uma empresa muda precos mude automaticamente se bem que só no ciclo seguinte
-    public void setCompanhia_eletrica(ComercializadoresEnergia s){this.companhia_eletrica=s;}
+    public void setCompanhia_eletrica(ComercializadoresEnergia s){this.companhia_eletrica=s; s.addCasa(this);}
     public ComercializadoresEnergia getCompanhia_eletrica(){return this.companhia_eletrica;}
 
     // public boolean hasDivisao(String divisao){ return this.divisao.contains(divisao);}

@@ -256,7 +256,7 @@ public class SmartCity implements Serializable {
                 createComercializadorEnergia(comercializadorDeEnergia);
                 SmartHouse house = new SmartHouse(id,nome,nif,morada,getComercializador(comercializadorDeEnergia));
                 createHouse(house);
-                getComercializador(comercializadorDeEnergia).addCasa(house);
+                //getComercializador(comercializadorDeEnergia).addCasa(house);
             }
             else{
                 ComercializadoresEnergia comer = getComercializador(comercializadorDeEnergia);
