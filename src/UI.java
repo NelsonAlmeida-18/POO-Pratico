@@ -182,8 +182,8 @@ public class UI {
         System.out.println("Insira o path para o ficheiro que pretende carregar:");
         StringBuilder path = new StringBuilder();
         path.append(sc.nextLine());
-        System.out.println("Insira o nome do ficheiro com a extensão (e.g. ficheiro.txt):");
-        path.append(sc.nextLine());
+        //System.out.println("Insira o nome do ficheiro com a extensão (e.g. ficheiro.txt):");
+        //path.append(sc.nextLine());
         city = (SmartCity) ReadObjectFromFile(path.toString()); //createMenuLine devolve a cidade guardada no ficheiro
     }
     public Object ReadObjectFromFile(String filepath) {
@@ -271,9 +271,17 @@ public class UI {
         System.out.println("Insira o nome do proprietário:");
         String nome_prop = sc.nextLine();
 
+        int nif = 0;
         System.out.println("Insira o NIF do proprietário:");
-        int nif = sc.nextInt();
+        try {
+            nif = sc.nextInt();
+        } catch (java.util.InputMismatchException e) {
+            sc.nextLine();
+            System.out.println("NIF inválido.");
+            return;
+        }
         sc.nextLine();
+
 
         System.out.println("Insira a morada:");
         String morada = sc.nextLine();
