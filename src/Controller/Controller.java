@@ -191,7 +191,7 @@ public class Controller {
     public void parseComercializadoresEnergia(String input){
         String[] campos = input.split(",");
         String nome = campos[0];
-        city.createComercializadorEnergia(nome);
+        this.this.city.createComercializadorEnergia(nome);
     }
 
     /**
@@ -202,7 +202,7 @@ public class Controller {
         String[] campos = input.split(",");
         String nome = campos[0];
         double consumo = Double.parseDouble(campos[1]);
-        city.createMarca(nome, consumo);
+        this.city.createMarca(nome, consumo);
     }
 
     /**
