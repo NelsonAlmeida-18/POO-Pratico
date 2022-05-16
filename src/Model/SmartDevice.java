@@ -2,8 +2,6 @@ package Model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 
 /**
  * A classe SmartDevice é um construtor simples.

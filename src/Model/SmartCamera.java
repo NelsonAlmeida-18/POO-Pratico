@@ -68,6 +68,15 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=LocalDate.now();
     }
 
+    public SmartCamera(int id, float width,float height, int tamanhoFicheiros, double consumo){
+        this.id = id;
+        this.resolucao=width*height/1000000;
+        this.tamanho_ficheiros= tamanhoFicheiros;
+        this.estado=state.OFF;
+        this.consumo=consumo;
+        this.ligadoInit=LocalDate.now();
+    }
+
     public SmartCamera(int id, float width,float height, int tamanhoFicheiros, state estado, float consumo){
         this.id = id;
         this.resolucao=width*height/1000000;

@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.StringBuilder;
 import java.io.*;
-import Controller.*;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -85,25 +84,6 @@ public class SmartCity implements Serializable {
         return 0;
     }
 
-    public String readFromFile(String filename) {
-        try{
-            File f = new File(filename);
-            BufferedReader br = new BufferedReader(new FileReader(f));
-            StringBuilder sb = new StringBuilder();
-            String st;
-            while((st=br.readLine())!=null){
-                sb.append(st);
-                sb.append("\n");
-            }
-            br.close();
-            return sb.toString();
-        }
-        catch(Exception e){
-            System.out.println("File name/path are not reachable!");
-        }
-
-        return "";
-    }
 
     public void merge(SmartCity toMerge){
         for(Integer id: toMerge.getCasas().keySet()){
@@ -296,6 +276,28 @@ public class SmartCity implements Serializable {
     public void addDeviceToDivisao(String divisao, SmartDevice sd){
         int houseID = this.houseID-1;
         SmartHouse temp = getCasa(houseID);
+        if(temp!=null){
+            temp.addDevice(divisao, sd);
+        }
+    }
+
+    public void addDeviceToDivisaoL(String divisao, int id, String mode , int dimensions, double consumo){
+        SmartBulb sb = new SmartBulb(id,mode,dimensions,consumo);
+        SmartDevice sd = (SmartDevice) sb;
+        addDeviceToDivisao(divisao, sd);
+    }
+
+    public void addDeviceToDivisaoC(String divisao, int id, float width , float height, int tamanho, double consumo){
+        SmartCamera sc = new SmartCamera(id,width,height,tamanho,consumo);
+        SmartDevice sd = (SmartDevice) sc;
+        addDeviceToDivisao(divisao,sd);
+    }
+
+    public void addDeviceToDivisaoS(String divisao, int id, String mode , int dimensions, double consumo){
+        int houseID = this.houseID-1;
+        SmartHouse temp = getCasa(houseID);
+        SmartBulb sb = new SmartBulb(id,mode,dimensions,consumo);
+        SmartDevice sd = (SmartDevice) sb;
         if(temp!=null){
             temp.addDevice(divisao, sd);
         }
