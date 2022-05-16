@@ -1,6 +1,6 @@
-import Controller.*;
-import Model.*;
-import View.*;
+import Controller.Controller;
+import Model.SmartCity;
+import View.View;
 
 import java.util.Scanner;
 
@@ -8,15 +8,15 @@ public class Main{
     public static void main(String[] args) {
 
 
-        SmartCity city = new SmartCity();
 
         //city = p.parse(city.getDeviceId(), city.getHouseId());
         //System.out.println(city.toString());
         //city.saveState("state");
-
-        Parser p = new Parser();
+        SmartCity city = new SmartCity();
+        Controller controller = new Controller(city);
         Scanner scanner = new Scanner(System.in);
-        new UI(city, scanner);
+        View view = new View(controller, scanner);
+        view.run();
         scanner.close();
 
        

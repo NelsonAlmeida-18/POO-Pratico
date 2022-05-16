@@ -4,24 +4,33 @@ import java.io.*;
 import java.util.Scanner;
 import java.lang.InterruptedException;
 import java.lang.ProcessBuilder;
+<<<<<<< HEAD
 import Model.*;
 // import Model.Model;
 import Controller.Parser;
+=======
+import Controller.*;
+import Model.*; // tratar disto
+>>>>>>> 481631ae69804dc39f286eb9ded23270f5b455e5
 
 //import static com.intellij.openapi.util.text.Strings.toUpperCase;
 //mudar o ui para um to string e passamos ao parser para construir tudo de uma vez, just an idea
 
 
 public class UI {
-    Scanner sc;
+    private Scanner sc;
+    private Controller c;
 
-    public UI(SmartCity city, Scanner scanner){
+    public UI(Controller controller, Scanner scanner){
         this.sc = scanner;
+        this.c = controller;
+    }
+
+    public void run(){
+        clearConsole();
         try {
-            clearConsole();
-            menuInicial(city, sc);
-        }catch(Exception e){
-            System.out.println(e.toString());
+            menuInicial();
+        } catch (Exception e) {System.out.println("Failed loading menuInicial");
         }
     }
 
@@ -534,8 +543,19 @@ public class UI {
     } */
         
     public void simulationMenu(SmartCity city, Scanner sc) {
-        System.out.println("Indique a data: (X dias ou DD.MM.YYYY)");
-        String time = sc.nextLine();
+        System.out.println("1 - Simulação Manual. ");
+        System.out.println("2 - Simulação através de ficheiro") ;
+        String choice = sc.nextLine();
+        switch(choice){
+            case("1"):
+                System.out.println("Indique a data: (X dias ou DD.MM.YYYY)");
+                String time = sc.nextLine();
+                //fazer o resto dos métodos
+            break;
+            case("2"):
+                System.out.println("Diretório do ficheiro: ");
+                //fazer novo parser e tudo o resto.
+        };        String time = sc.nextLine();
 
         if(city.simulation(time) == 0) {
             System.out.println(city.listFaturas());

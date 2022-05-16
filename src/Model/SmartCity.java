@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.StringBuilder;
 import java.io.*;
-import Controller.*;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -85,6 +84,10 @@ public class SmartCity implements Serializable {
         return 0;
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 481631ae69804dc39f286eb9ded23270f5b455e5
     public void merge(SmartCity toMerge){
         for(Integer id: toMerge.getCasas().keySet()){
             if(!casas.containsKey(id)){
@@ -276,6 +279,28 @@ public class SmartCity implements Serializable {
     public void addDeviceToDivisao(String divisao, SmartDevice sd){
         int houseID = this.houseID-1;
         SmartHouse temp = getCasa(houseID);
+        if(temp!=null){
+            temp.addDevice(divisao, sd);
+        }
+    }
+
+    public void addDeviceToDivisaoL(String divisao, int id, String mode , int dimensions, double consumo){
+        SmartBulb sb = new SmartBulb(id,mode,dimensions,consumo);
+        SmartDevice sd = (SmartDevice) sb;
+        addDeviceToDivisao(divisao, sd);
+    }
+
+    public void addDeviceToDivisaoC(String divisao, int id, float width , float height, int tamanho, double consumo){
+        SmartCamera sc = new SmartCamera(id,width,height,tamanho,consumo);
+        SmartDevice sd = (SmartDevice) sc;
+        addDeviceToDivisao(divisao,sd);
+    }
+
+    public void addDeviceToDivisaoS(String divisao, int id, String mode , int dimensions, double consumo){
+        int houseID = this.houseID-1;
+        SmartHouse temp = getCasa(houseID);
+        SmartBulb sb = new SmartBulb(id,mode,dimensions,consumo);
+        SmartDevice sd = (SmartDevice) sb;
         if(temp!=null){
             temp.addDevice(divisao, sd);
         }
