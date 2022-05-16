@@ -292,14 +292,10 @@ public class SmartCity implements Serializable {
         addDeviceToDivisao(divisao,sd);
     }
 
-    public void addDeviceToDivisaoS(String divisao, int id, String mode , int dimensions, double consumo){
-        int houseID = this.houseID-1;
-        SmartHouse temp = getCasa(houseID);
-        SmartBulb sb = new SmartBulb(id,mode,dimensions,consumo);
+    public void addDeviceToDivisaoS(String divisao, int id, int vol, String estacao , String marca, double consumo){
+        SmartBulb sb = new SmartSpeaker(id,vol,estacao,createMarca(marca),consumo);
         SmartDevice sd = (SmartDevice) sb;
-        if(temp!=null){
-            temp.addDevice(divisao, sd);
-        }
+        addDeviceToDivisao(divisao,sd);
     }
 
     public void addDeviceToDivisao(String divisao, String preset){
@@ -315,6 +311,12 @@ public class SmartCity implements Serializable {
     public void createMarca(String nome, double consumo){
         if(getMarca(nome) == null){
             createMarca(new Marca(nome, consumo));
+        }
+    }
+
+    public void createMarca(String nome){
+        if(getMarca(nome) == null){
+            createMarca(new Marca(nome));
         }
     }
 

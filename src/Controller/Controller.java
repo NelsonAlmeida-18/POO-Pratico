@@ -114,8 +114,8 @@ public class Controller {
                     parseSmartSpeaker(divisao, linhaPartida[1], city);
                    
                 }
-                case "Fornecedor" -> parseComercializadoresEnergia(linhaPartida[1],city); 
-                case "Marca" -> parseMarca(linhaPartida[1],city);
+                case "Fornecedor" -> parseComercializadoresEnergia(linhaPartida[1]);
+                case "Marca" -> parseMarca(linhaPartida[1]);
                 default -> {
                 }
                 //System.out.println("Linha inválida.");
@@ -178,10 +178,8 @@ public class Controller {
         String[] campos = input.split(",");
         int vol = Integer.parseInt(campos[0]);
         String estacao = campos[1];
-        Marca marca = new Marca(campos[2]);
-        city.createMarca(campos[2]);
         double consumo = Double.parseDouble(campos[3]);
-        this.city.addDeviceToDivisaoS(divisao, city.getDeviceId(), vol, estacao, marca, consumo);
+        this.city.addDeviceToDivisaoS(divisao, city.getDeviceId(), vol, estacao, campos[2], consumo);
     }
 
     /**
@@ -191,7 +189,7 @@ public class Controller {
     public void parseComercializadoresEnergia(String input){
         String[] campos = input.split(",");
         String nome = campos[0];
-        this.this.city.createComercializadorEnergia(nome);
+        this.city.createComercializadorEnergia(nome);
     }
 
     /**
@@ -237,33 +235,31 @@ public class Controller {
             //SmartCity city = new SmartCity();
             //city.loadState("path");
             if(city.hasSmartHouse(Integer.parseInt(linha[1]))) { // house related
-                SmartHouse clonedhouse = city.getCasa(Integer.parseInt(linha[1])).clone();
-                if (clonedhouse.existsDevice(Integer.parseInt(linha[2]))) {
-                    SmartDevice sd = clonedhouse.getDevice(Integer.parseInt(linha[2]));
+                if (city.getCasa(Integer.parseInt(linha[1])).existsDevice(Integer.parseInt(linha[2]))) {
+                    city.getCasa(Integer.parseInt(linha[1])).getDevice(Integer.parseInt(linha[2]));
                     switch (linha[3].toUpperCase()) {
-                        case "SETON", "TURNON" -> sd.turnOn();
-                        case "SETOFF", "TURNOFF" -> sd.turnOff();
+                        case "SETON", "TURNON" -> city.getCasa(Integer.parseInt(linha[1])).getDevice(Integer.parseInt(linha[2])).turnOn();
+                        case "SETOFF", "TURNOFF" -> city.getCasa(Integer.parseInt(linha[1])).getDevice(Integer.parseInt(linha[2])).turnOff();
                     }
                 } else {
                     if (city.hasComercializador(linha[2])) { // try catch não pode ser utilizado dentro de ifs statements
-                        clonedhouse.mudaDeFornecedor(city.getComercializador(linha[2]), city.getDataAtual());
+                        city.getCasa(Integer.parseInt(linha[1])).mudaDeFornecedor(city.getComercializador(linha[2]), city.getDataAtual());
                         throw new IOException(linha[2]);
                     }
                 }
 
             } else{
                 if (city.hasComercializador(linha[1])) { // fornecedor related
-                    ComercializadoresEnergia c = city.getComercializador(linha[1]);
-                        switch (linha[2].toUpperCase()) {
-                            case "ALTERAPRECOBASE" -> c.setPrecoBaseKW(Double.parseDouble(linha[3]));
-                            case "ALTERAVALORDESCONTO", "ALTERAIMPOSTO", "ALTERAFATORIMPOSTO" -> c.setFatorImposto(Double.parseDouble(linha[3]));
-                        }
-                    throw new AccessDeniedException(linha[2]);
+                    switch (linha[2].toUpperCase()) {
+                        case "ALTERAPRECOBASE" -> city.getComercializador(linha[1]).setPrecoBaseKW(Double.parseDouble(linha[3]));
+                        case "ALTERAVALORDESCONTO", "ALTERAIMPOSTO", "ALTERAFATORIMPOSTO" -> city.getComercializador(linha[1]).setFatorImposto(Double.parseDouble(linha[3]));
                     }
+                    throw new AccessDeniedException(linha[2]);
                 }
             }
-
         }
+
+    }
 
 
     
