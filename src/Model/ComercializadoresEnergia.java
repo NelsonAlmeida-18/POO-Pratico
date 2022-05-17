@@ -312,10 +312,14 @@ public class ComercializadoresEnergia implements Serializable {
         return casaMaisGastadora;
     }
 
+<<<<<<< HEAD
     /**
      * Setter do número de clientes
      * @param numero Numero de clientes
      */
+=======
+
+>>>>>>> 8fc333eed5541528989a41f0158154993b12c5f8
     public void setNumerodeClientes(int numero){ this.numeroDeClientes = numero; }
 
     /**

@@ -99,10 +99,14 @@ public class SmartCity implements Serializable {
         return 0;
     }
 
+<<<<<<< HEAD
     /**
      * Merge de duas cidades
      * @param toMerge cidade para dar merge
      */
+=======
+
+>>>>>>> 8fc333eed5541528989a41f0158154993b12c5f8
     public void merge(SmartCity toMerge){
         for(Integer id: toMerge.getCasas().keySet()){
             if(!casas.containsKey(id)){
