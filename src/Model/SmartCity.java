@@ -2,6 +2,9 @@ package Model;
 
 import java.time.LocalDate;
 import java.util.*;
+
+import Controller.Controller;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -59,7 +62,7 @@ public class SmartCity implements Serializable {
                 data_sim = LocalDate.now().plus(no_days,DAYS);
             }
             case 3 -> { //dada uma data em formato DD.MM.YYYY
-                Parser p = new Parser();
+                Controller p = new Controller(this);
                 data_sim = p.parseData(time);
                 if(data_sim.isBefore(this.data_atual)) return 1; //data anterior portanto inválida
             }
@@ -200,6 +203,38 @@ public class SmartCity implements Serializable {
 
     }
 
+    public SmartHouse getCasaMaisGastadora(){
+        SmartHouse ret=null;
+        for (ComercializadoresEnergia comer: this.comercializadores){
+            SmartHouse temp = comer.getCasaMaisGastadora();
+            if (ret == null || temp.getConsumo()>ret.getConsumo()){
+                ret = temp;
+            }
+        }
+        return ret;
+    }
+
+    public SmartHouse getCasaMaisGastadora(LocalDate dataInit, LocalDate dataFin){
+        SmartHouse ret=null;
+        for (ComercializadoresEnergia comer: this.comercializadores){
+            SmartHouse temp = comer.getCasaMaisGastadora(dataInit, dataFin);
+            if (ret == null || temp.getConsumo()>ret.getConsumo()){
+                ret = temp;
+            }
+        }
+        return ret;
+    }
+
+    public ComercializadoresEnergia getComercializadorMaiorFaturacao(){
+        ComercializadoresEnergia ret=null;
+        for (ComercializadoresEnergia comer: this.comercializadores){
+            if (ret == null || comer.getFaturacao()>ret.getFaturacao()){
+                ret = comer;
+            }
+        }
+        return ret;
+    }
+
     public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
 
     // public ComercializadoresEnergia getComercializador(String id){
@@ -287,15 +322,13 @@ public class SmartCity implements Serializable {
     }
 
     public void addDeviceToDivisaoC(String divisao, int id, float width , float height, int tamanho, double consumo){
-        SmartCamera sc = new SmartCamera(id,width,height,tamanho,consumo);
-        SmartDevice sd = (SmartDevice) sc;
-        addDeviceToDivisao(divisao,sd);
+        SmartDevice sc = new SmartCamera(id,width,height,tamanho,consumo);
+        addDeviceToDivisao(divisao,sc);
     }
 
     public void addDeviceToDivisaoS(String divisao, int id, int vol, String estacao , String marca, double consumo){
-        SmartBulb sb = new SmartSpeaker(id,vol,estacao,createMarca(marca),consumo);
-        SmartDevice sd = (SmartDevice) sb;
-        addDeviceToDivisao(divisao,sd);
+        SmartDevice sb = new SmartSpeaker(id,vol,estacao,this.createMarca(marca),consumo);
+        addDeviceToDivisao(divisao,sb);
     }
 
     public void addDeviceToDivisao(String divisao, String preset){
@@ -308,16 +341,18 @@ public class SmartCity implements Serializable {
         }
     }
 
-    public void createMarca(String nome, double consumo){
+    public Marca createMarca(String nome, double consumo){
         if(getMarca(nome) == null){
             createMarca(new Marca(nome, consumo));
         }
+        return getMarca(nome);
     }
 
-    public void createMarca(String nome){
+    public Marca createMarca(String nome){
         if(getMarca(nome) == null){
             createMarca(new Marca(nome));
         }
+        return getMarca(nome);
     }
 
     public void createMarca(Marca marca){

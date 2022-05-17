@@ -2,6 +2,7 @@ package Model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +22,7 @@ public class SmartHouse implements Serializable{
     private ComercializadoresEnergia companhia_eletrica;
     private double consumo; //consumo em kWh
     private Map<String,Map<Integer, SmartDevice>> devices = new HashMap<>();
+    private LocalDate dataCriacao;
                 //divisao, id,sd
     //Morada -> Map divisão -> devices) CONFIRMAR SE É ISTO
 
@@ -34,6 +36,7 @@ public class SmartHouse implements Serializable{
         this.morada = "";
         this.devices = new HashMap<>();
         this.companhia_eletrica = new ComercializadoresEnergia("");
+        this.dataCriacao=LocalDate.now();
     }
 
     // casa sem luz
@@ -43,8 +46,9 @@ public class SmartHouse implements Serializable{
         this.NIF_prop = NIF;
         this.morada = Morada;
         this.companhia_eletrica = null;
-
+        this.dataCriacao=LocalDate.now();
     }
+
     public SmartHouse(int id,String nome, int NIF, String morada, ComercializadoresEnergia comp) {
         // initialise instance variables
         this.id=id;
@@ -54,7 +58,22 @@ public class SmartHouse implements Serializable{
         this.devices = new HashMap<>();
         this.companhia_eletrica=comp;
         comp.addCasa(this);
+        this.dataCriacao=LocalDate.now();
+
     }
+
+    public SmartHouse(int id,String nome, int NIF, String morada, ComercializadoresEnergia comp, LocalDate dataDaCriacao) {
+        // initialise instance variables
+        this.id=id;
+        this.nome_prop = nome;
+        this.NIF_prop = NIF;
+        this.morada = morada;
+        this.devices = new HashMap<>();
+        this.companhia_eletrica=comp;
+        comp.addCasa(this);
+        this.dataCriacao=dataDaCriacao;
+    }
+
 
     public SmartHouse(int id, SmartHouse sh){ //o id tem sempre de ser passado pela cidade para
         this.id = id;
@@ -89,6 +108,10 @@ public class SmartHouse implements Serializable{
 
     public void setID(int id){
         this.id = id;
+    }
+
+    public LocalDate getDataCriacao(){
+        return this.dataCriacao;
     }
 
     public void setNome_prop(String nome) { this.nome_prop = nome; }
