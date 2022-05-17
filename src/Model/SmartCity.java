@@ -87,6 +87,7 @@ public class SmartCity implements Serializable {
         return 0;
     }
 
+
     public void merge(SmartCity toMerge){
         for(Integer id: toMerge.getCasas().keySet()){
             if(!casas.containsKey(id)){

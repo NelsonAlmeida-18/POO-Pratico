@@ -1,6 +1,6 @@
 import Controller.Controller;
 import Model.SmartCity;
-import View.UI;
+import View.*;
 
 import java.util.Scanner;
 

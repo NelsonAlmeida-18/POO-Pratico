@@ -15,11 +15,12 @@ import Model.*; // tratar disto
 //mudar o ui para um to string e passamos ao parser para construir tudo de uma vez, just an idea
 
 
-public class UI {
+public class View {
     private Scanner sc;
     private Controller c;
+    private SmartCity city=new SmartCity();
 
-    public UI(Controller controller, Scanner scanner){
+    public View(Controller controller, Scanner scanner){
         this.sc = scanner;
         this.c = controller;
     }
@@ -27,7 +28,7 @@ public class UI {
     public void run(){
         clearConsole();
         try {
-            menuInicial(c,sc);
+            menuInicial(this.city,sc);
         } catch (Exception e) {System.out.println("Failed loading menuInicial");
         }
     }
@@ -555,6 +556,7 @@ public class UI {
             case("1"):
                 System.out.println("Indique a data: (X dias ou DD.MM.YYYY)");
                 String time = sc.nextLine();
+                clearConsole();
                 simulationOptions(city, sc, time);
                 //fazer o resto dos métodos
             break;
@@ -593,15 +595,21 @@ public class UI {
         String choice = sc.nextLine();
         switch(choice){
             case("1"):
+
+            //falta fazer a faturacao ou ver se a mesma já foi feita
+
                 System.out.println("A casa mais gastadora neste período de tempo é a casa: " + city.getCasaMaisGastadora().getID());
+                System.out.println("KW's consumidos: "+city.getCasaMaisGastadora().getConsumoDaCasa());
                 System.out.println("1 - Mais dados da casa.");
                 System.out.println("2 - Retroceder.");
                 choice = sc.nextLine();
                 switch(choice){
                     case("1"):
                         clearConsole();
-                        System.out.println("Dados da casa: \n");
+                        System.out.println("Dados da casa: ");
+                        System.out.println("KW's consumidos: "+city.getCasaMaisGastadora().getConsumoDaCasa());
                         System.out.println(city.getCasaMaisGastadora().toString());
+                        simulationOptions(city, sc, time);
                         break;
                     case("2"):
                         clearConsole();
@@ -618,8 +626,9 @@ public class UI {
                 switch(choice){
                     case("1"):
                         clearConsole();
-                        System.out.println("Dados do Comercializador: \n");
+                        System.out.println("Dados do Comercializador: ");
                         System.out.println(city.getComercializadorMaiorFaturacao().toString());
+                        simulationOptions(city, sc, time);
                         break;
                     case("2"):
                         clearConsole();
@@ -629,6 +638,7 @@ public class UI {
             break;
             case("3"):
                 clearConsole();
+                System.out.println(city.listComercializadores());
                 System.out.println("Indique o nome do Comercializador do qual pretende obter faturas.");
                 choice = sc.nextLine();
                 while(city.hasComercializador(choice)==false){
@@ -641,6 +651,7 @@ public class UI {
                 ComercializadoresEnergia temp = city.getComercializador(choice);
                 temp.faturacao(time); //ver isto com a data data a data
                 System.out.println(temp.getListaFaturacao()); //TODO:testar o listaFaturacao
+                simulationOptions(city, sc, time);
             break;
             case("4"):
                 clearConsole();
@@ -652,7 +663,23 @@ public class UI {
                 System.out.println("Data Final (dd.MM.AAAA).");
                 String dataFinalTexto = sc.nextLine();
                 LocalDate dataFinal = LocalDate.from(formatador.parse(dataFinalTexto));
-                System.out.println("A casa mais gastadora entre "+dataInicialTexto+" e "+dataFinalTexto+ "foi: "+city.getCasaMaisGastadora(dataInicial, dataFinal));
+                LocalDate dataCriacao = city.getDataAtual();  //Mudar para data Inicial
+                System.out.println(dataCriacao.isAfter(dataInicial));
+                System.out.println(dataInicial.isAfter(dataFinal));
+                System.out.println(dataCriacao);
+                while(dataCriacao.isAfter(dataInicial) || dataInicial.isAfter(dataFinal)){
+                    clearConsole();
+                    System.out.println("Datas inválidas!");
+                    System.out.println("Data inicial mínima: "+dataCriacao);
+                    System.out.println("Data inicial (dd.MM.AAAA).");
+                    dataInicialTexto = sc.nextLine();
+                    dataInicial = LocalDate.from(formatador.parse(dataInicialTexto));
+                    System.out.println("Data Final (dd.MM.AAAA).");
+                    dataFinalTexto = sc.nextLine();
+                    dataFinal = LocalDate.from(formatador.parse(dataFinalTexto));
+                }
+                System.out.println("A casa mais gastadora entre "+dataInicialTexto+" e "+dataFinalTexto+ " foi: "+city.getCasaMaisGastadora(dataInicial, dataFinal));
+                simulationOptions(city, sc, time);
                 break;
             case("5"):
                 clearConsole();

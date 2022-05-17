@@ -185,6 +185,8 @@ public class ComercializadoresEnergia implements Serializable {
         }
         return casaMaisGastadora;
     }
+
+
     public void setNumerodeClientes(int numero){ this.numeroDeClientes = numero; }
     public int getNumeroDeClientes(){ return this.numeroDeClientes;}
 
