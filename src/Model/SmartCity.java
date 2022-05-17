@@ -24,6 +24,9 @@ public class SmartCity implements Serializable {
     private LocalDate data_inicial;
     private LocalDate data_atual;
 
+    /**
+     * Inicializador de uma cidade
+     */
     public SmartCity(){
         this.data_inicial = LocalDate.now();
         this.data_atual = LocalDate.now();
@@ -35,6 +38,10 @@ public class SmartCity implements Serializable {
         this.casas = new HashMap<>();
     }
 
+    /**
+     * Duplicação de uma cidade através (proveniente do estado)
+     * @param state cidade para ser duplicada
+     */
     public SmartCity(SmartCity state){
         this.data_inicial = state.getDataAtual();
         this.data_atual = state.getDataAtual();
@@ -46,6 +53,11 @@ public class SmartCity implements Serializable {
         this.casas = state.getCasas();
     }
 
+    /**
+     * Função responsável pela aprte da simulação
+     * @param time Data definida na simulação
+     * @return inteiros
+     */
     public int simulation(String time){
 
         String [] data = time.split("\\.", 3);  //separa a data dada
@@ -84,6 +96,10 @@ public class SmartCity implements Serializable {
         return 0;
     }
 
+    /**
+     * Merge de duas cidades
+     * @param toMerge cidade para dar merge
+     */
     public void merge(SmartCity toMerge){
         for(Integer id: toMerge.getCasas().keySet()){
             if(!casas.containsKey(id)){
@@ -113,6 +129,12 @@ public class SmartCity implements Serializable {
 
     }
 
+    /**
+     * Getter de marca
+     * @param nome nome da marca a procurar
+     * @return marca em questão
+     * @return null se não existir
+     */
     public Marca getMarca(String nome){
         for(Marca x : this.marcas){
             if(x.getNome().equals(nome)){return x;}
@@ -120,10 +142,22 @@ public class SmartCity implements Serializable {
         return null;
     }
 
+    /**
+     * Getter dos presets de dispositivos
+     * @return Map dos presets de dispositivos
+     */
     public Map<String, SmartDevice> getPresets(){return this.presets;}
 
+    /**
+     * Getter das marcas
+     * @return lista de marcas de uma cidade
+     */
     public List<Marca> getMarcas(){return this.marcas;}
 
+    /**
+     * Trocar o tipo de marcas de lista para string
+     * @return String das marcas
+     */
     public String marcasListToString(){
         StringBuffer sb = new StringBuffer();
         for(Marca x : this.marcas){
@@ -132,6 +166,11 @@ public class SmartCity implements Serializable {
         return sb.toString();
     }
 
+    /**
+     * Salvar estado de uma cidade
+     * @param nameOfFile nome do ficheiro onde guardar o estado
+     * @throws IOException Exception se ão for encontrado tal ficheiro
+     */
     public void saveState(String nameOfFile) throws IOException {
         try{
             FileOutputStream fos = new FileOutputStream(nameOfFile);
@@ -145,6 +184,13 @@ public class SmartCity implements Serializable {
         }
     }
 
+    /**
+     * Carregar estado pré-gravado de uma cidade
+     * @param nameOfFile nome do ficheiro com o estado de uma cidade
+     * @return Cidade redefinida
+     * @throws IOException Exception se não encontrar ficheiro
+     * @throws ClassNotFoundException Exception se ocorrerem problemas a ler strings do ficheiro estado.object
+     */
     public SmartCity loadState(String nameOfFile) throws IOException, ClassNotFoundException{
         FileInputStream fis = new FileInputStream(nameOfFile);
         ObjectInputStream oos = new ObjectInputStream(fis);
@@ -153,32 +199,74 @@ public class SmartCity implements Serializable {
         return cit;
     }
 
+    /**
+     * Inicializador de uma cidade
+     * @param houseID id da casa
+     * @param deviceID id de dispositivo
+     */
     public SmartCity(int houseID, int deviceID){
         this.deviceID = deviceID;
         this.houseID = houseID;
     }
 
+    /**
+     * Getter de data atual
+     * @return Data atural
+     */
     public LocalDate getDataAtual(){return this.data_atual;}
 
+    /**
+     * Getter do id da casa
+     * @return id da casa
+     */
     public int getHouseId(){return this.houseID;}
-    
+
+    /**
+     * Getter do id do dispositivo
+     * @return id do dispositivo
+     */
     public int getDeviceId(){return this.deviceID;}
 
+    /**
+     * Setter para o id de um dispositivo
+     * @return id incrementado de um dispositivo
+     */
     public int giveDeviceId(){return ++(this.deviceID);} //serve para dar o id e aumentar o numero de devices
 
+    /**
+     * Setter para o id de uma casa
+     * @return id incrementado de uma casa
+     */
     public int giveHouseId(){return ++(this.houseID);} //serve para dar o id e aumentar o numero de casas
 
+    /**
+     * Getter de preset's de dispositivos
+     * @param preset String de presets de dispositvos
+     * @return preset de dispositvo
+     */
     public SmartDevice getPreset(String preset){
         return presets.get(preset);
     }
 
-
+    /**
+     * Getter de casas
+     * @return map de casas em uma cidade
+     */
     public Map<Integer,SmartHouse> getCasas(){return this.casas;}
 
+    /**
+     * Procura comercializador por id
+     * @param id id em procura
+     * @return boolean se existe ou não comercializador por id na cidade
+     */
     public boolean hasComercializador(String id){
         return this.comercializadores.stream().anyMatch(c->c.getNome().equals(id));
     }
 
+    /**
+     * Lista em string fornecedores de uma cidade
+     * @return String de fornecedores
+     */
     public String listComercializadores(){
         List<ComercializadoresEnergia> comercializadoresDaCidade = this.comercializadores;
         StringBuilder sb = new StringBuilder();
@@ -200,6 +288,10 @@ public class SmartCity implements Serializable {
 
     }
 
+    /**
+     * Getter de comercializadores
+     * @return lista de comercializadores
+     */
     public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
 
     // public ComercializadoresEnergia getComercializador(String id){
@@ -213,24 +305,51 @@ public class SmartCity implements Serializable {
     //     return null;
     // }
 
+    /**
+     * Criar comercializador em uma cidade
+     * @param nome Nome do comercializador a adicionar à cidade
+     */
     public void createComercializadorEnergia(String nome){
         ComercializadoresEnergia com = new ComercializadoresEnergia(nome);
         createComercializadorEnergia(com);
     }
 
+    /**
+     * Criar comercializador em uma cidade
+     * @param nome Nome do fornecedor a adicionar
+     * @param preco Preço base do comercializador
+     * @param imposto Imposto do comercializor
+     */
     public void createComercializadorEnergia(String nome, double preco, double imposto){ 
         ComercializadoresEnergia com = new ComercializadoresEnergia(nome, preco, imposto);
         createComercializadorEnergia(com);
     }
 
+    /**
+     * Adicionar comercializador em uma cidade com base em um comercializador previamente existente
+     * @param com Comercializador a adicionar
+     */
     public void createComercializadorEnergia(ComercializadoresEnergia com){
         this.comercializadores.add(com);
     }
 
+    /**
+     * Getter de uma casa
+     * @param id id da casa
+     * @return Casa com determinado id
+     */
     public SmartHouse getCasa(int id){
         return this.casas.get(id);
     }
 
+    /**
+     * Criar casa em uma cidade
+     * @param nome nome do proprietário da casa
+     * @param nif nif do proprietário da casa
+     * @param morada morada da casa
+     * @param comercializadorDeEnergia fornecedor da casa
+     * @return id da casa
+     */
     public int createHouse(String nome, int nif, String morada, String comercializadorDeEnergia){
         int id = this.houseID;
         //if(getCasa(id)!=null){
@@ -251,11 +370,19 @@ public class SmartCity implements Serializable {
         return id;
     }
 
+    /**
+     * Definir casa em uma cidade
+     * @param house casa a definir
+     */
     public void createHouse(SmartHouse house){
         this.casas.put(this.houseID,house);
         this.houseID++;
     }
 
+    /**
+     * Cria uma divisão
+     * @param divisao divisão a criar
+     */
     public void criaDivisao(String divisao){
         SmartHouse temp = getCasa(this.houseID-1);
         //System.out.println(temp==null);
@@ -264,6 +391,11 @@ public class SmartCity implements Serializable {
         }
     }
 
+    /**
+     * Cria uma divisão numa determinada casa
+     * @param houseID id da casa
+     * @param divisao divisão a adicionar na casa
+     */
     public void criaDivisao(int houseID, String divisao){
         SmartHouse temp = getCasa(houseID);
         //System.out.println(temp==null);
@@ -272,6 +404,11 @@ public class SmartCity implements Serializable {
         }
     }
 
+    /**
+     * Adicionar dispositivo em uma divisão
+     * @param divisao divisão a receber o dispositivo
+     * @param sd dispositivo a adicionar
+     */
     public void addDeviceToDivisao(String divisao, SmartDevice sd){
         int houseID = this.houseID-1;
         SmartHouse temp = getCasa(houseID);
@@ -280,24 +417,57 @@ public class SmartCity implements Serializable {
         }
     }
 
+    /**
+     * Adicionar lampada a uma divisão
+     * @param divisao divisão a receber a lampada
+     * @param id id da lampada
+     * @param mode modo da lampada
+     * @param dimensions dimensão da lampada
+     * @param consumo consumo da lampada
+     */
     public void addDeviceToDivisaoL(String divisao, int id, String mode , int dimensions, double consumo){
         SmartBulb sb = new SmartBulb(id,mode,dimensions,consumo);
         SmartDevice sd = (SmartDevice) sb;
         addDeviceToDivisao(divisao, sd);
     }
 
+    /**
+     * Adicionar camara a divisão
+     * @param divisao divisão a receber a camara
+     * @param id id a definir
+     * @param width comprimento da resolução a definir
+     * @param height largura da resolução a definir
+     * @param tamanho tamanho de ficheiros da camara
+     * @param consumo consumo a definir
+     */
     public void addDeviceToDivisaoC(String divisao, int id, float width , float height, int tamanho, double consumo){
         SmartCamera sc = new SmartCamera(id,width,height,tamanho,consumo);
         SmartDevice sd = (SmartDevice) sc;
         addDeviceToDivisao(divisao,sd);
     }
 
+    /**
+     * Adicionar coluna a divisão
+     * @param divisao divisão a adicionar
+     * @param id id a definir
+     * @param vol volume a definir
+     * @param estacao estação a definir
+     * @param marca marca da coluna
+     * @param consumo consumo a definir
+     */
     public void addDeviceToDivisaoS(String divisao, int id, int vol, String estacao , String marca, double consumo){
-        SmartBulb sb = new SmartSpeaker(id,vol,estacao,createMarca(marca),consumo);
+        SmartSpeaker sb = null;
+        if(getMarca(marca)==null) { createMarca(marca); sb = new SmartSpeaker(id,vol,estacao,getMarca(marca),consumo);}
+        else sb = new SmartSpeaker(id,vol,estacao, getMarca(marca),consumo);
         SmartDevice sd = (SmartDevice) sb;
         addDeviceToDivisao(divisao,sd);
     }
 
+    /**
+     * Adicionar dispositivo em divisão
+     * @param divisao divisão a definir
+     * @param preset preset do dispositivo a adicionar
+     */
     public void addDeviceToDivisao(String divisao, String preset){
         int houseID = this.houseID-1;
         SmartHouse temp = getCasa(houseID);
@@ -308,30 +478,52 @@ public class SmartCity implements Serializable {
         }
     }
 
+    /**
+     * Criar marca em uma cidade
+     * @param nome nome a definir
+     * @param consumo consumo a definir
+     */
     public void createMarca(String nome, double consumo){
         if(getMarca(nome) == null){
             createMarca(new Marca(nome, consumo));
         }
     }
 
+    /**
+     * Criar marca
+     * @param nome nome a definir
+     */
     public void createMarca(String nome){
         if(getMarca(nome) == null){
             createMarca(new Marca(nome));
         }
     }
 
+    /**
+     * Criar marca
+     * @param marca marca a adicionar numa cidade com base a uma marca pré-criada
+     */
     public void createMarca(Marca marca){
         if(getMarca(marca.getNome()) == null){
             this.marcas.add(marca);
         }
     }
 
+    /**
+     * Adicionar preset de dispositivo
+     * @param nome nome do presety
+     * @param device smartdevice a definir o preset
+     */
     public void addDevicePreset(String nome, SmartDevice device){
         if(getPreset(nome) == null){
             this.presets.put(nome,device);
         }
     }
 
+    /**
+     * Listar faturas numa string
+     * @return string das faturas
+     */
     public String listFaturas(){
         List<String> listaDeFaturas = new ArrayList<>();
         for (ComercializadoresEnergia temp : this.comercializadores) {
@@ -341,10 +533,21 @@ public class SmartCity implements Serializable {
         return listaDeFaturas.toString();
     }
 
+    /**
+     * Listar faturas de determinado fornecedor numa string
+     * @param nomeComercializador nome do comercializador pretendido
+     * @return string com a lista de faturas de um fornecedor
+     */
     public String listFaturas(String nomeComercializador){
         return getComercializador(nomeComercializador).getListaFaturacao().toString();
     }
 
+    /**
+     * Getter de determinado comercializor
+     * @param nomeComercializador nome do comercializador
+     * @return Comercializador pretendido
+     * @return null caso não existe comercializador
+     */
     public ComercializadoresEnergia getComercializador(String nomeComercializador){
         for (ComercializadoresEnergia comer:this.comercializadores){
             if (comer.getNome().equals(nomeComercializador)){
@@ -354,7 +557,9 @@ public class SmartCity implements Serializable {
         return null;
     }
 
-
+    /**
+     * Lista de presets de dispositivos
+     */
     public void listSmartDevicesPresets(){
         StringBuilder sb = new StringBuilder();
         for(String name : this.presets.keySet()){
@@ -366,10 +571,16 @@ public class SmartCity implements Serializable {
         System.out.println(sb.toString());
     }
 
+    /**
+     * Lista de marcas existentes
+     */
     public void listMarcas(){
         System.out.println(this.marcasListToString());
     }
 
+    /**
+     * Lista de casas na cidade
+     */
     public void listSmartHouses(){
         StringBuilder sb = new StringBuilder();
         for(SmartHouse casa: this.casas.values()){
@@ -378,10 +589,19 @@ public class SmartCity implements Serializable {
         System.out.println(sb.toString());
     }
 
+    /**
+     * Procura casa em uma cidade através do seu id
+     * @param id id da casa
+     * @return boolean se existe casa em cidade
+     */
     public boolean hasSmartHouse(int id){
         return this.casas.containsKey(id);
     }
 
+    /**
+     * toString da cidade
+     * @return String com todos os componentes de uma cidade
+     */
     public String toString(){
         StringBuilder bd = new StringBuilder();
         bd.append("\nCASAS:\n");

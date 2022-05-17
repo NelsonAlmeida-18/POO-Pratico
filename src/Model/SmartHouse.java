@@ -2,10 +2,7 @@ package Model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A SmartHouse faz a gestão dos SmartDevices que existem e dos
@@ -26,7 +23,7 @@ public class SmartHouse implements Serializable{
 
 
     /**
-     * Constructor for objects of class SmartHouse
+     * Inicializador de construtor da casa
      */
     public SmartHouse() {
         this.nome_prop = "";
@@ -36,7 +33,13 @@ public class SmartHouse implements Serializable{
         this.companhia_eletrica = new ComercializadoresEnergia("");
     }
 
-    // casa sem luz
+    /**
+     * Inicializador de construtor de uma casa sem direito a luz
+     * @param id id a definir
+     * @param nome nome a definir
+     * @param NIF nif a definir
+     * @param Morada morada a definir
+     */
     public SmartHouse(int id, String nome, int NIF, String Morada){
         this.id = id;
         this.nome_prop = nome;
@@ -45,6 +48,15 @@ public class SmartHouse implements Serializable{
         this.companhia_eletrica = null;
 
     }
+
+    /**
+     * Inicializador de construtor de uma casa
+     * @param id id a definir
+     * @param nome nome a definir
+     * @param NIF nif a definir
+     * @param morada morada a definir
+     * @param comp comercializador a definir
+     */
     public SmartHouse(int id,String nome, int NIF, String morada, ComercializadoresEnergia comp) {
         // initialise instance variables
         this.id=id;
@@ -56,6 +68,11 @@ public class SmartHouse implements Serializable{
         comp.addCasa(this);
     }
 
+    /**
+     * Inicializador do construtor de uma casa
+     * @param id id a definir
+     * @param sh casa já pré-definida
+     */
     public SmartHouse(int id, SmartHouse sh){ //o id tem sempre de ser passado pela cidade para
         this.id = id;
         this.nome_prop=sh.getNome_prop();
@@ -65,6 +82,13 @@ public class SmartHouse implements Serializable{
         this.companhia_eletrica.addCasa(this);
     }
 
+    /**
+     * Inicializador de um construtor de uma casa
+     * @param houseID id a definir
+     * @param nome nome a definir
+     * @param nif nif a definir
+     * @param fornecedor fornecedor a definir
+     */
     public SmartHouse(int houseID, String nome,int nif,ComercializadoresEnergia fornecedor){
         this.id = houseID;
         this.nome_prop = nome;
@@ -74,6 +98,10 @@ public class SmartHouse implements Serializable{
         fornecedor.addCasa(this);
     }
 
+    /**
+     * Duplicar casa
+     * @param sh casa pré-definida
+     */
     public SmartHouse(SmartHouse sh){
         this.id = sh.getID();
         this.nome_prop = sh.getNome_prop();
@@ -83,35 +111,90 @@ public class SmartHouse implements Serializable{
         this.companhia_eletrica.addCasa(this);
     }
 
+    /**
+     * Getter do id da casa
+     * @return id da casa
+     */
     public int getID(){
         return this.id;
     }
 
+    /**
+     * Setter do id da casa
+     * @param id id a definir
+     */
     public void setID(int id){
         this.id = id;
     }
 
+    /**
+     * Setter do nome do proprietário
+     * @param nome nome a definir
+     */
     public void setNome_prop(String nome) { this.nome_prop = nome; }
+
+    /**
+     * Getter do nome do proprietário
+     * @return nome do proprietário
+     */
     public String getNome_prop() { return this.nome_prop; }
 
+    /**
+     * Setter do nif do proprietário
+     * @param NIF nif a definir
+     */
     public void setNIF_prop(int NIF) { this.NIF_prop = NIF;}
+
+    /**
+     * Getter nif do proprietário
+     * @return nif do proprietário
+     */
     public int getNIF_prop(){ return this.NIF_prop; }
 
+    /**
+     * Setter de morada
+     * @param morada morada a definir
+     */
     public void setMorada(String morada){ this.morada = morada; }
+
+    /**
+     * Getter da morada da casa
+     * @return morada
+     */
     public String getMorada(){ return this.morada; }
 
+    /**
+     * Setter de consumo
+     * @param consumo consumo a definir
+     */
     public void setConsumo(double consumo){this.consumo = consumo;}
+
+    /**
+     * Getter consumo da casa
+     * @return consumo
+     */
     public double getConsumo(){return this.consumo;}
 
-    //nao sei se vale a pena clonar visto que é pertinente que se uma empresa muda precos mude automaticamente se bem que só no ciclo seguinte
+    /**
+     * Setter de fornecedor de eletricidade
+     * @param s comercializador de energia
+     */
     public void setCompanhia_eletrica(ComercializadoresEnergia s){this.companhia_eletrica=s; s.addCasa(this);}
+
+    /**
+     * Getter de fornecedor de eltricidade
+     * @return comercializador de energia
+     */
     public ComercializadoresEnergia getCompanhia_eletrica(){return this.companhia_eletrica;}
 
     // public boolean hasDivisao(String divisao){ return this.divisao.contains(divisao);}
     // public void addDivisao(String divisao){ if(!hasDivisao(divisao)) this.divisao.add(divisao);}
     // public void delDivisao(String divisao){ if(hasDivisao(divisao)) this.divisao.remove(this.divisao.lastIndexOf(divisao));}
 
-    
+    /**
+     * Coloca todos os dispositivos e divisões em um mapo
+     * @return todos os componentes da casa emo um map
+     */
     public Map<String,Map<Integer, SmartDevice>> getHouse(){
         Map<String,Map<Integer, SmartDevice>> newHouse = new HashMap<>();
         for (String div:this.devices.keySet()){
@@ -125,13 +208,20 @@ public class SmartHouse implements Serializable{
     }
 
 
-    //ver se isto mantem o encapsulamento
+    /**
+     * Getter de dispositivos de divisão
+     * @param divisao em questão
+     * @return map de todos os dispositivos da divisão
+     */
     public Map<Integer, SmartDevice> getDivisao(String divisao){
         Map<Integer, SmartDevice> nova = new HashMap<>(this.devices.get(divisao));
         return nova;
     }
 
-    
+    /**
+     * Liga determinado dispositivo
+     * @param devCode id do dispositivo
+     */
     public void setDeviceOn(int devCode) {
         if(this.companhia_eletrica != null) {
             for (Map<Integer, SmartDevice> dispositivos : this.devices.values()) {
@@ -142,6 +232,10 @@ public class SmartHouse implements Serializable{
         }
     }
 
+    /**
+     * Liga todos os dispositivos de uma divisão
+     * @param div divisão em questão
+     */
     public void setDivisaoOn(String div){
         if(this.companhia_eletrica != null) {
             if (this.devices.containsKey(div)) {
@@ -153,6 +247,9 @@ public class SmartHouse implements Serializable{
         }
     }
 
+    /**
+     * Ligar todos os dispositivos da casa
+     */
     public void setHouseOn(){
         System.out.println(this.companhia_eletrica);
         if(this.companhia_eletrica != null) {
@@ -161,7 +258,11 @@ public class SmartHouse implements Serializable{
             }
         }
     }
-    
+
+    /**
+     * Desliga dispositivo por id
+     * @param devCode id de dispositivo
+     */
     public void setDeviceOFF(int devCode) {
         for (Map<Integer, SmartDevice> dispositivos: this.devices.values()){
             if (dispositivos.containsKey(devCode)){
@@ -170,6 +271,10 @@ public class SmartHouse implements Serializable{
         }
     }
 
+    /**
+     * Desliga todos os dispositivos de determinada divisão
+     * @param div divisão em questão
+     */
     public void setDivisaoOFF(String div){
         if (this.devices.containsKey(div)){
             Map <Integer, SmartDevice> divisao = this.devices.get(div);
@@ -179,12 +284,20 @@ public class SmartHouse implements Serializable{
         }
     }
 
+    /**
+     * Desliga todos os dispositivos da casa
+     */
     public void setHouseOFF(){
         for (String divisao:this.devices.keySet()){
             setDivisaoOFF(divisao);
         }
     }
 
+    /**
+     * Verifica se existe dispositivo na casa
+     * @param id id do dispositivo
+     * @return boolean se existe dispositivo na casa
+     */
     public boolean existsDevice(Integer id) {
         for(Map<Integer, SmartDevice> dispositivos:this.devices.values()){
             if (dispositivos.containsKey(id))
@@ -193,10 +306,21 @@ public class SmartHouse implements Serializable{
         return false;
     }
 
+    /**
+     * Verifica se dispositivo existe em determinada divisão
+     * @param id id a definir
+     * @param divisao divisão em questão
+     * @return boolean se existe dispositvo em determinada divisão por id
+     */
     public boolean existsDevice(Integer id, String divisao) {
         return this.devices.get(divisao).containsKey(id);
     }
-    
+
+    /**
+     * Adiciona dispostivo a uma divisão
+     * @param divisao divisão a adiconar
+     * @param s dispositivo a adicionar
+     */
     public void addDevice(String divisao,SmartDevice s) {
         if (this.devices.containsKey(divisao)){
             this.devices.get(divisao).put(s.getID(),s.clone());
@@ -208,6 +332,11 @@ public class SmartHouse implements Serializable{
         }
     }
 
+    /**
+     * Adiciona dispositivo a divisão pelo id
+     * @param divisao divisão a receber o dispositivo
+     * @param id do dispositivo a adicionar
+     */
     public void addDevice(String divisao,int id) {
         if (this.devices.containsKey(divisao)){
             this.devices.get(divisao).put(id,getDevice(id).clone());
@@ -218,6 +347,12 @@ public class SmartHouse implements Serializable{
             this.devices.put(divisao, disp);
         }
     }
+
+    /**
+     * Gette de dispositivo por id
+     * @param s id de dispositvo
+     * @return dispositivo
+     */
     public SmartDevice getDevice(Integer s) {
         for(Map<Integer, SmartDevice> devices: this.devices.values()){
             if(devices.containsKey(s))
@@ -226,7 +361,11 @@ public class SmartHouse implements Serializable{
         return null;
     }
 
-    //rever esta
+    /**
+     * Getter de consumo em uma divisão
+     * @param div map de dispositivos de determinada divisão
+     * @return consumo
+     */
     public double getConsumoDivisao(Map<Integer,SmartDevice> div){
         double consumoDivisao=0;
         for(SmartDevice disp:div.values()){
@@ -235,6 +374,13 @@ public class SmartHouse implements Serializable{
         return consumoDivisao;
     }
 
+    /**
+     * Getter de consumo por em uma divisão durante determinado tempo
+     * @param div dispositivos de divisão em questão
+     * @param data_atual data final de determinado tempo
+     * @param data_sim data inicial de determinado tempo
+     * @return consumo da divisão
+     */
     public double getConsumoDivisao(Map<Integer,SmartDevice> div,LocalDate data_atual, LocalDate data_sim){
         double consumoDivisao=0;
         for(SmartDevice disp:div.values()){
@@ -243,6 +389,10 @@ public class SmartHouse implements Serializable{
         return consumoDivisao;
     }
 
+    /**
+     * Adiciona divisão na casa
+     * @param div divisão em questão
+     */
     public void addDivisao(String div){
         if (this.devices ==null){
             Map<Integer,SmartDevice> disp = new HashMap<>();
@@ -255,18 +405,30 @@ public class SmartHouse implements Serializable{
         }
     }
 
+    /**
+     * Remove divisão de uma casa
+     * @param div divisão em questão
+     */
     public void removeDivisao(String div){
         if( this.devices!=null && this.devices.containsKey(div)){
             this.devices.remove(div);
         }
     }
 
+    /**
+     * Procura divisão em uma casa
+     * @param div divisão em questão
+     * @return boolean se existe ou não divisão
+     */
     public boolean hasDivisao(String div){
         return this.devices.containsKey(div);
     }
 
 
-    //isto é o consumo em KW's e não o consumo monetário
+    /**
+     * Getter do consumo em kWs da casa
+     * @return consumo em kWs
+     */
     public double getConsumoDaCasa(){
         this.consumo = 0;
         for(Map<Integer, SmartDevice> div: this.devices.values())
@@ -274,6 +436,12 @@ public class SmartHouse implements Serializable{
         return this.consumo;
     }
 
+    /**
+     * Getter do consumo da casa em determinado intervalo de tempo
+     * @param data_atual data do inicio do intervalo
+     * @param data_sim data final
+     * @return consumo
+     */
     public double getConsumoDaCasa(LocalDate data_atual, LocalDate data_sim){
         this.consumo = 0;
         for(Map<Integer, SmartDevice> div: this.devices.values())
@@ -281,10 +449,18 @@ public class SmartHouse implements Serializable{
         return this.consumo;
     }
 
+    /**
+     * Clone da casa
+     * @return casa clonada
+     */
     public SmartHouse clone(){
         return new SmartHouse(this);
     }
 
+    /**
+     * toString da casa
+     * @return String com todas as informações da casa
+     */
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("\nPROPRIETÁRIO: ");
@@ -315,6 +491,11 @@ public class SmartHouse implements Serializable{
         return sb.toString();
     }
 
+    /**
+     * Muda de fornecedor
+     * @param novoComercializadoresEnergia novo comercializador
+     * @param data_mudanca data em que se muda de fornecedor
+     */
     public void mudaDeFornecedor(ComercializadoresEnergia novoComercializadoresEnergia, LocalDate data_mudanca){
         this.companhia_eletrica.geraFatura(this, data_mudanca);
         this.companhia_eletrica.terminaContrato(this);//terminar contrato
@@ -322,22 +503,36 @@ public class SmartHouse implements Serializable{
         this.companhia_eletrica.addCasa(this);
     }
 
+    /**
+     * Termina contrato com fornecedor
+     */
     public void terminaContrato(){
         this.companhia_eletrica.removeCasa(this);
         this.companhia_eletrica=null;
     }
 
+    /**
+     * Getter do nome de divisões
+     * @return set com o nome de divisões
+     */
     public Set<String> getNomeDivisoes(){
         return this.devices.keySet();
     }
-    //funções sobre o map<divisions, devices>
 
+    /**
+     * Getter do número total de divisões
+     * @return número de divisões
+     */
     public int getTotalDivisions(){return this.devices.size();}
 
 
-    public ArrayList<String> getDivisaoList(){
+    /**
+     * Getter de lista de dvisiões
+     * @return lista de divisões na casa
+     */
+    public List<String> getDivisaoList(){
         
-        ArrayList<String> divs_list = new ArrayList<>();
+        List<String> divs_list = new ArrayList<>();
         int index = 0;
 
         for (Map.Entry<String,Map<Integer, SmartDevice>> devices : devices.entrySet()) {
@@ -348,11 +543,21 @@ public class SmartHouse implements Serializable{
         return divs_list;
     }
 
+    /**
+     * Getter de dispositivos por divisão
+     * @param divisao divisão onde procurar dispositivos
+     * @return Map de dispositvivos
+     */
     public Map<Integer,SmartDevice> getDevicesDivisao(String divisao){
         return this.devices.get(divisao);
 
     }
 
+    /**
+     * Getter da divisão por id
+     * @param index id da divisão
+     * @return divisão
+     */
     public String getDivisaoByIndex(int index){return this.getDivisaoList().get(index);}
 
 

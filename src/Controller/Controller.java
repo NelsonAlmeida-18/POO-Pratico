@@ -21,6 +21,10 @@ public class Controller {
         this.city = city;
     }
 
+    /**
+     * Função que lê todas as linhas de um fichero
+     * @param time Tempo dado na simulation
+     */
     /*
     public int simulation(String time){
 
@@ -79,9 +83,8 @@ public class Controller {
 
     /**
      * Função que dá parse às logs dadas em ficheiro
-     * @param city Smartcity em causa
      */
-    public void parse(SmartCity city) throws IOException{
+    public void parse() throws IOException{
         Path path = Path.of("./logs/logs.txt");
         //Path path = FileSystems.getDefault().getPath("logs", "logs.txt");
         String content = Files.readString(path);
@@ -95,23 +98,23 @@ public class Controller {
             linhaPartida = linha.split(":", 2);
 
             switch (linhaPartida[0]) {
-                case "Casa" -> parseCasa(linhaPartida[1], city);
+                case "Casa" -> parseCasa(linhaPartida[1]);
                 case "Divisao" -> {
                     //if (casaMaisRecente == null) System.out.println("Linha inválida.");
                     divisao = linhaPartida[1];
-                    city.criaDivisao(divisao);
+                    this.city.criaDivisao(divisao);
                 }
                 case "SmartBulb" -> {
                     if (divisao == null) System.out.println("Linha inválida.");
-                    parseSmartBulb(divisao, linhaPartida[1], city);
+                    parseSmartBulb(divisao, linhaPartida[1]);
                 }
                 case "SmartCamera" -> {
                     if (divisao == null) System.out.println("Linha inválida.");
-                    parseSmartCamera(divisao, linhaPartida[1], city);
+                    parseSmartCamera(divisao, linhaPartida[1]);
                 }
                 case "SmartSpeaker" -> {
                     if (divisao == null) System.out.println("Linha inválida.");
-                    parseSmartSpeaker(divisao, linhaPartida[1], city);
+                    parseSmartSpeaker(divisao, linhaPartida[1]);
                    
                 }
                 case "Fornecedor" -> parseComercializadoresEnergia(linhaPartida[1]);
@@ -127,9 +130,8 @@ public class Controller {
     /**
      * Função que dá parse às casas em uma SmartCity
      * @param input String atual a ser lida das logs
-     * @param city Smartcity em causa
      */
-    public void parseCasa(String input, SmartCity city){
+    public void parseCasa(String input){
         String[] campos = input.split(",");
         String nome = campos[0];
         int nif = Integer.parseInt(campos[1]);
@@ -139,24 +141,23 @@ public class Controller {
 
     /**
      * Função que dá parse às lampadas em uma SmartCity
-     * @param divisao divisao a ser adicionada
+     * @param divisao Divisao em que o dispositivo vai ser adicionado
      * @param input String atual a ser lida das logs
-     * @param city Smartcity em causa
      */
-    public void parseSmartBulb(String divisao,String input, SmartCity city){
+    public void parseSmartBulb(String divisao,String input){
         String[] campos = input.split(",");
         String mode = campos[0];
         int dimensions = Integer.parseInt(campos[1]);
         double consumo = Double.parseDouble(campos[2]);
-        this.city.addDeviceToDivisaoL(divisao, city.giveDeviceId(), mode, dimensions,consumo);
+        this.city.addDeviceToDivisaoL(divisao, this.city.giveDeviceId(), mode, dimensions,consumo);
     }
 
     /**
      * Função que dá parse às camaras desegurança em uma SmartCity
+     * @param divisao Divisao em que o dispositivo vai ser adicionado
      * @param input String atual a ser lida das logs
-     * @param city Smartcity em causa
      */
-    public void parseSmartCamera(String divisao, String input, SmartCity city){
+    public void parseSmartCamera(String divisao, String input){
         String[] campos = input.split(",");
         String resolucao = campos[0]; //resolução 0000x0000?
         resolucao = resolucao.replace("(","");
@@ -166,20 +167,20 @@ public class Controller {
         float width = Float.parseFloat(widthHeight[0]);
         float heigth = Float.parseFloat(widthHeight[1]);
         double consumo = Double.parseDouble(campos[2]);
-		this.city.addDeviceToDivisaoC(divisao, city.giveDeviceId(),width,heigth,tamanho,consumo);
+		this.city.addDeviceToDivisaoC(divisao, this.city.giveDeviceId(),width,heigth,tamanho,consumo);
     }
 
     /**
      * Função que dá parse às colunas em uma SmartCity
+     * @param divisao Divisao em que o dispositivo vai ser adicionado
      * @param input String atual a ser lida das logs
-     * @param city Smartcity em causa
      */
-    public void parseSmartSpeaker(String divisao, String input, SmartCity city){
+    public void parseSmartSpeaker(String divisao, String input){
         String[] campos = input.split(",");
         int vol = Integer.parseInt(campos[0]);
         String estacao = campos[1];
         double consumo = Double.parseDouble(campos[3]);
-        this.city.addDeviceToDivisaoS(divisao, city.getDeviceId(), vol, estacao, campos[2], consumo);
+        this.city.addDeviceToDivisaoS(divisao, this.city.getDeviceId(), vol, estacao, campos[2], consumo);
     }
 
     /**

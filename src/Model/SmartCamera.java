@@ -28,15 +28,15 @@ public class SmartCamera extends SmartDevice {
     private LocalDate ligadoInit;
     private LocalDate dataFin;
 
-    // public SmartCamera(){
-    //     this.resolucao=0;
-    //     this.tamanho_ficheiros=0;
-    //     this.estado=state.ON;
-    //     this.consumo=0;
-    //     this.ligadoInit=LocalDate.now();
-    //     this.dataFin=LocalDate.now();
-    // }
-
+    /**
+     * Inicialização da camara
+     * @param id id a definir
+     * @param resolucao resolução a definir
+     * @param tamanhoFicheiros tamanho dos ficheiros a definir
+     * @param estado estado a definir
+     * @param consumo consumo a definir
+     * @param ligadoI data de ativar a camara a definir
+     */
     public SmartCamera(int id,float resolucao, int tamanhoFicheiros, state estado, float consumo, LocalDate ligadoI){
         this.id = id;
         this.resolucao=resolucao;
@@ -46,6 +46,13 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=ligadoI;
     }
 
+    /**
+     * Inicializador da camara
+     * @param id id a definir
+     * @param resolucao resolução a definir
+     * @param tamanhoFicheiros tamanho de ficheiro a definir
+     * @param consumo consumo a definir
+     */
     public SmartCamera(int id, String resolucao, int tamanhoFicheiros, double consumo){
  
         String[] wxh = resolucao.split("x");
@@ -59,6 +66,14 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=LocalDate.now();
     }
 
+    /**
+     * Inicializador da camera
+     * @param id id a definir
+     * @param width comprimento a definir
+     * @param height largura a definir
+     * @param tamanhoFicheiros tamanho de ficheiros a definir
+     * @param estado estado a definir
+     */
     public SmartCamera(int id, float width,float height, int tamanhoFicheiros, String estado){
         this.id = id;
         this.resolucao=width*height/1000000;
@@ -68,6 +83,14 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=LocalDate.now();
     }
 
+    /**
+     * Inicializador de camara
+     * @param id id a definir
+     * @param width compprimento a definir
+     * @param height altura a definir
+     * @param tamanhoFicheiros tamanho de ficheiros a definir
+     * @param consumo consumo a definir
+     */
     public SmartCamera(int id, float width,float height, int tamanhoFicheiros, double consumo){
         this.id = id;
         this.resolucao=width*height/1000000;
@@ -77,6 +100,15 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=LocalDate.now();
     }
 
+    /**
+     * Inicializador de camara
+     * @param id id a definir
+     * @param width compprimento a definir
+     * @param height altura a definir
+     * @param tamanhoFicheiros tamanho de ficheiros a definir
+     * @param estado estado a definir
+     * @param consumo consumo a definir
+     */
     public SmartCamera(int id, float width,float height, int tamanhoFicheiros, state estado, float consumo){
         this.id = id;
         this.resolucao=width*height/1000000;
@@ -86,6 +118,10 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=LocalDate.now();
     }
 
+    /**
+     * Camara a duplicar
+     * @param sc camara a ser duplicado
+     */
     public SmartCamera(SmartCamera sc){
         this.id=sc.getID();
         this.resolucao=sc.getResolucao();
@@ -95,6 +131,12 @@ public class SmartCamera extends SmartDevice {
         this.ligadoInit=sc.getLastLigado();
     }
 
+    /**
+     * Getter de consumo da lampada
+     * @param data_atual data atual da camara
+     * @param dataSimulacao data de inicialização da camara
+     * @return consumo
+     */
     public double getConsumo(LocalDate data_atual, LocalDate dataSimulacao){
         switch(this.estado.toString()){
             case("ON"):
@@ -105,25 +147,49 @@ public class SmartCamera extends SmartDevice {
         return this.consumo;
     }
 
+    /**
+     * Getter do id
+     * @return id da camara
+     */
     @Override
     public int getID() {return this.id;}
 
+    /**
+     * Getter da última vez ligada
+     * @return Data da última vez ligada
+     */
     public LocalDate getLastLigado(){
         return this.ligadoInit;
     }
 
+    /**
+     * Getter da resolução
+     * @return resolução
+     */
     public float getResolucao(){
         return this.resolucao;
     }
 
+    /**
+     * Getter do tamanho do ficheiros
+     * @return tamanho dos ficheros
+     */
     public int getFileSize(){
         return this.tamanho_ficheiros;
     }
 
+    /**
+     * Getter do estado da camara
+     * @return estado
+     */
     public state getState(){
         return this.estado;
     }
 
+    /**
+     * Getter do consumo da camara
+     * @return consumo
+     */
     public double getConsumo(){
         // if (this.estado==state.OFF)
         //     return this.consumo;
@@ -134,20 +200,40 @@ public class SmartCamera extends SmartDevice {
         return this.tamanho_ficheiros*resolucao;
     }
 
+    /**
+     * Setter de resolução
+     * @param width comprimento da resolução a definir
+     * @param height largura da resolução a definir
+     */
     public void setResolucao(float width, float height){
         this.resolucao=(width*height)/10000000;
     }
 
+    /**
+     * Setter da resolução
+     * @param res resolução a definir
+     */
     public void setResolucao(float res){
         this.resolucao=res;
     }
 
+    /**
+     * Setter do tamanho de ficheiros
+     * @param file tamanho de ficheiros a definir'«
+     */
     public void setFileSize(int file){
         this.tamanho_ficheiros=file;
     }
 
+    /**
+     * Setter do estado a definir
+     * @param est estado a definir
+     */
     public void setState(state est){this.estado = est;}
 
+    /**
+     * Trocar o estado
+     */
     public void switchState(){
         switch (this.estado.toString()) {
             case ("ON") -> this.estado = state.OFF;
@@ -155,12 +241,19 @@ public class SmartCamera extends SmartDevice {
         }
     }
 
-    //nao sei se é relevante poder alterar o consumo
+    /**
+     * Setter de consumo
+     * @param con consumo a definir
+     */
     public void setConsumo(float con){
         this.consumo=con;
     }
 
-
+    /**
+     * Comparar camara a um objeto
+     * @param obj Objeto a comparar
+     * @return boolean de comparação
+     */
     public boolean equals(Object obj){
         if(this==obj)
             return true;
@@ -172,6 +265,10 @@ public class SmartCamera extends SmartDevice {
         return (this.id == newC.getID() && this.resolucao == (newC.getResolucao()) && this.tamanho_ficheiros==newC.getFileSize()  && this.estado.toString().equals(newC.getState().toString())  &&  this.consumo == (newC.getConsumo()));
     }
 
+    /**
+     * toString de uma camara
+     * @return String com as especificações de uma camara
+     */
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("\n[SmartCamera]");
@@ -187,26 +284,43 @@ public class SmartCamera extends SmartDevice {
         return sb.toString();
     }
 
+    /**
+     * Clone de camara
+     * @return camara clonada
+     */
     public SmartCamera clone(){
         return new SmartCamera(this);
     }
 
-    //funcoes da ficha
-
+    /**
+     * Ligar dispositivo
+     */
     public void turnOn(){
         this.estado = state.ON;
         setState(state.ON);
     }
 
+    /**
+     * Desligar dispositivo
+     */
     public void turnOff(){
         this.estado = state.OFF;
         setState(state.OFF);
     }
 
+    /**
+     * Trocar para determinada data
+     * @param data nova data
+     */
     public void goToData(LocalDate data){
         this.dataFin=data;
     }
 
+    /**
+     * Trocar para determinado estado
+     * @param state estado a definir
+     * @return estado da camara
+     */
     public SmartCamera.state toState(String state){
         SmartCamera.state ret = SmartCamera.state.OFF;
 
