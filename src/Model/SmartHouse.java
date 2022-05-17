@@ -2,15 +2,11 @@ package Model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-<<<<<<< HEAD
 import java.util.*;
-=======
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
->>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
 
 /**
  * A SmartHouse faz a gestão dos SmartDevices que existem e dos
@@ -59,7 +55,6 @@ public class SmartHouse implements Serializable{
         this.dataCriacao=LocalDate.now();
     }
 
-<<<<<<< HEAD
     /**
      * Inicializador de construtor de uma casa
      * @param id id a definir
@@ -68,8 +63,6 @@ public class SmartHouse implements Serializable{
      * @param morada morada a definir
      * @param comp comercializador a definir
      */
-=======
->>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
     public SmartHouse(int id,String nome, int NIF, String morada, ComercializadoresEnergia comp) {
         // initialise instance variables
         this.id=id;
@@ -95,15 +88,11 @@ public class SmartHouse implements Serializable{
         this.dataCriacao=dataDaCriacao;
     }
 
-<<<<<<< HEAD
     /**
      * Inicializador do construtor de uma casa
      * @param id id a definir
      * @param sh casa já pré-definida
      */
-=======
-
->>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
     public SmartHouse(int id, SmartHouse sh){ //o id tem sempre de ser passado pela cidade para
         this.id = id;
         this.nome_prop=sh.getNome_prop();
@@ -158,17 +147,19 @@ public class SmartHouse implements Serializable{
         this.id = id;
     }
 
-<<<<<<< HEAD
+
     /**
-     * Setter do nome do proprietário
-     * @param nome nome a definir
+     * Getter de data de criação
+     * @return data de ciração de dispositivo
      */
-=======
     public LocalDate getDataCriacao(){
         return this.dataCriacao;
     }
 
->>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
+    /**
+     * Setter do nome do proprietário
+     * @param nome nome a definir
+     */
     public void setNome_prop(String nome) { this.nome_prop = nome; }
 
     /**

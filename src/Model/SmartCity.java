@@ -99,14 +99,11 @@ public class SmartCity implements Serializable {
         return 0;
     }
 
-<<<<<<< HEAD
+
     /**
      * Merge de duas cidades
      * @param toMerge cidade para dar merge
      */
-=======
-
->>>>>>> 8fc333eed5541528989a41f0158154993b12c5f8
     public void merge(SmartCity toMerge){
         for(Integer id: toMerge.getCasas().keySet()){
             if(!casas.containsKey(id)){
@@ -295,12 +292,11 @@ public class SmartCity implements Serializable {
 
     }
 
-<<<<<<< HEAD
+
     /**
      * Getter de comercializadores
      * @return lista de comercializadores
      */
-=======
     public SmartHouse getCasaMaisGastadora(){
         SmartHouse ret=null;
         for (ComercializadoresEnergia comer: this.comercializadores){
@@ -333,7 +329,6 @@ public class SmartCity implements Serializable {
         return ret;
     }
 
->>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
     public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
 
     // public ComercializadoresEnergia getComercializador(String id){
@@ -497,16 +492,11 @@ public class SmartCity implements Serializable {
      * @param consumo consumo a definir
      */
     public void addDeviceToDivisaoS(String divisao, int id, int vol, String estacao , String marca, double consumo){
-<<<<<<< HEAD
-        SmartSpeaker sb = null;
+        SmartSpeaker sb;
         if(getMarca(marca)==null) { createMarca(marca); sb = new SmartSpeaker(id,vol,estacao,getMarca(marca),consumo);}
         else sb = new SmartSpeaker(id,vol,estacao, getMarca(marca),consumo);
         SmartDevice sd = (SmartDevice) sb;
         addDeviceToDivisao(divisao,sd);
-=======
-        SmartDevice sb = new SmartSpeaker(id,vol,estacao,this.createMarca(marca),consumo);
-        addDeviceToDivisao(divisao,sb);
->>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
     }
 
     /**
@@ -524,31 +514,25 @@ public class SmartCity implements Serializable {
         }
     }
 
-<<<<<<< HEAD
+
     /**
      * Criar marca em uma cidade
      * @param nome nome a definir
      * @param consumo consumo a definir
      */
-    public void createMarca(String nome, double consumo){
-=======
     public Marca createMarca(String nome, double consumo){
->>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
         if(getMarca(nome) == null){
             createMarca(new Marca(nome, consumo));
         }
         return getMarca(nome);
     }
 
-<<<<<<< HEAD
+
     /**
      * Criar marca
      * @param nome nome a definir
      */
-    public void createMarca(String nome){
-=======
     public Marca createMarca(String nome){
->>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
         if(getMarca(nome) == null){
             createMarca(new Marca(nome));
         }

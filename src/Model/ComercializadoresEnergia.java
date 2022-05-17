@@ -2,7 +2,6 @@ package Model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -312,14 +311,11 @@ public class ComercializadoresEnergia implements Serializable {
         return casaMaisGastadora;
     }
 
-<<<<<<< HEAD
+
     /**
      * Setter do número de clientes
      * @param numero Numero de clientes
      */
-=======
-
->>>>>>> 8fc333eed5541528989a41f0158154993b12c5f8
     public void setNumerodeClientes(int numero){ this.numeroDeClientes = numero; }
 
     /**
@@ -376,13 +372,11 @@ public class ComercializadoresEnergia implements Serializable {
         }
     }
 
-<<<<<<< HEAD
+
     /**
      * FUnção que retorna a lista de faturação de um fornecedor
-     * @return String da lista de faturação de um comercializador
+     * @param time tempo de faturação
      */
-=======
-
     //TODO: rever
     public void faturacao(String time){
         for(SmartHouse casa:this.casas.keySet()) {
@@ -392,7 +386,6 @@ public class ComercializadoresEnergia implements Serializable {
         }
     }
 
->>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
     public String getListaFaturacao(){
         StringBuilder sb = new StringBuilder();
         for (SmartHouse casa:this.casas.keySet()){
