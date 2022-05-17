@@ -20,11 +20,19 @@ public class View {
     private Controller c;
     private SmartCity city=new SmartCity();
 
+    /**
+     * Inicializador do construtor da View
+     * @param controller Controller a ser utilizado
+     * @param scanner Scanner a utilizar
+     */
     public View(Controller controller, Scanner scanner){
         this.sc = scanner;
         this.c = controller;
     }
 
+    /**
+     * Função que corre visualmente o projeto
+     */
     public void run(){
         clearConsole();
         try {
@@ -33,6 +41,11 @@ public class View {
         }
     }
 
+    /**
+     * Leitor de respostas de sim ou não.
+     * @param sc Scanner a utilizar
+     * @return opção escolhida
+     */
     public static int response(Scanner sc){
 
         System.out.print("[y/n] ");
@@ -53,6 +66,10 @@ public class View {
         return ret;
     }
 
+    /**
+     * @param city Cidade a ser utilizada
+     * @param sc Scanner a ser utilizador
+     */
     public void saveState(SmartCity city, Scanner sc){
        try{
            System.out.println("Dá um nome ao teu ficheiro de estado:");
@@ -72,27 +89,10 @@ public class View {
            System.out.println("Error saving state!");
        }
     }
-/*
-    public static void clearConsole(){
-        try{
-            String operatingSystem = System.getProperty("os.name") //Check the current operating system
 
-            if(operatingSystem.contains("Windows")){
-                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "cls");
-                Process startProcess = pb.inheritIO.start();
-                startProcess.waitFor();
-            } else {
-                ProcessBuilder pb = new ProcessBuilder("clear");
-                Process startProcess = pb.inheritIO.start();
-
-                startProcess.waitFor();
-            }
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }
-*/
-
+    /**
+     * Limpa a consola
+     */
     public static void clearConsole() {
        try {
             if (System.getProperty("os.name").contains("Windows")) {
@@ -108,6 +108,12 @@ public class View {
        // System.out.println("limpo");
     }
     
+    /**
+     * Menu inicial gráfico
+     * @param city Cidade a ser utilizada
+     * @param sc Scanner a ser utilizado
+     * 
+     */
     public void menuInicial(SmartCity city, Scanner sc) throws IOException {
         int res;
         System.out.print("\n");
@@ -165,7 +171,7 @@ public class View {
                 //city.merge(temp);
                 //assim podiamos dar merge de vários files
 
-                p.parse(city);
+                p.parse();
                 menuInicial(city, sc);
             }
             case 8 -> { //Guardar estado
@@ -273,7 +279,7 @@ public class View {
                 clearConsole();
                 Controller p = new Controller(city);
                 //city.merge(p.parse(city.getHouseId(), city.getDeviceId())); //carregar faz gestão de conflitos para dar merge à cidade já existente e à cidade que se está a carregar do log
-                p.parse(city);
+                p.parse();
                 createMenu(city, sc);
             }
             case 8 -> { //Retroceder
@@ -573,17 +579,6 @@ public class View {
                 }
             break;
         }
-
-        // if(city.simulation(time) == 0) {
-        //     System.out.println(city.listFaturas());
-        // } else {
-        //     System.out.println("Data inválida");
-        //     clearConsole();
-        //     simulationMenu(city, sc);
-        // }
-
-
-
     }
 
     public void simulationOptions(SmartCity city, Scanner sc, String time){
@@ -620,6 +615,7 @@ public class View {
             case("2"):
                 clearConsole();
                 System.out.println("Comercializador de Energia com maior faturação: "+ city.getComercializadorMaiorFaturacao().getNome());
+                System.out.println("Total faturado: "+ city.getComercializadorMaiorFaturacao().getFaturacao());
                 System.out.println("1 - Mais dados do Comercializador.");
                 System.out.println("2 - Retroceder.");
                 choice = sc.nextLine();
@@ -736,10 +732,12 @@ public class View {
                 switch (choice) {
                     case (0) -> {
                         casa.setHouseOFF();
+                        clearConsole();
                         System.out.println("Energia da Casa desligada com sucesso.");
                     }
                     case (1) -> {
                         casa.setHouseOn();
+                        clearConsole();
                         System.out.println("Energia da Casa ligada com sucesso.");
                     }
                     default -> menuInteracaoCasas(city, casa, sc);
@@ -789,7 +787,11 @@ public class View {
             break;
             case(6):
                 clearConsole();
-                menuInteracaoCasas(city, casa, sc);
+                try {
+                    createMenu(city, sc);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             break;
         }
     }

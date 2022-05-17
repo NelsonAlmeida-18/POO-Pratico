@@ -191,14 +191,13 @@ public class SmartCamera extends SmartDevice {
      * @return consumo
      */
     public double getConsumo(){
-        // if (this.estado==state.OFF)
-        //     return this.consumo;
-        // else{
-        //     return ChronoUnit.HOURS.between(this.ligadoInit, this.dataFin)*this.resolucao*((Math.random()*2)+1);
-        // }       
-                                            //tempo de gravacao, resolucao, bitrate
-        return this.tamanho_ficheiros*resolucao;
-    }
+        if (this.estado==state.OFF)
+            return 0;
+        else{
+            return this.tamanho_ficheiros*resolucao;
+            //return ChronoUnit.HOURS.between(this.ligadoInit, this.dataFin)*this.resolucao*((Math.random()*2)+1);
+        }       
+   }                                   //tempo de gravacao, resolucao, bitrate    }
 
     /**
      * Setter de resolução
