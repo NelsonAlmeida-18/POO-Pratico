@@ -26,7 +26,7 @@ public class SmartCamera extends SmartDevice {
     private state estado;
     private double consumo;
     private LocalDate ligadoInit;
-    private LocalDate dataFin;
+    //private LocalDate dataFin;
 
     /**
      * Inicialização da camara

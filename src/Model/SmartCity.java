@@ -2,6 +2,9 @@ package Model;
 
 import java.time.LocalDate;
 import java.util.*;
+
+import Controller.Controller;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -71,7 +74,7 @@ public class SmartCity implements Serializable {
                 data_sim = LocalDate.now().plus(no_days,DAYS);
             }
             case 3 -> { //dada uma data em formato DD.MM.YYYY
-                Parser p = new Parser();
+                Controller p = new Controller(this);
                 data_sim = p.parseData(time);
                 if(data_sim.isBefore(this.data_atual)) return 1; //data anterior portanto inválida
             }
@@ -288,10 +291,45 @@ public class SmartCity implements Serializable {
 
     }
 
+<<<<<<< HEAD
     /**
      * Getter de comercializadores
      * @return lista de comercializadores
      */
+=======
+    public SmartHouse getCasaMaisGastadora(){
+        SmartHouse ret=null;
+        for (ComercializadoresEnergia comer: this.comercializadores){
+            SmartHouse temp = comer.getCasaMaisGastadora();
+            if (ret == null || temp.getConsumo()>ret.getConsumo()){
+                ret = temp;
+            }
+        }
+        return ret;
+    }
+
+    public SmartHouse getCasaMaisGastadora(LocalDate dataInit, LocalDate dataFin){
+        SmartHouse ret=null;
+        for (ComercializadoresEnergia comer: this.comercializadores){
+            SmartHouse temp = comer.getCasaMaisGastadora(dataInit, dataFin);
+            if (ret == null || temp.getConsumo()>ret.getConsumo()){
+                ret = temp;
+            }
+        }
+        return ret;
+    }
+
+    public ComercializadoresEnergia getComercializadorMaiorFaturacao(){
+        ComercializadoresEnergia ret=null;
+        for (ComercializadoresEnergia comer: this.comercializadores){
+            if (ret == null || comer.getFaturacao()>ret.getFaturacao()){
+                ret = comer;
+            }
+        }
+        return ret;
+    }
+
+>>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
     public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
 
     // public ComercializadoresEnergia getComercializador(String id){
@@ -441,9 +479,8 @@ public class SmartCity implements Serializable {
      * @param consumo consumo a definir
      */
     public void addDeviceToDivisaoC(String divisao, int id, float width , float height, int tamanho, double consumo){
-        SmartCamera sc = new SmartCamera(id,width,height,tamanho,consumo);
-        SmartDevice sd = (SmartDevice) sc;
-        addDeviceToDivisao(divisao,sd);
+        SmartDevice sc = new SmartCamera(id,width,height,tamanho,consumo);
+        addDeviceToDivisao(divisao,sc);
     }
 
     /**
@@ -456,11 +493,16 @@ public class SmartCity implements Serializable {
      * @param consumo consumo a definir
      */
     public void addDeviceToDivisaoS(String divisao, int id, int vol, String estacao , String marca, double consumo){
+<<<<<<< HEAD
         SmartSpeaker sb = null;
         if(getMarca(marca)==null) { createMarca(marca); sb = new SmartSpeaker(id,vol,estacao,getMarca(marca),consumo);}
         else sb = new SmartSpeaker(id,vol,estacao, getMarca(marca),consumo);
         SmartDevice sd = (SmartDevice) sb;
         addDeviceToDivisao(divisao,sd);
+=======
+        SmartDevice sb = new SmartSpeaker(id,vol,estacao,this.createMarca(marca),consumo);
+        addDeviceToDivisao(divisao,sb);
+>>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
     }
 
     /**
@@ -478,25 +520,35 @@ public class SmartCity implements Serializable {
         }
     }
 
+<<<<<<< HEAD
     /**
      * Criar marca em uma cidade
      * @param nome nome a definir
      * @param consumo consumo a definir
      */
     public void createMarca(String nome, double consumo){
+=======
+    public Marca createMarca(String nome, double consumo){
+>>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
         if(getMarca(nome) == null){
             createMarca(new Marca(nome, consumo));
         }
+        return getMarca(nome);
     }
 
+<<<<<<< HEAD
     /**
      * Criar marca
      * @param nome nome a definir
      */
     public void createMarca(String nome){
+=======
+    public Marca createMarca(String nome){
+>>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
         if(getMarca(nome) == null){
             createMarca(new Marca(nome));
         }
+        return getMarca(nome);
     }
 
     /**

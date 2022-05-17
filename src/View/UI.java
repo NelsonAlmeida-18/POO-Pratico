@@ -4,14 +4,12 @@ import java.io.*;
 import java.util.Scanner;
 import java.lang.InterruptedException;
 import java.lang.ProcessBuilder;
-<<<<<<< HEAD
-import Model.*;
-// import Model.Model;
-import Controller.Parser;
-=======
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import Controller.*;
 import Model.*; // tratar disto
->>>>>>> 481631ae69804dc39f286eb9ded23270f5b455e5
 
 //import static com.intellij.openapi.util.text.Strings.toUpperCase;
 //mudar o ui para um to string e passamos ao parser para construir tudo de uma vez, just an idea
@@ -29,7 +27,7 @@ public class UI {
     public void run(){
         clearConsole();
         try {
-            menuInicial();
+            menuInicial(c,sc);
         } catch (Exception e) {System.out.println("Failed loading menuInicial");
         }
     }
@@ -158,8 +156,14 @@ public class UI {
             }
             case 7 -> { //Carregar um ficheiro log
                 clearConsole();
-                Parser p = new Parser();
+                Controller p = new Controller(city);
                 //city = p.parse(city.getHouseId(), city.getDeviceId());
+
+                //não devia ser algo deste género?
+                //SmartCity temp = p.parse(city.getHouseID(), city.getDeviceId());
+                //city.merge(temp);
+                //assim podiamos dar merge de vários files
+
                 p.parse(city);
                 menuInicial(city, sc);
             }
@@ -266,7 +270,7 @@ public class UI {
                     createMenu(city, sc);
             case 7 -> { //Adicionar apartir de log
                 clearConsole();
-                Parser p = new Parser();
+                Controller p = new Controller(city);
                 //city.merge(p.parse(city.getHouseId(), city.getDeviceId())); //carregar faz gestão de conflitos para dar merge à cidade já existente e à cidade que se está a carregar do log
                 p.parse(city);
                 createMenu(city, sc);
@@ -545,24 +549,119 @@ public class UI {
     public void simulationMenu(SmartCity city, Scanner sc) {
         System.out.println("1 - Simulação Manual. ");
         System.out.println("2 - Simulação através de ficheiro") ;
+        System.out.println("3 - Retroceder.");
         String choice = sc.nextLine();
         switch(choice){
             case("1"):
                 System.out.println("Indique a data: (X dias ou DD.MM.YYYY)");
                 String time = sc.nextLine();
+                simulationOptions(city, sc, time);
                 //fazer o resto dos métodos
             break;
             case("2"):
                 System.out.println("Diretório do ficheiro: ");
                 //fazer novo parser e tudo o resto.
-        };        String time = sc.nextLine();
+            break;
+            case("3"):
+                clearConsole();
+                try {
+                    menuInicial(city, sc);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            break;
+        }
 
-        if(city.simulation(time) == 0) {
-            System.out.println(city.listFaturas());
-        } else {
-            System.out.println("Data inválida");
-            clearConsole();
-            simulationMenu(city, sc);
+        // if(city.simulation(time) == 0) {
+        //     System.out.println(city.listFaturas());
+        // } else {
+        //     System.out.println("Data inválida");
+        //     clearConsole();
+        //     simulationMenu(city, sc);
+        // }
+
+
+
+    }
+
+    public void simulationOptions(SmartCity city, Scanner sc, String time){
+        System.out.println("1 - Casa mais gastadora.");
+        System.out.println("2 - Comercializador com maior faturação.");
+        System.out.println("3 - Listar faturas de um Comercializador.");
+        System.out.println("4 - Maiores consumidores de energia num intervalo de tempo.");
+        System.out.println("5 - Retroceder.");
+        String choice = sc.nextLine();
+        switch(choice){
+            case("1"):
+                System.out.println("A casa mais gastadora neste período de tempo é a casa: " + city.getCasaMaisGastadora().getID());
+                System.out.println("1 - Mais dados da casa.");
+                System.out.println("2 - Retroceder.");
+                choice = sc.nextLine();
+                switch(choice){
+                    case("1"):
+                        clearConsole();
+                        System.out.println("Dados da casa: \n");
+                        System.out.println(city.getCasaMaisGastadora().toString());
+                        break;
+                    case("2"):
+                        clearConsole();
+                        simulationOptions(city, sc, time);
+                        break;
+                }
+            break;     
+            case("2"):
+                clearConsole();
+                System.out.println("Comercializador de Energia com maior faturação: "+ city.getComercializadorMaiorFaturacao().getNome());
+                System.out.println("1 - Mais dados do Comercializador.");
+                System.out.println("2 - Retroceder.");
+                choice = sc.nextLine();
+                switch(choice){
+                    case("1"):
+                        clearConsole();
+                        System.out.println("Dados do Comercializador: \n");
+                        System.out.println(city.getComercializadorMaiorFaturacao().toString());
+                        break;
+                    case("2"):
+                        clearConsole();
+                        simulationOptions(city, sc, time);
+                        break;
+                }
+            break;
+            case("3"):
+                clearConsole();
+                System.out.println("Indique o nome do Comercializador do qual pretende obter faturas.");
+                choice = sc.nextLine();
+                while(city.hasComercializador(choice)==false){
+                    clearConsole();
+                    System.out.println(city.listComercializadores());
+                    System.out.println("\nIndique o nome do Comercializador do qual pretende obter faturas:");
+                    choice = sc.nextLine();
+                }
+                clearConsole();
+                ComercializadoresEnergia temp = city.getComercializador(choice);
+                temp.faturacao(time); //ver isto com a data data a data
+                System.out.println(temp.getListaFaturacao()); //TODO:testar o listaFaturacao
+            break;
+            case("4"):
+                clearConsole();
+                String formato = "dd.MM.yyyy";
+                DateTimeFormatter formatador = DateTimeFormatter.ofPattern(formato);
+                System.out.println("Data inicial (dd.MM.AAAA).");
+                String dataInicialTexto = sc.nextLine();
+                LocalDate dataInicial = LocalDate.from(formatador.parse(dataInicialTexto));
+                System.out.println("Data Final (dd.MM.AAAA).");
+                String dataFinalTexto = sc.nextLine();
+                LocalDate dataFinal = LocalDate.from(formatador.parse(dataFinalTexto));
+                System.out.println("A casa mais gastadora entre "+dataInicialTexto+" e "+dataFinalTexto+ "foi: "+city.getCasaMaisGastadora(dataInicial, dataFinal));
+                break;
+            case("5"):
+                clearConsole();
+                simulationMenu(city, sc);
+            break;
+            default:
+                clearConsole();
+                simulationOptions(city, sc, time);
+            break;
         }
     }
 

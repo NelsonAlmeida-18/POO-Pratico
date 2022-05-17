@@ -2,6 +2,7 @@ package Model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -236,12 +237,12 @@ public class ComercializadoresEnergia implements Serializable {
         Fatura newFatura;
         if (this.casas.containsKey(casa)){
             List<Fatura> faturas = this.casas.get(casa);
-            newFatura = new Fatura(LocalDate.now(), data_final, casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
+            newFatura = new Fatura(casa.getDataCriacao(), data_final, casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
             faturas.add(newFatura);
         }
         else{
             List<Fatura> faturas = new ArrayList<>();
-            newFatura = new Fatura(LocalDate.now(), data_final, casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
+            newFatura = new Fatura(casa.getDataCriacao(), data_final, casa.getConsumoDaCasa(), casa.getConsumoDaCasa()*this.fatorImposto*this.precoBaseKW);
             faturas.add(newFatura);
             this.casas.put(casa,faturas);
         }
@@ -371,10 +372,23 @@ public class ComercializadoresEnergia implements Serializable {
         }
     }
 
+<<<<<<< HEAD
     /**
      * FUnção que retorna a lista de faturação de um fornecedor
      * @return String da lista de faturação de um comercializador
      */
+=======
+
+    //TODO: rever
+    public void faturacao(String time){
+        for(SmartHouse casa:this.casas.keySet()) {
+            LocalDate data_final= casa.getDataCriacao().plusDays(Integer.parseInt(time));
+            geraFatura(casa, data_final);
+            //casa.setConsumo(0);
+        }
+    }
+
+>>>>>>> 9d6cd92f97fd63072819dad3a1353b2f4c7251ee
     public String getListaFaturacao(){
         StringBuilder sb = new StringBuilder();
         for (SmartHouse casa:this.casas.keySet()){
