@@ -512,6 +512,8 @@ public class SmartHouse implements Serializable{
                 //sb.append("Id do dispositivo: ");
                 //sb.append(sd.getID());
                 //sb.append("\n");
+                sb.append("Consumo do dispositivo: "+sd.getConsumo());
+                sb.append("\n");
                 sb.append(sd.toString());
                 sb.append("\n");
             }

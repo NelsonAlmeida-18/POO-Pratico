@@ -275,7 +275,7 @@ public class SmartBulb extends SmartDevice {
      */
     public double getConsumo() {
         if (this.estado == state.ON)
-            return this.consumo;
+            return 10;
         else
             return 0;
     }

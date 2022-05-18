@@ -191,7 +191,7 @@ public class SmartCamera extends SmartDevice {
      * @return consumo
      */
     public double getConsumo(){
-        if (this.estado == state.ON)
+        if (this.estado.equals(state.ON))
             return this.tamanho_ficheiros*resolucao;
         else
             return 0;

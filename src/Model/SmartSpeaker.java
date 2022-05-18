@@ -216,7 +216,7 @@ public class SmartSpeaker extends SmartDevice {
     public double getConsumo() {
         double result;
         if (this.estado == state.OFF) {
-            result = this.consumo;
+            result = 0;
         } else {
             //result = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin) * this.volume;//função do consumo por definir
             result = this.marca.getConsumoDiario()+0.3*this.volume;

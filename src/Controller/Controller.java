@@ -202,25 +202,25 @@ public class Controller {
      * Getter do id da casa mais gastadora
      * @return id da casa
      */
-    public int getCasaMaisGastadoraID(){
-        return this.city.getCasaMaisGastadora().getID();
-    }
+    // public int getCasaMaisGastadoraID(){
+    //     return this.city.getCasaMaisGastadora().getID();
+    // }
 
     /**
      * Getter do id da casa mais gastadora
      * @return id da casa
      */
-    public double getCasaMaisGastadoraConsumo(){
-        return this.city.getCasaMaisGastadora().getConsumoDaCasa();
-    }
+    // public double getCasaMaisGastadoraConsumo(){
+    //     return this.city.getCasaMaisGastadora().getConsumoDaCasa();
+    // }
 
     /**
      * Getter de casa mais gastadora
      * @return Casa mais gastadora
      */
-    public String getCasaMaisGastadora(){
-        return this.city.getCasaMaisGastadora().toString();
-    }
+    // public String getCasaMaisGastadora(){
+    //     return this.city.getCasaMaisGastadora().toString();
+    // }
 
     /**
      * Lista de casas
