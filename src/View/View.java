@@ -22,11 +22,19 @@ public class View {
     private Scanner sc;
     private Controller c;
 
+    /**
+     * Inicializador do construtor da View
+     * @param controller Controller a ser utilizado
+     * @param scanner Scanner a utilizar
+     */
     public View(Controller controller, Scanner scanner){
         this.sc = scanner;
         this.c = controller;
     }
 
+    /**
+     * Função que corre visualmente o projeto
+     */
     public void run(){
         clearConsole();
         try {
@@ -35,6 +43,11 @@ public class View {
         }
     }
 
+    /**
+     * Leitor de respostas de sim ou não.
+     * @param sc Scanner a utilizar
+     * @return opção escolhida
+     */
     public static int response(Scanner sc){
 
         System.out.print("[y/n] ");
@@ -55,6 +68,7 @@ public class View {
         return ret;
     }
 
+
     public void saveState(){
        try{
            System.out.println("Dá um nome ao teu ficheiro de estado:");
@@ -74,27 +88,10 @@ public class View {
            System.out.println("Error saving state!");
        }
     }
-/*
-    public static void clearConsole(){
-        try{
-            String operatingSystem = System.getProperty("os.name") //Check the current operating system
 
-            if(operatingSystem.contains("Windows")){
-                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "cls");
-                Process startProcess = pb.inheritIO.start();
-                startProcess.waitFor();
-            } else {
-                ProcessBuilder pb = new ProcessBuilder("clear");
-                Process startProcess = pb.inheritIO.start();
-
-                startProcess.waitFor();
-            }
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }
-*/
-
+    /**
+     * Limpa a consola
+     */
     public static void clearConsole() {
        try {
             if (System.getProperty("os.name").contains("Windows")) {
@@ -110,6 +107,7 @@ public class View {
        // System.out.println("limpo");
     }
     
+
     public void menuInicial() throws IOException {
 
         System.out.print("\n");
@@ -168,6 +166,7 @@ public class View {
                 //assim podiamos dar merge de vários files
 
                 p.parse();
+
                 menuInicial();
             }
             case 8 -> { //Guardar estado
@@ -275,6 +274,7 @@ public class View {
                 Controller p = new Controller();
                 //city.merge(p.parse(city.getHouseId(), city.getDeviceId())); //carregar faz gestão de conflitos para dar merge à cidade já existente e à cidade que se está a carregar do log
                 p.parse();
+
                 createMenu();
             }
             case 8 -> { //Retroceder
@@ -571,17 +571,6 @@ public class View {
                 }
             }
         }
-
-        // if(city.simulation(time) == 0) {
-        //     System.out.println(city.listFaturas());
-        // } else {
-        //     System.out.println("Data inválida");
-        //     clearConsole();
-        //     simulationMenu(city, sc);
-        // }
-
-
-
     }
 
     public void simulationOptions( String time){
@@ -617,6 +606,7 @@ public class View {
             }
             case ("2") -> {
                 clearConsole();
+
                 System.out.println("Comercializador de Energia com maior faturação: " + this.c.getComercializadorMaiorFaturacaoNome());
                 System.out.println("1 - Mais dados do Comercializador.");
                 System.out.println("2 - Retroceder.");
@@ -730,11 +720,13 @@ public class View {
                 this.sc.nextLine();
                 switch (choice) {
                     case (0) -> {
+
                         this.c.setHouseOFF(id);
                         System.out.println("Energia da Casa desligada com sucesso.");
                     }
                     case (1) -> {
                         this.c.setHouseOn(id);
+
                         System.out.println("Energia da Casa ligada com sucesso.");
                     }
                     default -> menuInteracaoCasas(id);
@@ -785,6 +777,7 @@ public class View {
             case(6):
                 clearConsole();
                 menuInteracaoCasas(id);
+
             break;
         }
     }

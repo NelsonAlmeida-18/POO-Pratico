@@ -22,14 +22,14 @@ public class SmartDeviceTest{
         Marca marca = new Marca("JBL");
         SmartSpeaker ss = new SmartSpeaker(3,10,"RFM",marca,0.0);
         assertEquals(SmartBulb.state.OFF,sb.getEstado(), "Não está desligado (L)");
-        assertEquals(SmartCamera.state.OFF,sc.getState(), "Não está desligado (C)");
+        assertEquals(SmartCamera.state.OFF,sc.getEstado(), "Não está desligado (C)");
         assertEquals(SmartSpeaker.state.OFF,ss.getEstado(), "Não está desligado (S)");
 
         sb.turnOn();
         sc.turnOn();
         ss.turnOn();
         assertEquals(SmartBulb.state.ON,sb.getEstado(), "Não está ligado(L)");
-        assertEquals(SmartCamera.state.ON,sc.getState(), "Não está ligado (C)");
+        assertEquals(SmartCamera.state.ON,sc.getEstado(), "Não está ligado (C)");
         assertEquals(SmartSpeaker.state.ON,ss.getEstado(), "Não está ligado (S)");
     }
 
@@ -40,7 +40,7 @@ public class SmartDeviceTest{
         Marca marca = new Marca("JBL");
         SmartSpeaker ss = new SmartSpeaker(3,10,"RFM",marca,0.0);
         assertEquals(SmartBulb.state.OFF,sb.getEstado(), "Não está desligado (L)");
-        assertEquals(SmartCamera.state.OFF,sc.getState(), "Não está desligado (C)");
+        assertEquals(SmartCamera.state.OFF,sc.getEstado(), "Não está desligado (C)");
         assertEquals(SmartSpeaker.state.OFF,ss.getEstado(), "Não está desligado (S)");
 
         sb.turnOn();
@@ -50,7 +50,7 @@ public class SmartDeviceTest{
         sc.turnOff();
         ss.turnOff();
         assertEquals(SmartBulb.state.OFF,sb.getEstado(), "Não está desligado (L)");
-        assertEquals(SmartCamera.state.OFF,sc.getState(), "Não está desligado (C)");
+        assertEquals(SmartCamera.state.OFF,sc.getEstado(), "Não está desligado (C)");
         assertEquals(SmartSpeaker.state.OFF,ss.getEstado(), "Não está desligado (S)");
 
     }

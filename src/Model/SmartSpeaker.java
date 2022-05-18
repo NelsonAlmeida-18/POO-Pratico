@@ -16,31 +16,10 @@ import java.time.temporal.ChronoUnit;
 
 public class SmartSpeaker extends SmartDevice {
 
-    private int id;
+    
     private int volume;
     private String estacao;
-    public enum state {
-        ON,
-        OFF
-    }
-    private SmartSpeaker.state estado;
     private Marca marca;
-    private double consumo;
-    private LocalDate ligadoInit;
-    private LocalDate dataFin;
-
-    /**
-     * Inicializador de coluna
-     */
-    public SmartSpeaker() {
-        this.id = getID();
-        this.volume = 10;
-        this.estacao = "";
-        this.estado = state.OFF;
-        this.consumo = 0;
-        this.ligadoInit = LocalDate.now();
-        this.dataFin = LocalDate.now();
-    }
 
     /**
      * Inicializador de coluna
@@ -51,14 +30,10 @@ public class SmartSpeaker extends SmartDevice {
      * @param consumo consumo a definir
      */
     public SmartSpeaker(int id,int volume, String estacao, Marca marca, double consumo) {
-        this.id = id;
+        super(id,state.OFF, consumo, LocalDate.now(), LocalDate.now());
         this.volume = volume;
         this.estacao = estacao;
         this.marca = marca;
-        this.estado = state.OFF;
-        this.consumo = consumo;
-        this.ligadoInit = LocalDate.now();
-        this.dataFin = LocalDate.now();
     }
 
     /**
@@ -71,15 +46,10 @@ public class SmartSpeaker extends SmartDevice {
      * @param consumo consumon a definir
      */
     public SmartSpeaker(int id,int volume, String estacao, String estado, Marca marca, double consumo) {
-        this.id = id;
+        super(id,estado, consumo, LocalDate.now(), LocalDate.now());
         this.volume = volume;
         this.estacao = estacao;
-        this.estado = toState(estado);
         this.marca = marca;
-        this.estado = state.OFF;
-        this.consumo = consumo;
-        this.ligadoInit = LocalDate.now();
-        this.dataFin = LocalDate.now();
     }
 
     /**
@@ -87,22 +57,11 @@ public class SmartSpeaker extends SmartDevice {
      * @param speaker coluna a duplicar
      */
     public SmartSpeaker(SmartSpeaker speaker) {
-        this.id = speaker.getID();
+        super(speaker.getID(),speaker.getEstado(), speaker.getConsumo(), speaker.getLigadoInit(), speaker.getDataFin());
+        this.marca = speaker.getMarca();
         this.volume = speaker.getVolume();
         this.estacao = speaker.getEstacao();
-        this.estado = speaker.getEstado();
-        this.consumo = speaker.getConsumo();
-        this.ligadoInit = speaker.getLigadoInit();
-        this.dataFin = speaker.getDataFin();
     }
-
-
-    /**
-     * Getter do id
-     * @return id da coluna
-     */
-    @Override
-    public int getID() {return this.id;}
 
     /**
      * Getter da marca
@@ -153,73 +112,17 @@ public class SmartSpeaker extends SmartDevice {
     }
 
     /**
-     * Getter do estado
-     * @return estado
-     */
-    public state getEstado() {
-        return this.estado;
-    }
-
-    /**
-     * Setter estado
-     * @param estado estado a definir
-     */
-    public void setEstado(state estado) {
-        this.estado = estado;
-    }
-
-    /**
-     * Setter do consumo
-     * @param consumo consumo a definir
-     */
-    public void setConsumo(double consumo) {
-        this.consumo = consumo;
-    }
-
-    /**
-     * Getter da data de ativação
-     * @return data de ativação
-     */
-    public LocalDate getLigadoInit() {
-        return this.ligadoInit;
-    }
-
-    /**
-     * Setter da data de ativação
-     * @param ligadoInit data de ativação a definir
-     */
-    public void setLigadoInit(LocalDate ligadoInit) {
-        this.ligadoInit = ligadoInit;
-    }
-
-    /**
-     * Getter data de desligar a coluna
-     * @return
-     */
-    public LocalDate getDataFin() {
-        return this.dataFin;
-    }
-
-    /**
-     * Setter da data de desligar a coluna
-     * @param dataFin data de desativação da coluna
-     */
-    public void setDataFin(LocalDate dataFin) {
-        this.dataFin = dataFin;
-    }
-
-    /**
      * Getter do consumo
      * @return consumo
      */
     @Override
     public double getConsumo() {
         double result;
-        if (this.estado == state.OFF) {
-            result = this.consumo;
+        if (this.getEstado() == state.OFF) {
+            result = 0;
         } else {
             //result = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin) * this.volume;//função do consumo por definir
-            result = this.marca.getConsumoDiario()+0.3*this.volume;
+            result = this.marca.getConsumoDiario()+0.03*this.volume;
         }
         return result;
     }
@@ -232,28 +135,12 @@ public class SmartSpeaker extends SmartDevice {
      */
     public double getConsumo(LocalDate data_atual, LocalDate dataSimulacao){
 
-        switch (this.estado.toString()) {
+        switch (this.getEstado().toString()) {
             case ("ON") ->
-                    this.consumo = ChronoUnit.DAYS.between(data_atual, dataSimulacao) * this.volume * this.marca.getConsumoDiario() * ((Math.random() * 2) + 1);
-            case ("OFF") -> this.consumo = 0;
+                    this.setConsumo((float)(ChronoUnit.DAYS.between(data_atual, dataSimulacao) * this.volume * this.marca.getConsumoDiario() * ((Math.random() * 2) + 1)));
+            case ("OFF") -> this.setConsumo(0);
         }
-        return this.consumo;
-    }
-
-    /**
-     * Ligar coluna
-     */
-    @Override
-    public void turnOn() {
-        this.setState(SmartSpeaker.state.ON);
-    }
-
-    /**
-     * Desligar coluna
-     */
-    @Override
-    public void turnOff() {
-        this.setState(SmartSpeaker.state.OFF);
+        return this.getConsumo();
     }
 
     /**
@@ -278,8 +165,8 @@ public class SmartSpeaker extends SmartDevice {
             return false;
 
         SmartSpeaker newC = (SmartSpeaker) obj;
-        return (this.id == newC.getID() && this.volume == (newC.getVolume()) && this.estacao==newC.getEstacao()  && this.estado.toString().equals(newC.getEstado().toString())
-                &&  this.consumo == (newC.getConsumo()));
+        return (this.getID() == newC.getID() && this.volume == (newC.getVolume()) && this.estacao==newC.getEstacao()  && this.getEstado().toString().equals(newC.getEstado().toString())
+                &&  this.getConsumo() == (newC.getConsumo()));
     }
 
     /**
@@ -291,9 +178,9 @@ public class SmartSpeaker extends SmartDevice {
         StringBuilder sb = new StringBuilder();
         sb.append("\n[SmartSpeaker]");
         sb.append("\nID: ");
-        sb.append(this.id);
+        sb.append(this.getID());
         sb.append("\nEstado: ");
-        sb.append(this.estado);
+        sb.append(this.getEstado());
         sb.append("\nEstação: ");
         sb.append(this.estacao);
         sb.append("\nVolume: ");
@@ -301,29 +188,6 @@ public class SmartSpeaker extends SmartDevice {
         sb.append("\n");
 
         return sb.toString();
-    }
-
-    /**
-     * Setter de estado
-     * @param est estado a definir
-     */
-    public void setState(SmartSpeaker.state est) {
-        switch (est.toString()) {
-            case ("ON"):
-                //this.ligadoInit = LocalDate.now();
-                this.estado = est;
-            case ("OFF"):
-                //this.consumo = ChronoUnit.MINUTES.between(this.ligadoInit, this.dataFin) * this.volume;
-                this.estado = est;
-        }
-    }
-
-    /**
-     * Avançar data
-     * @param data data para qual avançar
-     */
-    public void goToData(LocalDate data){
-        this.dataFin=data;
     }
 
     /**
@@ -338,23 +202,5 @@ public class SmartSpeaker extends SmartDevice {
      */
     public void volumeDown(){
         if(this.volume > 0) this.setVolume(this.volume-1);
-    }
-
-    /**
-     * Modificar de estado
-     * @param state novo estado para modificar
-     * @return novo estado
-     */
-    public SmartSpeaker.state toState(String state){
-        SmartSpeaker.state ret = null;
-
-        switch (state.toUpperCase()) {
-            case ("ON") -> ret = SmartSpeaker.state.ON;
-            case ("OFF") -> ret = SmartSpeaker.state.OFF;
-            default -> {
-            }
-        }
-
-        return ret;
     }
 }   
