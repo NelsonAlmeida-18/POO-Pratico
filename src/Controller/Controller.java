@@ -1,5 +1,9 @@
 package Controller;
 
+import Model.Marca;
+import Model.SmartCity;
+import Model.SmartDevice;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AccessDeniedException;
@@ -11,15 +15,331 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import Model.SmartCity;
+import java.util.Set;
 
 public class Controller {
     private SmartCity city;
 
+    public Controller(){ this.city = new SmartCity(); }
+    /**
+     * Inicializador do Controller
+     * @param city Cidade a ser inicializada
+     */
     public Controller(SmartCity city){
         this.city = city;
     }
+
+    /**
+     * Getter da cidade
+     * @param city Cidade do controller
+     * @return Cidade
+     */
+    public SmartCity getCity(SmartCity city){
+        return this.city;
+    }
+
+    /**
+     * Salvar estado da cidade
+     * @param name_path path do ficheiro
+     * @throws IOException Exception de não encontrar o caminho
+     */
+    public void saveState(String name_path) throws IOException {
+        this.city.saveState(name_path);
+    }
+
+    /**
+     * Função que dá merge a cidades
+     * @param toMergeo Cidade a dar merge
+     */
+    public void merge(Object toMergeo) {
+        this.city.merge(toMergeo);
+    }
+
+    /**
+     * Função que procura a data atual na cidade
+     * @return Data atual
+     */
+    public LocalDate getDataAtual(){
+        return this.city.getDataAtual();
+    }
+
+    /**
+     * Função que cria fornecedor de energia
+     * @param nome nome do fornecedor
+     * @param preco preço base
+     * @param imposto imposto
+     */
+    public void createComercializadorEnergia(String nome, double preco, double imposto){
+        this.city.createComercializadorEnergia(nome,preco,imposto);
+    }
+
+    /**
+     * Getter do comercializador
+     * @param id id da casa
+     * @return String do comercializador
+     */
+    public String getComercializadoratual(int id){
+        return this.city.getCasa(id).getCompanhia_eletrica().toString();
+    }
+
+    /**
+     * Muda o Fornecedor de uma casa
+     * @param id id da casa
+     * @param nome nome do fornecedor
+     * @param data Data atual
+     */
+    public void mudaDeFornecedorString(int id, String nome, LocalDate data){
+        this.city.mudaDeFornecedorString(id, nome, data);
+    }
+
+    /**
+     * Função que verifica se existe fornecedor na cidade
+     * @param comercializador nome do comercializador
+     * @return boolean
+     */
+    public boolean hasComercializador(String comercializador){
+        return this.city.hasComercializador(comercializador);
+    }
+
+    /**
+     * Função que lista comercializadores
+     * @return String da lista de comercializadores
+     */
+    public String listComercializadores(){
+        return this.city.listComercializadores();
+    }
+
+    /**
+     * Faturação
+     * @param comercializador nome do comercializador
+     * @param time data em string
+     */
+    public void ComercializadorFaturacao(String comercializador,String time){
+        this.city.getComercializador(comercializador).faturacao(time);
+    }
+
+    /**
+     * Getter de lista de faturação de um comercializador
+     * @param comercializador noem do comercializador
+     * @return Lista de faturação em string
+     */
+    public String getListaFaturacaoComercializador(String comercializador){
+        return this.city.getComercializador(comercializador).getListaFaturacao();
+    }
+
+    /**
+     * Getter do comercializador com maior faturação
+     * @return comercializador
+     */
+    public String getComercializadorMaiorFaturacao(){
+        return this.city.getComercializadorMaiorFaturacao().toString();
+    }
+
+    /**
+     * Getter do nome do comercializador com maior faturação
+     * @return nome do comercializador
+     */
+    public String getComercializadorMaiorFaturacaoNome(){
+        return this.city.getComercializadorMaiorFaturacao().getNome();
+    }
+
+
+    /**
+     * Função que cria marca
+     * @param nome nome da marca
+     * @param consumo consumo
+     */
+    public void createMarca(String nome, double consumo){
+        this.city.createMarca(nome,consumo);
+    }
+    /**
+     * Getter de marca pelo nome
+     * @param nome Nome da marca
+     * @return Marca
+     */
+    public Marca getMarca(String nome){
+        return this.city.getMarca(nome);
+    }
+
+    /**
+     * Função que transforma a lista de marca em string
+     * @return String de marcas
+     */
+    public String marcasListToString(){
+        return this.city.marcasListToString();
+    }
+
+    /**
+     * Função que lista as marcas
+     */
+    public void listMarcas(){
+        this.city.listMarcas();
+    }
+
+    /**
+     * Função que cria casa na cidade
+     * @param nome_prop Nome do proprietário
+     * @param nif NIF do proprietário
+     * @param morada Morada da casa
+     * @param fornecedor Fornecedor da casa
+     * @return id da casa
+     */
+    public int createHouse(String nome_prop, int nif, String morada, String fornecedor){
+        return this.city.createHouse(nome_prop, nif, morada, fornecedor);
+    }
+
+    /**
+     * Getter id da casa atual
+     * @return id da casa
+     */
+    public int getHouseId(){return this.city.getHouseId();}
+
+    public int getCasaMaisGastadora(LocalDate a, LocalDate b){
+        return this.city.getCasaMaisGastadora(a,b).getID();
+    }
+
+    /**
+     * Getter do id da casa mais gastadora
+     * @return id da casa
+     */
+    public int getCasaMaisGastadoraID(){
+        return this.city.getCasaMaisGastadora().getID();
+    }
+
+    /**
+     * Getter do id da casa mais gastadora
+     * @return id da casa
+     */
+    public double getCasaMaisGastadoraConsumo(){
+        return this.city.getCasaMaisGastadora().getConsumoDaCasa();
+    }
+
+    /**
+     * Getter de casa mais gastadora
+     * @return Casa mais gastadora
+     */
+    public String getCasaMaisGastadora(){
+        return this.city.getCasaMaisGastadora().toString();
+    }
+
+    /**
+     * Lista de casas
+     */
+    public void listSmartHouses(){
+        this.city.listSmartHouses();
+    }
+
+    /**
+     * Função que cria divisões
+     * @param nome_divisao Nome da divisão
+     */
+    public void criaDivisao(String nome_divisao){
+        this.city.criaDivisao(nome_divisao);
+    }
+
+    /**
+     * Função que cria divisão em uma casa
+     * @param id id da casa
+     * @param nome_divisao Nome da divisão
+     */
+    public void criaDivisaoCasa(int id, String nome_divisao){
+        this.city.getCasa(id).addDivisao(nome_divisao);
+    }
+
+    /**
+     * Função que remove divisão em uma casa
+     * @param id id da casa
+     * @param nome_divisao Nome da divisão
+     */
+    public void removeDivisaoCasa(int id, String nome_divisao){
+        this.city.getCasa(id).removeDivisao(nome_divisao);
+    }
+
+    /**
+     * Adiciona dispositivo a divisão
+     * @param divisao divisão emq uestão
+     * @param sd dispositivo a adicionar
+     */
+    public void addDeviceToDivisao(String divisao, SmartDevice sd){
+        this.city.addDeviceToDivisao(divisao,sd);
+    }
+
+    /**
+     * Função que adiciona preset de dispositivo a uma divisão de uma casa
+     * @param id id da casa
+     * @param divisao nome da divisão
+     * @param preset preset de dispositivo
+     */
+    public void addDeviceToDivisao(int id, String divisao, String preset){
+        this.city.getCasa(id).addDevice(divisao,this.city.getPreset(preset));
+    }
+    /**
+     * Função que obtem o nome das divisões de uma casa
+     * @param id id da casa
+     * @return Set do nome das divisões
+     */
+    public Set<String> getHouseDivisoes(int id){
+        return this.city.getCasa(id).getNomeDivisoes();
+    }
+    public void addDevicePreset(String nome,SmartDevice id){
+        this.city.addDevicePreset(nome,id);
+    }
+
+    /**
+     * Lista preset de dispositivos
+     */
+    public void listSmartDevicesPresets(){
+        this.city.listSmartDevicesPresets();
+    }
+
+    /**
+     * Liga dispositvos de uma casa através do id
+     * @param id id da casa
+     */
+    public void setHouseOn(int id){ this.city.setHouseOn(id);}
+
+
+    /**
+     * Liga dispositivos de uma divisão através do id
+     * @param id id da casa
+     * @param divisao divisao da casa
+     */
+    public void setCasaDivisaoOn(int id, String divisao){
+        this.city.setCasaDivisaoOn(id,divisao);
+    }
+
+    /**
+     * Desliga dispositvos de uma casa através do id
+     * @param id id da casa
+     */
+    public void setHouseOFF(int id){ this.city.setHouseOFF(id); }
+
+    /**
+     * Desliga dispositvos de uma divisão através do id
+     * @param id id da casa
+     * @param divisao divisao da casa
+     */
+    public void setCasaDivisaoOFF(int id, String divisao){
+        this.city.setCasaDivisaoOFF(id,divisao);
+    }
+
+    /**
+     * Função que procura uma divisão numa casa atrásves do id
+     * @param id id da casa
+     * @param divisao divisão em questão
+     * @return divisao
+     */
+    public String getCasaDivisao(int id, String divisao){
+        return this.city.getCasaDivisao(id,divisao);
+    }
+
+    /**
+     * Dá um id a um dispositivo
+     */
+    public int giveDeviceId(){
+        return this.city.giveDeviceId();
+    }
+
 
     /**
      * Função que lê todas as linhas de um fichero

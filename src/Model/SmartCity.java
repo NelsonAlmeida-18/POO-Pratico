@@ -102,9 +102,10 @@ public class SmartCity implements Serializable {
 
     /**
      * Merge de duas cidades
-     * @param toMerge cidade para dar merge
+     * @param toMergeo cidade para dar merge
      */
-    public void merge(SmartCity toMerge){
+    public void merge(Object toMergeo){
+        SmartCity toMerge = (SmartCity) toMergeo;
         for(Integer id: toMerge.getCasas().keySet()){
             if(!casas.containsKey(id)){
                 this.casas.put(id,toMerge.getCasa(id));
@@ -231,6 +232,13 @@ public class SmartCity implements Serializable {
      */
     public int getDeviceId(){return this.deviceID;}
 
+    public SmartDevice getDevice(int id){
+        for(SmartHouse casas:this.casas.values()){
+            if(casas.existsDevice(id)) return casas.getDevice(id);
+        }
+        return null;
+    }
+
     /**
      * Setter para o id de um dispositivo
      * @return id incrementado de um dispositivo
@@ -308,6 +316,12 @@ public class SmartCity implements Serializable {
         return ret;
     }
 
+    /**
+     * Getter da casa mais gastadora entre determinadas datas
+     * @param dataInit data de inicio
+     * @param dataFin data final
+     * @return casa
+     */
     public SmartHouse getCasaMaisGastadora(LocalDate dataInit, LocalDate dataFin){
         SmartHouse ret=null;
         for (ComercializadoresEnergia comer: this.comercializadores){
@@ -318,7 +332,6 @@ public class SmartCity implements Serializable {
         }
         return ret;
     }
-
     public ComercializadoresEnergia getComercializadorMaiorFaturacao(){
         ComercializadoresEnergia ret=null;
         for (ComercializadoresEnergia comer: this.comercializadores){
@@ -368,6 +381,17 @@ public class SmartCity implements Serializable {
      */
     public void createComercializadorEnergia(ComercializadoresEnergia com){
         this.comercializadores.add(com);
+    }
+
+    /**
+     * Muda de fornecedor
+     * @param id id da casa
+     * @param novo novo comercializador
+     * @param data_mudanca data em que se muda de fornecedor
+     */
+    public void mudaDeFornecedorString(int id, String novo, LocalDate data_mudanca){
+        SmartHouse casa = getCasa(id);
+        casa.mudaDeFornecedor(getComercializador(novo),data_mudanca);
     }
 
     /**
@@ -442,11 +466,35 @@ public class SmartCity implements Serializable {
     }
 
     /**
+     * Função que procura uma divisão numa casa atrásves do id
+     * @param id id da casa
+     * @param divisao divisão em questão
+     * @return divisao
+     */
+    public String getCasaDivisao(int id, String divisao){
+        if(getCasa(id).hasDivisao(divisao)) return divisao ;
+        else return null;
+    }
+
+    /**
      * Adicionar dispositivo em uma divisão
      * @param divisao divisão a receber o dispositivo
      * @param sd dispositivo a adicionar
      */
     public void addDeviceToDivisao(String divisao, SmartDevice sd){
+        int houseID = this.houseID-1;
+        SmartHouse temp = getCasa(houseID);
+        if(temp!=null){
+            temp.addDevice(divisao, sd);
+        }
+    }
+
+    /**
+     * Adicionar dispositivo em uma divisão
+     * @param divisao divisão a receber o dispositivo
+     * @param sd dispositivo a adicionar por id
+     */
+    public void addDeviceToDivisao(String divisao, int sd){
         int houseID = this.houseID-1;
         SmartHouse temp = getCasa(houseID);
         if(temp!=null){
@@ -561,6 +609,17 @@ public class SmartCity implements Serializable {
     }
 
     /**
+     * Adicionar preset de dispositivo
+     * @param nome nome do presety
+     * @param device id do smartdevice a definir o preset
+     */
+    public void addDevicePreset(String nome, int device){
+        if(getPreset(nome) == null){
+            this.presets.put(nome,getDevice(device));
+        }
+    }
+
+    /**
      * Listar faturas numa string
      * @return string das faturas
      */
@@ -636,6 +695,42 @@ public class SmartCity implements Serializable {
      */
     public boolean hasSmartHouse(int id){
         return this.casas.containsKey(id);
+    }
+
+
+    /**
+     * Desliga dispositvos de uma casa através do id
+     * @param id id da casa
+     */
+    public void setHouseOFF(int id){
+        getCasa(id).setHouseOFF();
+    }
+
+    /**
+     * Desliga dispositivos de uma divisão através do id
+     * @param id id da casa
+     * @param divisao divisao da casa
+     */
+    public void setCasaDivisaoOFF(int id, String divisao){
+        getCasa(id).setDivisaoOFF(divisao);
+    }
+
+    /**
+     * Liga dispositvos de uma casa através do id
+     * @param id id da casa
+     */
+    public void setHouseOn(int id){
+        getCasa(id).setHouseOn();
+    }
+
+
+    /**
+     * Liga dispositivos de uma divisão através do id
+     * @param id id da casa
+     * @param divisao divisao da casa
+     */
+    public void setCasaDivisaoOn(int id, String divisao){
+        getCasa(id).setDivisaoOn(divisao);
     }
 
     /**
