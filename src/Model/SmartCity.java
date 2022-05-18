@@ -305,9 +305,11 @@ public class SmartCity implements Serializable {
      * Getter de comercializadores
      * @return lista de comercializadores
      */
-    public SmartHouse getCasaMaisGastadora(){
+    public SmartHouse getCasaMaisGastadora(String time){
         SmartHouse ret=null;
         for (ComercializadoresEnergia comer: this.comercializadores){
+            if (!comer.hasFaturado())
+                comer.faturacao(time);  //depois da primeira vez torna-se redundante e tenho de arranjar forma de corrigir isto
             SmartHouse temp = comer.getCasaMaisGastadora();
             if (ret == null || temp.getConsumo()>ret.getConsumo()){
                 ret = temp;
@@ -325,6 +327,9 @@ public class SmartCity implements Serializable {
     public SmartHouse getCasaMaisGastadora(LocalDate dataInit, LocalDate dataFin){
         SmartHouse ret=null;
         for (ComercializadoresEnergia comer: this.comercializadores){
+            if(!comer.hasFaturado()){
+                comer.faturacao(dataFin);
+            }
             SmartHouse temp = comer.getCasaMaisGastadora(dataInit, dataFin);
             if (ret == null || temp.getConsumo()>ret.getConsumo()){
                 ret = temp;

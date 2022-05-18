@@ -526,7 +526,7 @@ public class SmartHouse implements Serializable{
      * @param data_mudanca data em que se muda de fornecedor
      */
     public void mudaDeFornecedor(ComercializadoresEnergia novoComercializadoresEnergia, LocalDate data_mudanca){
-        this.companhia_eletrica.geraFatura(this, data_mudanca);
+        //this.companhia_eletrica.geraFatura(this, data_mudanca);
         this.companhia_eletrica.terminaContrato(this);//terminar contrato
         this.companhia_eletrica=novoComercializadoresEnergia;
         this.companhia_eletrica.addCasa(this);

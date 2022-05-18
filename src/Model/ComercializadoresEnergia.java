@@ -14,7 +14,7 @@ public class ComercializadoresEnergia implements Serializable {
     private double fatorImposto;
     private Map<SmartHouse,List<Fatura>> casas;
     private int numeroDeClientes;
-
+    private boolean faturado=false;
 
     /**
      * Função que inicializa um comercializador
@@ -71,6 +71,8 @@ public class ComercializadoresEnergia implements Serializable {
         this.casas = new HashMap<>();
         this.numeroDeClientes=0;
     }
+
+    public boolean hasFaturado(){return this.faturado;}
 
     /**
      * Função que inicializa um comercializador
@@ -170,8 +172,6 @@ public class ComercializadoresEnergia implements Serializable {
     public void removeCasa(SmartHouse casa){
         this.casas.remove(casa);
         // casa fica sem luz
-        casa.setHouseOFF();
-        casa.setCompanhia_eletrica(null);
         this.numeroDeClientes--;
     }
 
@@ -280,9 +280,6 @@ public class ComercializadoresEnergia implements Serializable {
      */
     public void terminaContrato(SmartHouse casa){
         removeCasa(casa);
-        this.numeroDeClientes--;
-        casa.setCompanhia_eletrica(null);
-        casa.setHouseOFF();
     }
 
     /**
@@ -370,6 +367,7 @@ public class ComercializadoresEnergia implements Serializable {
             geraFatura(casa, data_final);
             //casa.setConsumo(0);
         }
+        this.faturado=true;
     }
 
 
@@ -382,8 +380,8 @@ public class ComercializadoresEnergia implements Serializable {
         for(SmartHouse casa:this.casas.keySet()) {
             LocalDate data_final= casa.getDataCriacao().plusDays(Integer.parseInt(time));
             geraFatura(casa, data_final);
-            //casa.setConsumo(0);
         }
+        this.faturado=true;
     }
 
     public String getListaFaturacao(){
@@ -398,6 +396,7 @@ public class ComercializadoresEnergia implements Serializable {
         }
         return sb.toString();
     }
+
 
     /**
      * Funçaõ que lista os clientes de um fornecedor
