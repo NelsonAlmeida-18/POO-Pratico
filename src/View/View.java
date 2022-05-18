@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.Scanner;
 import java.lang.InterruptedException;
 import java.lang.ProcessBuilder;
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -120,13 +119,14 @@ public class View {
         System.out.println("1 - Editar cidade");
         System.out.println("2 - Consultar SmartHouses existentes");
         System.out.println("3 - Consultar comercializadores de energia existentes");
-        System.out.println("4 - Consultar marcas existentes");
-        System.out.println("5 - Consultar SmartDevices presets");
-        System.out.println("6 - Carregar um estado de programa");
-        System.out.println("7 - Carregar um ficheiro log");
-        System.out.println("8 - Guardar estado");
-        System.out.println("9 - Começar Simulação");
-        System.out.println("10 - Sair");
+        System.out.println("4 - Editar comercializador existente");
+        System.out.println("5 - Consultar marcas existentes");
+        System.out.println("6 - Consultar SmartDevices presets");
+        System.out.println("7 - Carregar um estado de programa");
+        System.out.println("8 - Carregar um ficheiro log");
+        System.out.println("9 - Guardar estado");
+        System.out.println("10 - Começar Simulação");
+        System.out.println("11 - Sair");
         int res = sc.nextInt();
         sc.nextLine();
         switch (res) {
@@ -146,25 +146,29 @@ public class View {
             case 3 -> { //Consultar comercializadores de energia existentes
                 clearConsole();
                 System.out.println(city.listComercializadores());
-                //city.listFaturas();
                 menuInicial(city, sc);
             }
-            case 4 -> { //Consultar marcas existentes
+            case 4 -> { //Editar comercializadores de energia existentes
+                clearConsole();
+                editComercializadores(city,sc);
+                menuInicial(city, sc);
+            }
+            case 5 -> { //Consultar marcas existentes
                 clearConsole();
                 city.listMarcas();
                 menuInicial(city, sc);
             }
-            case 5 -> { //Consultar SmartDevices presets
+            case 6 -> { //Consultar SmartDevices presets
                 clearConsole();
                 city.listSmartDevicesPresets();
                 menuInicial(city, sc);
             }
-            case 6 -> { //Carregar um estado de programa
+            case 7 -> { //Carregar um estado de programa
                 clearConsole();
                 loadMenu(city,sc);
                 menuInicial(city, sc);
             }
-            case 7 -> { //Carregar um ficheiro log
+            case 8 -> { //Carregar um ficheiro log
                 clearConsole();
                 Controller p = new Controller(city);
                 //city = p.parse(city.getHouseId(), city.getDeviceId());
@@ -181,18 +185,18 @@ public class View {
                 }
                 menuInicial(city, sc);
             }
-            case 8 -> { //Guardar estado
+            case 9 -> { //Guardar estado
                 clearConsole();
                 saveState(city, sc); //função save, não tem menu, simplesmente guarda na pasta save
                 System.out.println("Estado do programa guardado");
                 menuInicial(city, sc);
             }
-            case 9 -> { //Começar Simulação
+            case 10 -> { //Começar Simulação
                 clearConsole();
                 simulationMenu(city, sc);
                 menuInicial(city, sc);
             }
-            case 10 -> { //Sair
+            case 11 -> { //Sair
                 clearConsole();
                 System.out.println("Tem a certeza que quer sair?");
                 if (response(sc) == 1) {
@@ -250,6 +254,56 @@ public class View {
             return null;
         }
     }
+
+    /**
+     * Menu para editar os valores dos comercializadores de energia, nomeadamente o valor do KWh e o fator imposto
+     * @param city Cidade a ser utilizada
+     * @param sc Scannar a ser utilizada
+     */
+
+    public void editComercializadores(SmartCity city, Scanner sc){
+        clearConsole();
+        System.out.println("Seleciona um comercializador para editar dos listados abaixo: ");
+        System.out.println(city.listComercializadores());
+        String choice = sc.nextLine();
+        while(city.getComercializador(choice)==null){
+            clearConsole();
+            System.out.println("Seleciona um comercializador para editar dos listados abaixo: ");
+            System.out.println(city.listComercializadores());
+            choice = sc.nextLine();
+        }
+        ComercializadoresEnergia comer = city.getComercializador(choice);
+        System.out.println("1 - Editar o custo por KWh");
+        System.out.println("2 - Editar o fator de imposto");
+        System.out.println("3 - Retroceder");
+        choice = sc.nextLine();
+        switch(choice){
+            case("1"):
+                clearConsole();
+                System.out.println("Valor atual do KWh: "+comer.getPrecoBaseKW());
+                System.out.print("Selecione um novo preço por KWh:");
+                comer.setPrecoBaseKW(Double.parseDouble(sc.nextLine()));
+                clearConsole();
+                System.out.println("Valor do KWh atualizado com sucesso!");
+                menuInicial(city, sc);
+            break;
+            case("2"):
+                clearConsole();
+                System.out.println("Valor atual do imposto: "+comer.getFatorImposto());
+                System.out.print("Selecione um novo valor do imposto:");
+                comer.setFatorImposto(Double.parseDouble(sc.nextLine()));
+                clearConsole();
+                System.out.println("Valor do imposto atualizado com sucesso!");
+                menuInicial(city, sc);
+            break;
+            default:
+                clearConsole();
+                menuInicial(city, sc);
+            break;
+        }
+    }
+
+
 
     /**
      * Menu de criar cidades, dispositivos e fornecedores de energia
@@ -698,24 +752,25 @@ public class View {
 
             //falta fazer a faturacao ou ver se a mesma já foi feita
             try{
-                System.out.println("A casa mais gastadora neste período de tempo é a casa: " + city.getCasaMaisGastadora(time).getID());
-                System.out.println("KW's consumidos: "+city.getCasaMaisGastadora(time).getConsumoDaCasa());
-                System.out.println("1 - Mais dados da casa.");
-                System.out.println("2 - Retroceder.");
-                choice = sc.nextLine();
-                switch(choice){
-                    case("1"):
-                        clearConsole();
-                        System.out.println("Dados da casa: ");
-                        System.out.println("KW's consumidos: "+city.getCasaMaisGastadora(time).getConsumoDaCasa());
-                        System.out.println(city.getCasaMaisGastadora(time).toString());
-                        simulationOptions(city, sc, time);
-                        break;
-                    case("2"):
-                        clearConsole();
-                        simulationOptions(city, sc, time);
-                        break;
-                }
+                System.out.println(city.getCasaMaisGastadora(time));
+                // System.out.println("A casa mais gastadora neste período de tempo é a casa: " + city.getCasaMaisGastadora(time).getID());
+                // System.out.println("KW's consumidos: "+city.getCasaMaisGastadora(time).getConsumoDaCasa());
+                // System.out.println("1 - Mais dados da casa.");
+                // System.out.println("2 - Retroceder.");
+                // choice = sc.nextLine();
+                // switch(choice){
+                //     case("1"):
+                //         clearConsole();
+                //         System.out.println("Dados da casa: ");
+                //         System.out.println("KW's consumidos: "+city.getCasaMaisGastadora(time).getConsumoDaCasa());
+                //         System.out.println(city.getCasaMaisGastadora(time).toString());
+                //         simulationOptions(city, sc, time);
+                //         break;
+                //     case("2"):
+                //         clearConsole();
+                //         simulationOptions(city, sc, time);
+                //         break;
+                
             }
             catch(Exception e){
                 System.out.println("Something went wrong");
@@ -819,7 +874,8 @@ public class View {
         System.out.println("3 - Ligar/Desligar a Casa. ");
         System.out.println("4 - Ligar/Desligar uma divisão.");
         System.out.println("5 - Alterar Comercializador de energia.");
-        System.out.println("6 - Retroceder");
+        System.out.println("6 -  Listar SmartHouse.");
+        System.out.println("7 - Retroceder.");
         int choice = sc.nextInt();
         sc.nextLine();
 
@@ -900,6 +956,12 @@ public class View {
                 menuInteracaoCasas(city, casa, sc);
             break;
             case(6):
+                clearConsole();
+                StringBuffer s =
+                //System.out.println(casa.toString());
+                menuInteracaoCasas(city, casa, sc);
+                break;
+            case(7):
                 clearConsole();
                 try {
                     createMenu(city, sc);

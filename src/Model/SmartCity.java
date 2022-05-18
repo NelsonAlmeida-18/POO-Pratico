@@ -307,13 +307,19 @@ public class SmartCity implements Serializable {
      */
     public SmartHouse getCasaMaisGastadora(String time){
         SmartHouse ret=null;
-        for (ComercializadoresEnergia comer: this.comercializadores){
-            if (!comer.hasFaturado())
-                comer.faturacao(time);  //depois da primeira vez torna-se redundante e tenho de arranjar forma de corrigir isto
-            SmartHouse temp = comer.getCasaMaisGastadora();
-            if (ret == null || temp.getConsumo()>ret.getConsumo()){
-                ret = temp;
+        try{
+            for (ComercializadoresEnergia comer: this.comercializadores){
+                if (!comer.hasFaturado())
+                    comer.faturacao(time);  //depois da primeira vez torna-se redundante e tenho de arranjar forma de corrigir isto
+                SmartHouse temp = comer.getCasaMaisGastadora();
+                if (ret == null || temp.getConsumo()>ret.getConsumo()){
+                    ret = temp;
+                }
             }
+            return ret;
+        }
+        catch(Exception e){
+            System.out.println("Deu asneira a ir buscar a casa mais gastadora");
         }
         return ret;
     }
