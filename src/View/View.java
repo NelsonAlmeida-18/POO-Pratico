@@ -111,16 +111,10 @@ public class View {
      * Menu inicial gráfico
      * @param city Cidade a ser utilizada
      * @param sc Scanner a ser utilizado
-<<<<<<< HEAD
-     * @throws IOException inicialização menu inicial
-     */
-    public void menuInicial(SmartCity city, Scanner sc) {
-=======
      * 
      */
     public void menuInicial(SmartCity city, Scanner sc) throws IOException {
         int res;
->>>>>>> main
         System.out.print("\n");
         System.out.println("Selecione uma das opções abaixo:\n");
         System.out.println("1 - Editar cidade");
@@ -134,7 +128,7 @@ public class View {
         System.out.println("9 - Guardar estado");
         System.out.println("10 - Começar Simulação");
         System.out.println("11 - Sair");
-        int res = sc.nextInt();
+        res = sc.nextInt();
         sc.nextLine();
         switch (res) {
             case 1 -> { //Editar cidade
@@ -185,15 +179,7 @@ public class View {
                 //city.merge(temp);
                 //assim podiamos dar merge de vários files
 
-<<<<<<< HEAD
-                try {
-                    p.parse();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-=======
                 p.parse();
->>>>>>> main
                 menuInicial(city, sc);
             }
             case 9 -> { //Guardar estado
@@ -270,9 +256,10 @@ public class View {
      * Menu para editar os valores dos comercializadores de energia, nomeadamente o valor do KWh e o fator imposto
      * @param city Cidade a ser utilizada
      * @param sc Scannar a ser utilizada
+     * @throws IOException
      */
 
-    public void editComercializadores(SmartCity city, Scanner sc){
+    public void editComercializadores(SmartCity city, Scanner sc) throws IOException{
         clearConsole();
         System.out.println("Seleciona um comercializador para editar dos listados abaixo: ");
         System.out.println(city.listComercializadores());
@@ -296,7 +283,12 @@ public class View {
                 comer.setPrecoBaseKW(Double.parseDouble(sc.nextLine()));
                 clearConsole();
                 System.out.println("Valor do KWh atualizado com sucesso!");
-                menuInicial(city, sc);
+                try {
+                    menuInicial(city, sc);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             break;
             case("2"):
                 clearConsole();
@@ -719,8 +711,9 @@ public class View {
      * Menu de simulações
      * @param city Cidade a ser utilizada
      * @param sc Scanner a ser utilizado
+     * @throws IOException
      */  
-    public void simulationMenu(SmartCity city, Scanner sc) {
+    public void simulationMenu(SmartCity city, Scanner sc) throws IOException {
         System.out.println("1 - Simulação Manual. ");
         System.out.println("2 - Simulação através de ficheiro") ;
         System.out.println("3 - Retroceder.");
@@ -750,8 +743,9 @@ public class View {
      * @param city Cidade a ser utilizada
      * @param sc Scanner a ser utilizado
      * @return coluna criada
+     * @throws IOException
      */
-    public void simulationOptions(SmartCity city, Scanner sc, String time){
+    public void simulationOptions(SmartCity city, Scanner sc, String time) throws IOException{
         System.out.println("1 - Casa mais gastadora.");
         System.out.println("2 - Comercializador com maior faturação.");
         System.out.println("3 - Listar faturas de um Comercializador.");
@@ -968,15 +962,6 @@ public class View {
             break;
             case(6):
                 clearConsole();
-<<<<<<< HEAD
-                StringBuffer s =
-                //System.out.println(casa.toString());
-                menuInteracaoCasas(city, casa, sc);
-                break;
-            case(7):
-                clearConsole();
-=======
->>>>>>> main
                 try {
                     createMenu(city, sc);
                 } catch (IOException e) {

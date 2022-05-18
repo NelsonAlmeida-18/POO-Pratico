@@ -191,13 +191,6 @@ public class SmartCamera extends SmartDevice {
      * @return consumo
      */
     public double getConsumo(){
-<<<<<<< HEAD
-        if (this.estado.equals(state.ON))
-            return this.tamanho_ficheiros*resolucao;
-        else
-            return 0;
-    }
-=======
         if (this.estado==state.OFF)
             return 0;
         else{
@@ -205,7 +198,6 @@ public class SmartCamera extends SmartDevice {
             //return ChronoUnit.HOURS.between(this.ligadoInit, this.dataFin)*this.resolucao*((Math.random()*2)+1);
         }       
    }                                   //tempo de gravacao, resolucao, bitrate    }
->>>>>>> main
 
     /**
      * Setter de resolução
