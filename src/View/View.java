@@ -65,11 +65,16 @@ public class View {
         return ret;
     }
 
+<<<<<<< HEAD
     /**
      * @param city Cidade a ser utilizada
      * @param sc Scanner a ser utilizador
      */
     public void saveState(SmartCity city, Scanner sc){
+=======
+
+    public void saveState(){
+>>>>>>> fc07392c7274143fb89e421dc325335a2884d105
        try{
            System.out.println("Dá um nome ao teu ficheiro de estado:");
            String nameOfFile = sc.nextLine();
@@ -107,6 +112,7 @@ public class View {
        // System.out.println("limpo");
     }
     
+<<<<<<< HEAD
     /**
      * Menu inicial gráfico
      * @param city Cidade a ser utilizada
@@ -115,6 +121,11 @@ public class View {
      */
     public void menuInicial(SmartCity city, Scanner sc) throws IOException {
         int res;
+=======
+
+    public void menuInicial() throws IOException {
+
+>>>>>>> fc07392c7274143fb89e421dc325335a2884d105
         System.out.print("\n");
         System.out.println("Selecione uma das opções abaixo:\n");
         System.out.println("1 - Editar cidade");
@@ -180,7 +191,12 @@ public class View {
                 //assim podiamos dar merge de vários files
 
                 p.parse();
+<<<<<<< HEAD
                 menuInicial(city, sc);
+=======
+
+                menuInicial();
+>>>>>>> fc07392c7274143fb89e421dc325335a2884d105
             }
             case 9 -> { //Guardar estado
                 clearConsole();
@@ -358,7 +374,12 @@ public class View {
                 Controller p = new Controller(city);
                 //city.merge(p.parse(city.getHouseId(), city.getDeviceId())); //carregar faz gestão de conflitos para dar merge à cidade já existente e à cidade que se está a carregar do log
                 p.parse();
+<<<<<<< HEAD
                 createMenu(city, sc);
+=======
+
+                createMenu();
+>>>>>>> fc07392c7274143fb89e421dc325335a2884d105
             }
             case 8 -> { //Retroceder
                 clearConsole();
@@ -783,8 +804,13 @@ public class View {
             break;     
             case("2"):
                 clearConsole();
+<<<<<<< HEAD
                 System.out.println("Comercializador de Energia com maior faturação: "+ city.getComercializadorMaiorFaturacao().getNome());
                 System.out.println("Total faturado: "+ city.getComercializadorMaiorFaturacao().getFaturacao());
+=======
+
+                System.out.println("Comercializador de Energia com maior faturação: " + this.c.getComercializadorMaiorFaturacaoNome());
+>>>>>>> fc07392c7274143fb89e421dc325335a2884d105
                 System.out.println("1 - Mais dados do Comercializador.");
                 System.out.println("2 - Retroceder.");
                 choice = sc.nextLine();
@@ -901,6 +927,7 @@ public class View {
                 sc.nextLine();
                 switch (choice) {
                     case (0) -> {
+<<<<<<< HEAD
                         casa.setHouseOFF();
                         clearConsole();
                         System.out.println("Energia da Casa desligada com sucesso.");
@@ -908,6 +935,15 @@ public class View {
                     case (1) -> {
                         casa.setHouseOn();
                         clearConsole();
+=======
+
+                        this.c.setHouseOFF(id);
+                        System.out.println("Energia da Casa desligada com sucesso.");
+                    }
+                    case (1) -> {
+                        this.c.setHouseOn(id);
+
+>>>>>>> fc07392c7274143fb89e421dc325335a2884d105
                         System.out.println("Energia da Casa ligada com sucesso.");
                     }
                     default -> menuInteracaoCasas(city, casa, sc);
@@ -962,11 +998,16 @@ public class View {
             break;
             case(6):
                 clearConsole();
+<<<<<<< HEAD
                 try {
                     createMenu(city, sc);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+=======
+                menuInteracaoCasas(id);
+
+>>>>>>> fc07392c7274143fb89e421dc325335a2884d105
             break;
         }
     }
