@@ -111,9 +111,16 @@ public class View {
      * Menu inicial gráfico
      * @param city Cidade a ser utilizada
      * @param sc Scanner a ser utilizado
+<<<<<<< HEAD
      * @throws IOException inicialização menu inicial
      */
     public void menuInicial(SmartCity city, Scanner sc) {
+=======
+     * 
+     */
+    public void menuInicial(SmartCity city, Scanner sc) throws IOException {
+        int res;
+>>>>>>> main
         System.out.print("\n");
         System.out.println("Selecione uma das opções abaixo:\n");
         System.out.println("1 - Editar cidade");
@@ -178,11 +185,15 @@ public class View {
                 //city.merge(temp);
                 //assim podiamos dar merge de vários files
 
+<<<<<<< HEAD
                 try {
                     p.parse();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+=======
+                p.parse();
+>>>>>>> main
                 menuInicial(city, sc);
             }
             case 9 -> { //Guardar estado
@@ -957,12 +968,15 @@ public class View {
             break;
             case(6):
                 clearConsole();
+<<<<<<< HEAD
                 StringBuffer s =
                 //System.out.println(casa.toString());
                 menuInteracaoCasas(city, casa, sc);
                 break;
             case(7):
                 clearConsole();
+=======
+>>>>>>> main
                 try {
                     createMenu(city, sc);
                 } catch (IOException e) {

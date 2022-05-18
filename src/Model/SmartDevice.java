@@ -3,11 +3,6 @@ package Model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-/**
- * A classe SmartDevice é um construtor simples.
- * Permite ligar ou desligar circuitos. 
- *
- */
 public abstract class SmartDevice implements Serializable{
 
     /**

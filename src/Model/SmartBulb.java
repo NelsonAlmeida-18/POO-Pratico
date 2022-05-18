@@ -274,12 +274,22 @@ public class SmartBulb extends SmartDevice {
      * @return consumo
      */
     public double getConsumo() {
+<<<<<<< HEAD
         if (this.estado == state.ON)
             return 10;
         else
             return 0;
     }
 
+=======
+        if (this.estado == state.ON){
+            return this.consumo;
+        }
+        else{
+            return 0;
+        }
+    }
+>>>>>>> main
 
     /**
      * Calcula o consumo da lampada
