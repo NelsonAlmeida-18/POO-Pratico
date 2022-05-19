@@ -144,7 +144,8 @@ public class SmartCity implements Serializable {
         for(Marca x : this.marcas){
             if(x.getNome().equals(nome)){return x;}
         }
-        return null;
+        createMarca(nome);
+        return getMarca(nome);
     }
 
     /**
@@ -489,60 +490,59 @@ public class SmartCity implements Serializable {
 
     /**
      * Adicionar dispositivo em uma divisão
+     * @param house_id id da casa
      * @param divisao divisão a receber o dispositivo
      * @param sd dispositivo a adicionar
      */
-    public void addDeviceToDivisao(String divisao, SmartDevice sd){
-        int houseID = this.houseID-1;
-        SmartHouse temp = getCasa(houseID);
-        if(temp!=null){
-            temp.addDevice(divisao, sd);
+    public void addDeviceToDivisao(int house_id, String divisao, SmartDevice sd){
+        if(getCasa(houseID)!=null){
+            getCasa(houseID).addDevice(divisao, sd);
         }
     }
 
     /**
      * Adicionar dispositivo em uma divisão
+     * @param house_id id da casa
      * @param divisao divisão a receber o dispositivo
      * @param sd dispositivo a adicionar por id
      */
-    public void addDeviceToDivisao(String divisao, int sd){
-        int houseID = this.houseID-1;
-        SmartHouse temp = getCasa(houseID);
-        if(temp!=null){
-            temp.addDevice(divisao, sd);
+    public void addDeviceToDivisao(int house_id, String divisao, int sd){
+        if(getCasa(houseID)!=null){
+            getCasa(houseID).addDevice(divisao, sd);
         }
     }
 
     /**
-     * Adicionar lampada a uma divisão
+     * Adicionar lampada a uma divisão~
+     * @param house_id id da casa
      * @param divisao divisão a receber a lampada
      * @param id id da lampada
      * @param mode modo da lampada
      * @param dimensions dimensão da lampada
      * @param consumo consumo da lampada
      */
-    public void addDeviceToDivisaoL(String divisao, int id, String mode , int dimensions, double consumo){
-        SmartBulb sb = new SmartBulb(id,mode,dimensions,consumo);
-        SmartDevice sd = (SmartDevice) sb;
-        addDeviceToDivisao(divisao, sd);
+    public void addDeviceToDivisaoL(int house_id, String divisao, int id, String mode , int dimensions, double consumo){
+        SmartDevice sd = (SmartDevice) new SmartBulb(id,mode,dimensions,consumo);
+        getCasa(house_id).addDevice(divisao, sd);
     }
 
     /**
      * Adicionar camara a divisão
+     * @param house_id id da casa
      * @param divisao divisão a receber a camara
      * @param id id a definir
      * @param width comprimento da resolução a definir
      * @param height largura da resolução a definir
-     * @param tamanho tamanho de ficheiros da camara
      * @param consumo consumo a definir
      */
-    public void addDeviceToDivisaoC(String divisao, int id, float width , float height, int tamanho, double consumo){
+    public void addDeviceToDivisaoC(int house_id, String divisao, int id, float width , float height, int tamanho, double consumo){
         SmartDevice sc = new SmartCamera(id,width,height,tamanho,consumo);
-        addDeviceToDivisao(divisao,sc);
+        getCasa(house_id).addDevice(divisao, sc);
     }
 
     /**
      * Adicionar coluna a divisão
+     * @param house_id id da casa
      * @param divisao divisão a adicionar
      * @param id id a definir
      * @param vol volume a definir
@@ -550,12 +550,12 @@ public class SmartCity implements Serializable {
      * @param marca marca da coluna
      * @param consumo consumo a definir
      */
-    public void addDeviceToDivisaoS(String divisao, int id, int vol, String estacao , String marca, double consumo){
+    public void addDeviceToDivisaoS(int house_id, String divisao, int id, int vol, String estacao , String marca, double consumo){
         SmartSpeaker sb;
         if(getMarca(marca)==null) { createMarca(marca); sb = new SmartSpeaker(id,vol,estacao,getMarca(marca),consumo);}
         else sb = new SmartSpeaker(id,vol,estacao, getMarca(marca),consumo);
         SmartDevice sd = (SmartDevice) sb;
-        addDeviceToDivisao(divisao,sd);
+        getCasa(house_id).addDevice(divisao, sd);
     }
 
     /**

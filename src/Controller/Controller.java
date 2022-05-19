@@ -1,12 +1,19 @@
 package Controller;
 
 import Model.Marca;
+import Model.SmartBulb;
+import Model.SmartCamera;
 import Model.SmartCity;
 import Model.SmartDevice;
+import Model.SmartSpeaker;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AccessDeniedException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -48,11 +55,37 @@ public class Controller {
     }
 
     /**
+     * Ler ficheiro object
+     * @param filepath String de caminho para ler ficheiro
+     */
+    public Object ReadObjectFromFile(String filepath) {
+
+        try {
+
+            FileInputStream fileIn = new FileInputStream(filepath);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+
+            Object obj = objectIn.readObject();
+
+            System.out.println("Estado carregado com sucesso!");
+            objectIn.close();
+            return obj;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * Função que dá merge a cidades
      * @param toMergeo Cidade a dar merge
-     */
-    public void merge(Object toMergeo) {
-        this.city.merge(toMergeo);
+     * @throws FileNotFoundException
+    */
+    public void merge(String path) throws FileNotFoundException { //era só isto? *skull emoji*
+ 
+        SmartCity city = (SmartCity)ReadObjectFromFile(path);
+        this.city.merge(city);
     }
 
     /**
@@ -74,12 +107,58 @@ public class Controller {
     }
 
     /**
+     * Verifica se um dado comercializador existe na cidade
+     * @param String nome do comercializador a procurar
+     * @return Bool a indicar se existe ou não
+     */
+    public boolean existsComercializador(String nome){
+        return this.city.getComercializador(nome) == null;
+    }
+
+    /**
      * Getter do comercializador
      * @param id id da casa
      * @return String do comercializador
      */
     public String getComercializadoratual(int id){
         return this.city.getCasa(id).getCompanhia_eletrica().toString();
+    }
+
+    /**
+     * Getter do comercializador do preço base
+     * @param nome nome do comercializador
+     * @return preço base
+     */
+    public double getComercializadorPrecoBaseKW(String nome){
+        return this.city.getComercializador(nome).getPrecoBaseKW();
+    }
+    
+    /**
+     * Setter do comercializador do preço base
+     * @param nome nome do comercializador
+     * @param precobase preço a modificar
+     */
+    public void setComercializadorPrecoBaseKW(String nome,double precobase){
+        this.city.getComercializador(nome).setPrecoBaseKW(precobase);
+    }
+
+    /**
+     * Setter do comercializador do fator imposto
+     * @param nome nome do comercializador
+     * @param precobase fator imposto a modificar
+     */
+    public void setComercializadorFatorImposto(String nome,double fator){
+        this.city.getComercializador(nome).setFatorImposto(fator);
+    }
+    
+    /**
+     * Getter do comercializador do fator imposto
+     * @param nome nome do comercializador
+     * @return fator imposto
+     */
+    public double getComercializadorFatorImposto(String nome){
+
+        return this.city.getComercializador(nome).getFatorImposto();
     }
 
     /**
@@ -188,7 +267,7 @@ public class Controller {
         return this.city.createHouse(nome_prop, nif, morada, fornecedor);
     }
 
-    /**
+/**
      * Getter id da casa atual
      * @return id da casa
      */
@@ -202,25 +281,25 @@ public class Controller {
      * Getter do id da casa mais gastadora
      * @return id da casa
      */
-    // public int getCasaMaisGastadoraID(){
-    //     return this.city.getCasaMaisGastadora().getID();
-    // }
+    public int getCasaMaisGastadoraID(){
+        return this.city.getCasaMaisGastadora(null).getID();
+    }
 
     /**
      * Getter do id da casa mais gastadora
      * @return id da casa
      */
-    // public double getCasaMaisGastadoraConsumo(){
-    //     return this.city.getCasaMaisGastadora().getConsumoDaCasa();
-    // }
+    public double getCasaMaisGastadoraConsumo(){
+        return this.city.getCasaMaisGastadora(null).getConsumoDaCasa();
+    }
 
     /**
      * Getter de casa mais gastadora
      * @return Casa mais gastadora
      */
-    // public String getCasaMaisGastadora(){
-    //     return this.city.getCasaMaisGastadora().toString();
-    // }
+    public String getCasaMaisGastadora(){
+        return this.city.getCasaMaisGastadora(null).toString();
+    }
 
     /**
      * Lista de casas
@@ -257,12 +336,32 @@ public class Controller {
 
     /**
      * Adiciona dispositivo a divisão
+     * @param house_id id da casa
      * @param divisao divisão emq uestão
      * @param sd dispositivo a adicionar
      */
-    public void addDeviceToDivisao(String divisao, SmartDevice sd){
-        this.city.addDeviceToDivisao(divisao,sd);
+    public void addDeviceToDivisao(int house_id, String divisao, SmartDevice sd){
+        this.city.addDeviceToDivisao(this.city.getHouseId(),divisao,sd);
     }
+
+    /**
+     * Adiciona dispositivo a divisão
+     * @param house_id id da casa
+     * @param divisao divisão emq uestão
+     * @param sd dispositivo a adicionar
+     */
+    public void addSmartBulbToDivisao(int house_id,String divisao, String modo,  int dimensions, double consumo, String estado){
+        this.city.addDeviceToDivisaoL(house_id, divisao, this.city.getDeviceId(),modo , dimensions,consumo);
+    }
+    
+    public void addSmartCameraToDivisao(int house_id,String divisao, float width,  float heigth, int tamanho, double consumo, String estado){
+        this.city.addDeviceToDivisaoC(house_id, divisao, this.city.getDeviceId(),width , heigth,tamanho, consumo);
+    }
+    //house_id, divisao, nome_marca, consumo, estacao, volume, estado
+    public void addSmartSpeakerToDivisao(int house_id,String divisao, String nome_marca,  double consumo, String estacao, int volume, String estado){
+        this.city.addDeviceToDivisaoS(house_id, divisao, this.city.getDeviceId(), volume, estacao, nome_marca, consumo);
+    }
+
 
     /**
      * Função que adiciona preset de dispositivo a uma divisão de uma casa
@@ -273,6 +372,7 @@ public class Controller {
     public void addDeviceToDivisao(int id, String divisao, String preset){
         this.city.getCasa(id).addDevice(divisao,this.city.getPreset(preset));
     }
+
     /**
      * Função que obtem o nome das divisões de uma casa
      * @param id id da casa
@@ -307,6 +407,7 @@ public class Controller {
     public void setCasaDivisaoOn(int id, String divisao){
         this.city.setCasaDivisaoOn(id,divisao);
     }
+
 
     /**
      * Desliga dispositvos de uma casa através do id
@@ -401,50 +502,71 @@ public class Controller {
 
     }
 
+    public void addSmartSpeakerPreset(String nome_preset, String nome_marca, double consumo, String estacao, int volume, String estado){
+        SmartDevice sp = new SmartSpeaker(this.city.giveDeviceId(),volume,estacao,estado,this.city.getMarca(nome_marca),consumo);  //O COntroller por criar devices?
+        this.city.addDevicePreset(nome_preset, sp);
+    }
+
+    public void addSmartCameraPreset(String nome_preset, float width, float height, int tamanho, String estado){
+        SmartDevice sc = new SmartCamera(this.city.giveDeviceId(), width,height,tamanho,estado);
+        this.city.addDevicePreset(nome_preset, sc);
+    }
+
+    public void addSmartBulbPreset(String nome_preset,  String mode,int dimensions, double consumo){
+        SmartDevice sc = new SmartBulb(this.city.giveDeviceId(), mode,dimensions,consumo);
+        this.city.addDevicePreset(nome_preset, sc);
+    }
+
     /**
      * Função que dá parse às logs dadas em ficheiro
      */
     public void parse() throws IOException{
-        Path path = Path.of("./logs/logs.txt");
-        //Path path = FileSystems.getDefault().getPath("logs", "logs.txt");
-        String content = Files.readString(path);
-        //List<String> linhas = readFile("dados.csv");
-        String[] contentSplited = content.split("\n");
-        String[] linhaPartida;
-        String divisao = "";
-
-        for (String linha : contentSplited) {
-
-            linhaPartida = linha.split(":", 2);
-
-            switch (linhaPartida[0]) {
-                case "Casa" -> parseCasa(linhaPartida[1]);
-                case "Divisao" -> {
-                    //if (casaMaisRecente == null) System.out.println("Linha inválida.");
-                    divisao = linhaPartida[1];
-                    this.city.criaDivisao(divisao);
+        try{
+            //Path path = Path.of("./logs/logs.txt");
+            Path path = FileSystems.getDefault().getPath("logs", "logs.txt");
+            String content = Files.readString(path);
+            //List<String> linhas = readFile("dados.csv");
+            String[] contentSplited = content.split("\n");
+            String[] linhaPartida;
+            String divisao = "";
+    
+            for (String linha : contentSplited) {
+    
+                linhaPartida = linha.split(":", 2);
+    
+                switch (linhaPartida[0]) {
+                    case "Casa" -> parseCasa(linhaPartida[1]);
+                    case "Divisao" -> {
+                        //if (casaMaisRecente == null) System.out.println("Linha inválida.");
+                        divisao = linhaPartida[1];
+                        this.city.criaDivisao(divisao);
+                    }
+                    case "SmartBulb" -> {
+                        if (divisao == null) System.out.println("Linha inválida.");
+                        parseSmartBulb(divisao, linhaPartida[1]);
+                    }
+                    case "SmartCamera" -> {
+                        if (divisao == null) System.out.println("Linha inválida.");
+                        parseSmartCamera(divisao, linhaPartida[1]);
+                    }
+                    case "SmartSpeaker" -> {
+                        if (divisao == null) System.out.println("Linha inválida.");
+                        parseSmartSpeaker(divisao, linhaPartida[1]);
+                       
+                    }
+                    case "Fornecedor" -> parseComercializadoresEnergia(linhaPartida[1]);
+                    case "Marca" -> parseMarca(linhaPartida[1]);
+                    default -> {
+                    }
+                    //System.out.println("Linha inválida.");
                 }
-                case "SmartBulb" -> {
-                    if (divisao == null) System.out.println("Linha inválida.");
-                    parseSmartBulb(divisao, linhaPartida[1]);
-                }
-                case "SmartCamera" -> {
-                    if (divisao == null) System.out.println("Linha inválida.");
-                    parseSmartCamera(divisao, linhaPartida[1]);
-                }
-                case "SmartSpeaker" -> {
-                    if (divisao == null) System.out.println("Linha inválida.");
-                    parseSmartSpeaker(divisao, linhaPartida[1]);
-                   
-                }
-                case "Fornecedor" -> parseComercializadoresEnergia(linhaPartida[1]);
-                case "Marca" -> parseMarca(linhaPartida[1]);
-                default -> {
-                }
-                //System.out.println("Linha inválida.");
             }
+            System.out.println("Ficheiro carregado com sucesso.");
         }
-        System.out.println("Ficheiro carregado com sucesso.");
+        catch(Exception e){
+            System.out.println("Ocorreu um erro a carregar o ficheiro.");
+        }
+      
     }
 
     /**
@@ -469,7 +591,7 @@ public class Controller {
         String mode = campos[0];
         int dimensions = Integer.parseInt(campos[1]);
         double consumo = Double.parseDouble(campos[2]);
-        this.city.addDeviceToDivisaoL(divisao, this.city.giveDeviceId(), mode, dimensions,consumo);
+        this.city.addDeviceToDivisaoL(city.getHouseId(), divisao, this.city.giveDeviceId(), mode, dimensions,consumo);
     }
 
     /**
@@ -487,7 +609,7 @@ public class Controller {
         float width = Float.parseFloat(widthHeight[0]);
         float heigth = Float.parseFloat(widthHeight[1]);
         double consumo = Double.parseDouble(campos[2]);
-		this.city.addDeviceToDivisaoC(divisao, this.city.giveDeviceId(),width,heigth,tamanho,consumo);
+		this.city.addDeviceToDivisaoC(city.getHouseId(), divisao, this.city.giveDeviceId(),width,heigth,tamanho,consumo);
     }
 
     /**
@@ -500,7 +622,7 @@ public class Controller {
         int vol = Integer.parseInt(campos[0]);
         String estacao = campos[1];
         double consumo = Double.parseDouble(campos[3]);
-        this.city.addDeviceToDivisaoS(divisao, this.city.getDeviceId(), vol, estacao, campos[2], consumo);
+        this.city.addDeviceToDivisaoS(city.getHouseId(),divisao, this.city.getDeviceId(), vol, estacao, campos[2], consumo);
     }
 
     /**

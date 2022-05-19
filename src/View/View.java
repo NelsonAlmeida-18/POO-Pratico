@@ -7,17 +7,16 @@ import java.lang.ProcessBuilder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import Controller.*;
-import Model.*; // tratar disto
+import Controller.Controller;
+
 
 //import static com.intellij.openapi.util.text.Strings.toUpperCase;
 //mudar o ui para um to string e passamos ao parser para construir tudo de uma vez, just an idea
 
 
-public class View {
+public class View{
     private Scanner sc;
     private Controller c;
-    private SmartCity city=new SmartCity();
 
     /**
      * Inicializador do construtor da View
@@ -35,7 +34,7 @@ public class View {
     public void run(){
         clearConsole();
         try {
-            menuInicial(this.city,sc);
+            menuInicial();
         } catch (Exception e) {System.out.println("Failed loading menuInicial");
         }
     }
@@ -76,7 +75,7 @@ public class View {
                 nameOfFile = sc.nextLine();
                 f = new File("./output/"+nameOfFile);
            }
-           city.saveState(nameOfFile);
+           this.c.saveState(nameOfFile);
        } 
        catch(FileNotFoundException e){
            System.out.println("Error creating file with that name!");
@@ -105,6 +104,10 @@ public class View {
     }
     
 
+    /**
+     * Menu Inicial da View
+     * @throws IOException Exception de não encontrar ficheiro
+     */
     public void menuInicial() throws IOException {
 
         System.out.print("\n");
@@ -120,55 +123,55 @@ public class View {
         System.out.println("9 - Guardar estado");
         System.out.println("10 - Começar Simulação");
         System.out.println("11 - Sair");
-        res = sc.nextInt();
+        int res = sc.nextInt();
         sc.nextLine();
         switch (res) {
             case 1 -> { //Editar cidade
                 clearConsole();
                 try {
-                    createMenu(city, sc);
+                    createMenu();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
             case 2 -> { //Consultar SmartHouses existentes
                 clearConsole();
-                city.listSmartHouses();
-                menuInicial(city, sc);
+                this.c.listSmartHouses();
+                menuInicial();
             }
             case 3 -> { //Consultar comercializadores de energia existentes
                 clearConsole();
-                System.out.println(city.listComercializadores());
-                menuInicial(city, sc);
+                System.out.println(this.c.listComercializadores());
+                menuInicial();
             }
             case 4 -> { //Editar comercializadores de energia existentes
                 clearConsole();
-                editComercializadores(city,sc);
-                menuInicial(city, sc);
+                editComercializadores();
+                menuInicial();
             }
             case 5 -> { //Consultar marcas existentes
                 clearConsole();
-                city.listMarcas();
-                menuInicial(city, sc);
+                this.c.listMarcas();
+                menuInicial();
             }
             case 6 -> { //Consultar SmartDevices presets
                 clearConsole();
-                city.listSmartDevicesPresets();
-                menuInicial(city, sc);
+                this.c.listSmartDevicesPresets();
+                menuInicial();
             }
             case 7 -> { //Carregar um estado de programa
                 clearConsole();
-                loadMenu(city,sc);
-                menuInicial(city, sc);
+                loadMenu();
+                menuInicial();
             }
             case 8 -> { //Carregar um ficheiro log
                 clearConsole();
-                Controller p = new Controller(city);
-                //city = p.parse(city.getHouseId(), city.getDeviceId());
+                Controller p = new Controller();
+                //this.c = p.parse(this.c.getHouseId(), this.c.getDeviceId());
 
                 //não devia ser algo deste género?
-                //SmartCity temp = p.parse(city.getHouseID(), city.getDeviceId());
-                //city.merge(temp);
+                //Smartthis.c temp = p.parse(this.c.getHouseID(), this.c.getDeviceId());
+                //this.c.merge(temp);
                 //assim podiamos dar merge de vários files
 
                 p.parse();
@@ -177,14 +180,14 @@ public class View {
             }
             case 9 -> { //Guardar estado
                 clearConsole();
-                saveState(city, sc); //função save, não tem menu, simplesmente guarda na pasta save
+                saveState(); //função save, não tem menu, simplesmente guarda na pasta save
                 System.out.println("Estado do programa guardado");
-                menuInicial(city, sc);
+                menuInicial();
             }
             case 10 -> { //Começar Simulação
                 clearConsole();
-                simulationMenu(city, sc);
-                menuInicial(city, sc);
+                simulationMenu();
+                menuInicial();
             }
             case 11 -> { //Sair
                 clearConsole();
@@ -192,92 +195,70 @@ public class View {
                 if (response(sc) == 1) {
                     System.out.println("That's all, folks!.");
                 } else {
-                    menuInicial(city, sc);
+                    menuInicial();
                 }
             }
             default -> {
                 clearConsole();
                 System.out.println("Opção inválida.");
-                menuInicial(city, sc);
+                menuInicial();
             }
         }
     }
 
     /**
      * Menu do load
-     * @param city Cidade a ser utilizada
-     * @param sc Scanner a ser utilizado
      */
-    public void loadMenu(SmartCity city, Scanner sc) {
+    public void loadMenu() {
         System.out.println("Insira o path para o ficheiro que pretende carregar:");
         StringBuilder path = new StringBuilder();
         path.append(sc.nextLine());
         System.out.println("Insira o nome do ficheiro com a extensão (e.g. ficheiro.txt):");
         path.append(sc.nextLine());
-        city.merge((SmartCity)ReadObjectFromFile(path.toString())); //createMenuLine devolve a cidade guardada no ficheiro
-        /*try {menuInicial(city,sc);}
+        try{this.c.merge(path.toString());}
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        try {menuInicial();}
         catch(Exception e){
             System.out.println("Erro a carregar estado.");
-        }*/
-
-    }
-
-    /**
-     * Ler ficheiro object
-     * @param filepath String de caminho para ler ficheiro
-     */
-    public Object ReadObjectFromFile(String filepath) {
-
-        try {
-
-            FileInputStream fileIn = new FileInputStream(filepath);
-            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-
-            Object obj = objectIn.readObject();
-
-            System.out.println("Estado carregado com sucesso!");
-            objectIn.close();
-            return obj;
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
         }
+
     }
 
     /**
      * Menu para editar os valores dos comercializadores de energia, nomeadamente o valor do KWh e o fator imposto
-     * @param city Cidade a ser utilizada
+     * @param this.c Cidade a ser utilizada
      * @param sc Scannar a ser utilizada
      * @throws IOException
      */
 
-    public void editComercializadores(SmartCity city, Scanner sc) throws IOException{
+    public void editComercializadores() throws IOException{
         clearConsole();
         System.out.println("Seleciona um comercializador para editar dos listados abaixo: ");
-        System.out.println(city.listComercializadores());
-        String choice = sc.nextLine();
-        while(city.getComercializador(choice)==null){
+        System.out.println(this.c.listComercializadores());
+        String nome = sc.nextLine();
+        //while(this.c.getComercializador(choice)==null){
+        while(!(this.c.existsComercializador(nome))){
             clearConsole();
             System.out.println("Seleciona um comercializador para editar dos listados abaixo: ");
-            System.out.println(city.listComercializadores());
-            choice = sc.nextLine();
+            System.out.println(this.c.listComercializadores());
+            nome = sc.nextLine();
         }
-        ComercializadoresEnergia comer = city.getComercializador(choice);
         System.out.println("1 - Editar o custo por KWh");
         System.out.println("2 - Editar o fator de imposto");
         System.out.println("3 - Retroceder");
-        choice = sc.nextLine();
+        String choice = sc.nextLine();
         switch(choice){
             case("1"):
                 clearConsole();
-                System.out.println("Valor atual do KWh: "+comer.getPrecoBaseKW());
+                System.out.println("Valor atual do KWh: "+this.c.getComercializadorPrecoBaseKW(nome)); 
                 System.out.print("Selecione um novo preço por KWh:");
-                comer.setPrecoBaseKW(Double.parseDouble(sc.nextLine()));
+                this.c.setComercializadorPrecoBaseKW(nome,Double.parseDouble(sc.nextLine()));   
                 clearConsole();
                 System.out.println("Valor do KWh atualizado com sucesso!");
                 try {
-                    menuInicial(city, sc);
+                    menuInicial();
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -285,16 +266,16 @@ public class View {
             break;
             case("2"):
                 clearConsole();
-                System.out.println("Valor atual do imposto: "+comer.getFatorImposto());
+                System.out.println("Valor atual do imposto: "+this.c.getComercializadorFatorImposto(nome)); 
                 System.out.print("Selecione um novo valor do imposto:");
-                comer.setFatorImposto(Double.parseDouble(sc.nextLine()));
+                this.c.setComercializadorFatorImposto(nome,Double.parseDouble(sc.nextLine()));
                 clearConsole();
                 System.out.println("Valor do imposto atualizado com sucesso!");
-                menuInicial(city, sc);
+                menuInicial();
             break;
             default:
                 clearConsole();
-                menuInicial(city, sc);
+                menuInicial();
             break;
         }
     }
@@ -303,11 +284,9 @@ public class View {
 
     /**
      * Menu de criar cidades, dispositivos e fornecedores de energia
-     * @param city Cidade a ser utilizada
-     * @param sc Scannar a ser utilizada
      * @throws IOException Exception ao voltar ao menu inicial
      */
-    public void createMenu(SmartCity city, Scanner sc) throws IOException{
+    public void createMenu() throws IOException{
         System.out.println("Selecione uma das opções abaixo:");
         System.out.println();
         System.out.println("1 - Criar SmartHouse");
@@ -323,41 +302,40 @@ public class View {
 
         switch (res) {
             case 1 -> { //Criar SmartHouse
-                createSmartHouseMenu(city, sc);
-                createMenu(city, sc);
+                createSmartHouseMenu();
+                createMenu();
             }
             case 2 -> { //Editar uma smartHouse(Ligar e desligar todos os dispostivios/dispostivos individuais)
 
-                editSmartHouse(city, sc);
-                createMenu(city, sc);
+                editSmartHouse();
+                createMenu();
             }
             case 3 -> { //Criar Comercializador de Energia
-                createComercializadorMenu(city, sc);
-                createMenu(city, sc);
+                createComercializadorMenu();
+                createMenu();
             }
             case 4 -> { //Criar marca de SmartSpeaker
-                createMarcaMenu(city, sc);
-                createMenu(city, sc);
+                createMarcaMenu();
+                createMenu();
             }
             case 5 -> { //Criar preset de SmartDevice
-                createSmartDevicePresetMenu(city, sc);
-                createMenu(city, sc);
+                createSmartDevicePresetMenu();
+                createMenu();
             }
             case 6 -> //Eliminar um preset de SmartDevice
                 //deleteSmartDevicePresetMenu(city);
-                    createMenu(city, sc);
+                    createMenu();
             case 7 -> { //Adicionar apartir de log
                 clearConsole();
-                Controller p = new Controller(city);
                 //city.merge(p.parse(city.getHouseId(), city.getDeviceId())); //carregar faz gestão de conflitos para dar merge à cidade já existente e à cidade que se está a carregar do log
-                p.parse();
+                this.c.parse();
 
                 createMenu();
             }
             case 8 -> { //Retroceder
                 clearConsole();
                 try {
-                    menuInicial(city, sc);
+                    menuInicial();
                 } catch (Exception e) {
                     System.out.println("Failed to load menuInicial");
                 }
@@ -368,65 +346,61 @@ public class View {
 
     /**
      * Menu criar casa
-     * @param city Cidade a ser utilizada
-     * @param sc Scanner a ser utilizado
      */
-    public void createSmartHouseMenu(SmartCity city, Scanner sc){
+    public void createSmartHouseMenu(){
 
         System.out.println("Insira o nome do proprietário:");
-        String nome_prop = sc.nextLine();
+        String nome_prop = this.sc.nextLine();
 
         int nif = 0;
         System.out.println("Insira o NIF do proprietário:");
         try {
-            nif = sc.nextInt();
+            nif = this.sc.nextInt();
         } catch (java.util.InputMismatchException e) {
-            sc.nextLine();
+            this.sc.nextLine();
             System.out.println("NIF inválido.");
             return;
         }
-        sc.nextLine();
+        this.sc.nextLine();
 
 
         System.out.println("Insira a morada:");
         String morada = sc.nextLine();
 
         System.out.println("Insira o fornecedor:");
-        city.listComercializadores();
+        this.c.listComercializadores();
         String fornecedor = sc.nextLine();
 
-        int house_id = city.createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
+        int house_id = this.c.createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
 
         System.out.println("Pretende adicionar divisões na casa?");
-        int res = response(sc);
+        int res = response(this.sc);
 
-        if(res == 1) addDivisoesToHouseMenu(house_id, city, sc);
+        if(res == 1) addDivisoesToHouseMenu(house_id);
 
     }
 
     /**
      * Menu de adicionar divisões a casa
      * @param house_id id da casa que se pretende adicionar divisão
-     * @param city Cidade a ser utilizada
-     * @param sc Scanner a ser utilizado
      */
-    public void addDivisoesToHouseMenu(int house_id, SmartCity city, Scanner sc){ //reviewed
+    public void addDivisoesToHouseMenu(int house_id){ //reviewed
 
         System.out.println("Insira o nome da divisão:");
         String nome_divisao = sc.nextLine();
 
-        city.criaDivisao(nome_divisao);
+        this.c.criaDivisao(nome_divisao);
 
         System.out.println("Pretende adicionar dispositivos na divisão?");
         int res = response(sc);
         if(res == 1){
-            addDivisionDevicesMenu(city, house_id, nome_divisao);
+            addDivisionDevicesMenu(house_id, nome_divisao);
         }
 
         System.out.println("Pretende adicionar mais divisões?");
-        res = response(sc);
+        res = response(this.sc);
         if(res == 1){
-            addDivisoesToHouseMenu(house_id, city, sc);
+            addDivisoesToHouseMenu(house_id);
         }
 
         
@@ -435,16 +409,15 @@ public class View {
     /**
      * Menu de adicionar dispositivos a divisões a casa
      * @param house_id id da casa que se pretende adicionar divisão
-     * @param city Cidade a ser utilizada
      * @param nome_divisao Nome da divisão a adicionar o dispositivo
      */
-    public void addDivisionDevicesMenu(SmartCity city, int house_id, String nome_divisao){ //reviewed
+    public void addDivisionDevicesMenu(int house_id, String nome_divisao){ //reviewed
         
-        addDeviceToDivisaoMenu(city, house_id, nome_divisao, sc); //adiciona um dispositivo a uma divisão
+        addDeviceToDivisaoMenu(house_id, nome_divisao); //adiciona um dispositivo a uma divisão
         System.out.println("Pretende adicionar mais um dispositivo na divisão?");
         int res = response(sc);
         if(res == 1){
-            addDivisionDevicesMenu(city, house_id, nome_divisao);
+            addDivisionDevicesMenu(house_id, nome_divisao);
         }
         
     }
@@ -452,24 +425,22 @@ public class View {
     /**
      * Menu de adicionar dispositivos a divisões da casa
      * @param house_id id da casa que se pretende adicionar divisão
-     * @param city Cidade a ser utilizada
      * @param nome_divisao Scanner a ser utilizado
-     * @param sc Scanner a ser utilizado
      */
-    public void addDeviceToDivisaoMenu(SmartCity city, int house_id, String nome_divisao, Scanner sc){
+    public void addDeviceToDivisaoMenu(int house_id, String nome_divisao){
 
         System.out.println("Adicionar SmartDevice em "+ nome_divisao);
         System.out.println("(escolha uma das seguintes opções)\n");
         System.out.println("1 - Adicionar preset");
         System.out.println("2 - Criar SmartDevice");
 
-        int res = sc.nextInt();
-        sc.nextLine();
+        int res = this.sc.nextInt();
+        this.sc.nextLine();
 
         switch (res) {
-            case 1 -> addPresetToDivisaoMenu(city, house_id, nome_divisao, sc);
-            case 2 ->
-                    city.addDeviceToDivisao(nome_divisao, createSmartDeviceMenu(city, sc)); //adiciona um dispositivo criado no momento
+            case 1 -> addPresetToDivisaoMenu(house_id, nome_divisao);
+            //case 2 -> this.c.addDeviceToDivisao(house_id, nome_divisao, createSmartDeviceMenu()); //adiciona um dispositivo criado no momento
+            case 2 -> createSmartDeviceMenu(house_id, nome_divisao); //adiciona um dispositivo criado no momento
         }
                   
     }
@@ -477,64 +448,58 @@ public class View {
     /**
      * Menu de adicionar presets de dispositivos a divisões da casa
      * @param house_id id da casa que se pretende adicionar divisão
-     * @param city Cidade a ser utilizada
      * @param nome_divisao Nome da divisão a ser adicionada o preset
-     * @param sc Scanner a ser utilizado
      */
-    public void addPresetToDivisaoMenu(SmartCity city, int house_id, String nome_divisao, Scanner sc){
+    public void addPresetToDivisaoMenu(int house_id, String nome_divisao){
 
         System.out.println("Eis os presets existentes:");
-        city.listSmartDevicesPresets();
+        this.c.listSmartDevicesPresets();
         
-        String preset_selection = sc.nextLine();
+        String preset_selection = this.sc.nextLine();
 
-        city.addDeviceToDivisao(nome_divisao, preset_selection);
+        this.c.addDeviceToDivisao(house_id,nome_divisao, preset_selection);
         
     }
 
+    
+
     /**
-     * Menu de criar dispositivo
-     * @param city Cidade a ser utilizada
-     * @param sc Scanner a ser utilizado
-     * @return dispositivo criado
+     * Menu de criar device
+     * @param house_id id da casa
+     * @param divisao divisao
      */
-    public SmartDevice createSmartDeviceMenu(SmartCity city, Scanner sc){
+    public void createSmartDeviceMenu(int house_id, String divisao){
 
         System.out.println("Escolha o tipo de SmartDevice para criar:");
         System.out.println("1 - SmartSpeaker");
         System.out.println("2 - SmartCamera");
         System.out.println("3 - SmartBulb");
 
-        int res = sc.nextInt();
-        sc.nextLine();
-
-        SmartDevice sd;
+        int res = this.sc.nextInt();
+        this.sc.nextLine();
 
         switch (res) {
-            case 1 -> sd = createSmartSpeakerMenu(city, sc);
-            case 2 -> sd = createSmartCameraMenu(city, sc);
-            case 3 -> sd = createSmartBulbMenu(city, sc);
+            case 1 -> createSmartSpeakerMenu(house_id, divisao);
+            case 2 -> createSmartCameraMenu(house_id, divisao);
+            case 3 -> createSmartBulbMenu(house_id,divisao);
             default -> {
                 System.out.println("Opção inexistente");
-                sd = createSmartDeviceMenu(city, sc);
+                createSmartDeviceMenu(house_id,divisao);
             }
         }
-        
-        return sd;
+    
     }
-
+    
     /**
      * Menu de criar coluna
-     * @param city Cidade a ser utilizada
-     * @param sc Scanner a ser utilizado
-     * @return coluna criada
+     * @param house_id id da casa
+     * @param divisao divisao
      */
-    public SmartSpeaker createSmartSpeakerMenu(SmartCity city, Scanner sc){
+    public void createSmartSpeakerMenu(int house_id, String divisao){
 
         System.out.println("Insira a marca:");
-        city.marcasListToString();
+        this.c.marcasListToString();
         String nome_marca = sc.nextLine();
-        Marca marca = city.getMarca(nome_marca);
 
         System.out.println("Insira o consumo diário: (kWh)");
         double consumo = sc.nextDouble();
@@ -550,18 +515,19 @@ public class View {
         System.out.println("Insira o estado (ON/OFF):");
         String estado = sc.nextLine();
 
-        return new SmartSpeaker(city.giveDeviceId(),volume, estacao, estado, marca, consumo);
-
+        this.c.addSmartSpeakerToDivisao(house_id, divisao, nome_marca, consumo, estacao, volume, estado);
+        if(house_id == -1){
+            String nome_preset = divisao;
+            this.c.addSmartSpeakerPreset(nome_preset, nome_marca, consumo, estacao, volume, estado);
+        }
     }
 
-    
     /**
      * Menu de criar camara
-     * @param city Cidade a ser utilizada
-     * @param sc Scanner a ser utilizado
-     * @return camara criada
+     * @param house_id id da casa
+     * @param divisao divisao
      */
-    public SmartCamera createSmartCameraMenu(SmartCity city, Scanner sc){
+    public void createSmartCameraMenu(int house_id, String divisao){
 
         System.out.println("Insira a altura em pixeis desejada: ");
         float heigth = sc.nextFloat();
@@ -578,17 +544,19 @@ public class View {
         System.out.println("Insira o estado (ON/OFF):");
         String estado = sc.nextLine();
 
-        return new SmartCamera(city.giveDeviceId(), width, heigth, tamanho, estado);
+        this.c.addSmartCameraToDivisao(house_id,divisao, width, heigth, tamanho,0.0, estado);
+        if(house_id == -1){
+            String nome_preset = divisao;
+            this.c.addSmartCameraPreset(nome_preset, width, heigth, tamanho, estado); //TODO add SmartCamera preset com polimorfismo
+        }
     }
 
-    
     /**
      * Menu de criar lampada
-     * @param city Cidade a ser utilizada
-     * @param sc Scanner a ser utilizado
-     * @return lampada criada
+     * @param house_id id da casa
+     * @param divisao divisao
      */
-    public SmartBulb createSmartBulbMenu(SmartCity city, Scanner sc){
+     public void createSmartBulbMenu(int house_id, String divisao){
 
         System.out.println("Insira as dimensões da lâmpada:");
         int dimensions = sc.nextInt();
@@ -604,30 +572,30 @@ public class View {
         System.out.println("Insira o estado (ON/OFF):");
         String estado = sc.nextLine();
 
-        return new SmartBulb(city.giveDeviceId(), modo, dimensions, consumo, estado);
-        
+        this.c.addSmartBulbToDivisao(house_id, divisao, modo, dimensions, consumo, estado);
+        if(house_id == -1){
+            String nome_preset = divisao;
+            this.c.addSmartBulbPreset(nome_preset, modo, dimensions, consumo);
+        }
     }
-
     
     /**
      * Menu de criar fornecedor
-     * @param city Cidade a ser utilizada
-     * @param sc Scanner a ser utilizado
      */
-    public void createComercializadorMenu(SmartCity city, Scanner sc){
+    public void createComercializadorMenu(){
 
         System.out.println("Insira o nome do comercializador:");
-        String nome = sc.nextLine();
+        String nome = this.sc.nextLine();
 
         System.out.println("Insira o preço base (KW):");
-        float preco = sc.nextFloat();
-        sc.nextLine();
+        float preco = this.sc.nextFloat();
+        this.sc.nextLine();
         
         System.out.println("Insira o fator imposto:");
-        float imposto = sc.nextFloat();
-        sc.nextLine();
+        float imposto = this.sc.nextFloat();
+        this.sc.nextLine();
 
-        city.createComercializadorEnergia(nome, preco, imposto);
+        this.c.createComercializadorEnergia(nome, preco, imposto);
         System.out.println("Comercializador "+ nome +" criado");
         
     }
@@ -635,19 +603,17 @@ public class View {
     
     /**
      * Menu de criar marca
-     * @param city Cidade a ser utilizada
-     * @param sc Scanner a ser utilizado
      */
-    public void createMarcaMenu(SmartCity city, Scanner sc){
+    public void createMarcaMenu(){
 
         System.out.println("Insira o nome da marca:");
-        String nome = sc.nextLine();
+        String nome = this.sc.nextLine();
 
         System.out.println("Insira o consumo diário associado ao uso dos dispostivos:");
-        double consumo = sc.nextDouble();
-        sc.nextLine();
+        double consumo = this.sc.nextDouble();
+        this.sc.nextLine();
         
-        city.createMarca(nome, consumo);
+        this.c.createMarca(nome, consumo);
         System.out.println("Marca "+ nome +" criada. Consumo diário dos dispositivos: "+ consumo);
         
     }
@@ -655,244 +621,253 @@ public class View {
     
     /**
      * Menu de criar preset de dispositivo
-     * @param city Cidade a ser utilizada
-     * @param sc Scanner a ser utilizado
      */
-    public void createSmartDevicePresetMenu(SmartCity city,Scanner sc){
+    public void createSmartDevicePresetMenu(){
 
         System.out.println("Insira o nome do preset:");
-        String nome = sc.nextLine();
+        String nome = this.sc.nextLine();
 
-        city.addDevicePreset(nome, createSmartDeviceMenu(city, sc));
+        System.out.println("Escolha o tipo de SmartDevice para criar:");
+        System.out.println("1 - SmartSpeaker");
+        System.out.println("2 - SmartCamera");
+        System.out.println("3 - SmartBulb");
+
+        int res = this.sc.nextInt();
+        this.sc.nextLine();
+
+        switch (res) {
+            case 1 -> createSmartSpeakerMenu(-1,nome);
+            case 2 -> createSmartCameraMenu(-1,nome);
+            case 3 -> createSmartBulbMenu(-1,nome);
+            default -> {
+                System.out.println("Opção inexistente");
+                createSmartDeviceMenu(-1,nome);
+            }
+        }
     }
 
-   /*  public void deleteSmartDevicePresetMenu(SmartCity city){ //falta adicionar opções de voltar atrás ou cancelar
+   /*  public void deleteSmartDevicePresetMenu(Smartthis.c this.c){ //falta adicionar opções de voltar atrás ou cancelar
 
-        city.listSmartDevicesPresets(); //lista os presets existentes
+        this.c.listSmartDevicesPresets(); //lista os presets existentes
 
         System.out.println("Insira o nome do preset que pretende eliminar:");
         String preset_name = sc.nextLine();
 
-        city.deleteSmartDevicePreset(preset_name);
+        this.c.deleteSmartDevicePreset(preset_name);
 
     }
 
-    public void listSmartHousesMenu(SmartCity city){ //falta adicionar opções de voltar atrás ou cancelar
+    public void listSmartHousesMenu(Smartthis.c this.c){ //falta adicionar opções de voltar atrás ou cancelar
 
-        city.listSmartHouses(); //lista das existentes
+        this.c.listSmartHouses(); //lista das existentes
 
         System.out.println("Insira o id da casa para ver mais detalhes:");
         int id_casa = sc.nextInt();
 
-        city.getSmartHouseDetails(id_casa);
+        this.c.getSmartHouseDetails(id_casa);
 
     }
 
-    public void listSmartDevicesPresetsMenu(SmartCity city){ //falta adicionar opções de voltar atrás ou cancelar
+    public void listSmartDevicesPresetsMenu(Smartthis.c this.c){ //falta adicionar opções de voltar atrás ou cancelar
 
-        printPresetsList(city); //lista das existentes
+        printPresetsList(this.c); //lista das existentes
 
         System.out.println("Insira o nome do SmartDevice para ver mais detalhes:");
         String nome = sc.nextLine();
         sc.nextLine();
 
-        city.getSmartDevicePresetDetails(nome);
+        this.c.getSmartDevicePresetDetails(nome);
 
     } */
 
     
     /**
      * Menu de simulações
-     * @param city Cidade a ser utilizada
-     * @param sc Scanner a ser utilizado
-     * @throws IOException
      */  
-    public void simulationMenu(SmartCity city, Scanner sc) throws IOException {
+    public void simulationMenu() {
         System.out.println("1 - Simulação Manual. ");
         System.out.println("2 - Simulação através de ficheiro") ;
         System.out.println("3 - Retroceder.");
-        String choice = sc.nextLine();
-        switch(choice){
-            case("1"):
+        String choice = this.sc.nextLine();
+        switch (choice) {
+            case ("1") -> {
                 System.out.println("Indique a data: (X dias ou DD.MM.YYYY)");
-                String time = sc.nextLine();
+                String time = this.sc.nextLine();
                 clearConsole();
-                simulationOptions(city, sc, time);
-                //fazer o resto dos métodos
-            break;
-            case("2"):
-                System.out.println("Diretório do ficheiro: ");
-                //fazer novo parser e tudo o resto.
-            break;
-            case("3"):
+                simulationOptions(time);
+            }
+            //fazer o resto dos métodos
+            case ("2") -> System.out.println("Diretório do ficheiro: ");
+
+            //fazer novo parser e tudo o resto.
+            case ("3") -> {
                 clearConsole();
-                menuInicial(city, sc);
-            break;
+                try {
+                    menuInicial();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     
     /**
      * Menu de o
-     * @param city Cidade a ser utilizada
-     * @param sc Scanner a ser utilizado
-     * @return coluna criada
-     * @throws IOException
+     * @param time Tempo da simulação
      */
-    public void simulationOptions(SmartCity city, Scanner sc, String time) throws IOException{
+    public void simulationOptions( String time){
         System.out.println("1 - Casa mais gastadora.");
         System.out.println("2 - Comercializador com maior faturação.");
         System.out.println("3 - Listar faturas de um Comercializador.");
         System.out.println("4 - Maiores consumidores de energia num intervalo de tempo.");
         System.out.println("5 - Retroceder.");
-        String choice = sc.nextLine();
-        switch(choice){
-            case("1"):
+        String choice = this.sc.nextLine();
+        switch (choice) {
+            case ("1") -> {
 
-            //falta fazer a faturacao ou ver se a mesma já foi feita
-            try{
-                System.out.println(city.getCasaMaisGastadora(time));
-                // System.out.println("A casa mais gastadora neste período de tempo é a casa: " + city.getCasaMaisGastadora(time).getID());
-                // System.out.println("KW's consumidos: "+city.getCasaMaisGastadora(time).getConsumoDaCasa());
-                // System.out.println("1 - Mais dados da casa.");
-                // System.out.println("2 - Retroceder.");
-                // choice = sc.nextLine();
-                // switch(choice){
-                //     case("1"):
-                //         clearConsole();
-                //         System.out.println("Dados da casa: ");
-                //         System.out.println("KW's consumidos: "+city.getCasaMaisGastadora(time).getConsumoDaCasa());
-                //         System.out.println(city.getCasaMaisGastadora(time).toString());
-                //         simulationOptions(city, sc, time);
-                //         break;
-                //     case("2"):
-                //         clearConsole();
-                //         simulationOptions(city, sc, time);
-                //         break;
-                
+                //falta fazer a faturacao ou ver se a mesma já foi feita
+
+                System.out.println("A casa mais gastadora neste período de tempo é a casa: " + this.c.getCasaMaisGastadoraID());
+                System.out.println("KW's consumidos: " + this.c.getCasaMaisGastadoraConsumo());
+                System.out.println("1 - Mais dados da casa.");
+                System.out.println("2 - Retroceder.");
+                choice = this.sc.nextLine();
+                switch (choice) {
+                    case ("1") -> {
+                        clearConsole();
+                        System.out.println("Dados da casa: ");
+                        System.out.println("KW's consumidos: " + this.c.getCasaMaisGastadoraConsumo());
+                        System.out.println(this.c.getCasaMaisGastadora());
+                        simulationOptions(time);
+                    }
+                    case ("2") -> {
+                        clearConsole();
+                        simulationOptions(time);
+                    }
+                }
             }
-            catch(Exception e){
-                System.out.println("Something went wrong");
-            }
-            break;     
-            case("2"):
+            case ("2") -> {
                 clearConsole();
 
                 System.out.println("Comercializador de Energia com maior faturação: " + this.c.getComercializadorMaiorFaturacaoNome());
                 System.out.println("1 - Mais dados do Comercializador.");
                 System.out.println("2 - Retroceder.");
-                choice = sc.nextLine();
-                switch(choice){
-                    case("1"):
+                choice = this.sc.nextLine();
+                switch (choice) {
+                    case ("1") -> {
                         clearConsole();
                         System.out.println("Dados do Comercializador: ");
-                        System.out.println(city.getComercializadorMaiorFaturacao().toString());
-                        simulationOptions(city, sc, time);
-                        break;
-                    case("2"):
+                        System.out.println(this.c.getComercializadorMaiorFaturacao());
+                        simulationOptions(time);
+                    }
+                    case ("2") -> {
                         clearConsole();
-                        simulationOptions(city, sc, time);
-                        break;
+                        simulationOptions(time);
+                    }
                 }
-            break;
-            case("3"):
+            }
+            case ("3") -> {
                 clearConsole();
-                System.out.println(city.listComercializadores());
+                System.out.println(this.c.listComercializadores());
                 System.out.println("Indique o nome do Comercializador do qual pretende obter faturas.");
                 choice = sc.nextLine();
-                while(city.hasComercializador(choice)==false){
+                while (!this.c.hasComercializador(choice)) {
                     clearConsole();
-                    System.out.println(city.listComercializadores());
+                    System.out.println(this.c.listComercializadores());
                     System.out.println("\nIndique o nome do Comercializador do qual pretende obter faturas:");
-                    choice = sc.nextLine();
+                    choice = this.sc.nextLine();
                 }
                 clearConsole();
-                ComercializadoresEnergia temp = city.getComercializador(choice);
-                temp.faturacao(time); //ver isto com a data data a data
-                System.out.println(temp.getListaFaturacao()); //TODO:testar o listaFaturacao
-                simulationOptions(city, sc, time);
-            break;
-            case("4"):
+                this.c.ComercializadorFaturacao(choice,time); //ver isto com a data data a data
+                System.out.println(this.c.getListaFaturacaoComercializador(choice)); //TODO:testar o listaFaturacao
+                simulationOptions(time);
+            }
+            case ("4") -> {
                 clearConsole();
                 String formato = "dd.MM.yyyy";
                 DateTimeFormatter formatador = DateTimeFormatter.ofPattern(formato);
                 System.out.println("Data inicial (dd.MM.AAAA).");
-                String dataInicialTexto = sc.nextLine();
+                String dataInicialTexto = this.sc.nextLine();
                 LocalDate dataInicial = LocalDate.from(formatador.parse(dataInicialTexto));
                 System.out.println("Data Final (dd.MM.AAAA).");
-                String dataFinalTexto = sc.nextLine();
+                String dataFinalTexto = this.sc.nextLine();
                 LocalDate dataFinal = LocalDate.from(formatador.parse(dataFinalTexto));
-                LocalDate dataCriacao = city.getDataAtual();  //Mudar para data Inicial
+                LocalDate dataCriacao = this.c.getDataAtual();  //Mudar para data Inicial
                 System.out.println(dataCriacao.isAfter(dataInicial));
                 System.out.println(dataInicial.isAfter(dataFinal));
                 System.out.println(dataCriacao);
-                while(dataCriacao.isAfter(dataInicial) || dataInicial.isAfter(dataFinal)){
+                while (dataCriacao.isAfter(dataInicial) || dataInicial.isAfter(dataFinal)) {
                     clearConsole();
                     System.out.println("Datas inválidas!");
-                    System.out.println("Data inicial mínima: "+dataCriacao);
+                    System.out.println("Data inicial mínima: " + dataCriacao);
                     System.out.println("Data inicial (dd.MM.AAAA).");
-                    dataInicialTexto = sc.nextLine();
+                    dataInicialTexto = this.sc.nextLine();
                     dataInicial = LocalDate.from(formatador.parse(dataInicialTexto));
                     System.out.println("Data Final (dd.MM.AAAA).");
-                    dataFinalTexto = sc.nextLine();
+                    dataFinalTexto = this.sc.nextLine();
                     dataFinal = LocalDate.from(formatador.parse(dataFinalTexto));
                 }
-                System.out.println("A casa mais gastadora entre "+dataInicialTexto+" e "+dataFinalTexto+ " foi: "+city.getCasaMaisGastadora(dataInicial, dataFinal));
-                simulationOptions(city, sc, time);
-                break;
-            case("5"):
+                System.out.println("A casa mais gastadora entre " + dataInicialTexto + " e " + dataFinalTexto + " foi: " + this.c.getCasaMaisGastadora(dataInicial, dataFinal));
+                simulationOptions(time);
+            }
+            case ("5") -> {
                 clearConsole();
-                simulationMenu(city, sc);
-            break;
-            default:
+                simulationMenu();
+            }
+            default -> {
                 clearConsole();
-                simulationOptions(city, sc, time);
-            break;
+                simulationOptions(time);
+            }
         }
     }
-
-    public void editSmartHouse(SmartCity city, Scanner sc){
-        System.out.println("Indique o ID da casa que pertende editar(0-"+(city.getHouseId()-1)+"):");
-        int id=sc.nextInt();
+    
+    /**
+     * Menu que edita casas
+     */
+    public void editSmartHouse(){
+        System.out.println("Indique o ID da casa que pertende editar(0-"+(this.c.getHouseId()-1)+"):");
+        int id= this.sc.nextInt();
         sc.nextLine();
-        SmartHouse casa = city.getCasa(id);
-        while(casa==null){
-            System.out.println("Por favor indique um ID válido(0-"+(city.getHouseId()-1)+"):"); 
+        while(id<0||id>this.c.getHouseId()-1){
+            System.out.println("Por favor indique um ID válido(0-"+(this.c.getHouseId()-1)+"):");
             id=sc.nextInt();
             sc.nextLine();
-            casa = city.getCasa(id);
         }
         clearConsole();
-        menuInteracaoCasas(city, casa, sc);
+        menuInteracaoCasas(id);
     }
 
-    public void menuInteracaoCasas(SmartCity city, SmartHouse casa, Scanner sc){
+    /**
+     * Menu de interação com uma casa
+     * @param id id da casa
+     */
+    public void menuInteracaoCasas(int id){
     //Menu de edições possíveis
         System.out.println("1 - Listar divisões. ");
         System.out.println("2 - Editar divisões. "); 
         System.out.println("3 - Ligar/Desligar a Casa. ");
         System.out.println("4 - Ligar/Desligar uma divisão.");
         System.out.println("5 - Alterar Comercializador de energia.");
-        System.out.println("6 -  Listar SmartHouse.");
-        System.out.println("7 - Retroceder.");
+        System.out.println("6 - Retroceder");
         int choice = sc.nextInt();
         sc.nextLine();
 
         switch(choice){
             case(1):
-                System.out.println(casa.getNomeDivisoes().toString());
-                menuInteracaoCasas(city, casa, sc);
+                System.out.println(this.c.getHouseDivisoes(id).toString());
+                menuInteracaoCasas(id);
             break;
             case(2):
                 clearConsole();
-                editaDivisoes(city, casa, sc);
-                menuInteracaoCasas(city, casa, sc);
+                editaDivisoes(id);
+                menuInteracaoCasas(id);
             break;
             case(3):
                 System.out.println("0 - Desligar");
                 System.out.println("1 - Ligar");
-                choice = sc.nextInt();
-                sc.nextLine();
+                choice = this.sc.nextInt();
+                this.sc.nextLine();
                 switch (choice) {
                     case (0) -> {
 
@@ -904,14 +879,14 @@ public class View {
 
                         System.out.println("Energia da Casa ligada com sucesso.");
                     }
-                    default -> menuInteracaoCasas(city, casa, sc);
+                    default -> menuInteracaoCasas(id);
                 }
-                menuInteracaoCasas(city, casa, sc);
+                menuInteracaoCasas(id);
             case(4):
-                System.out.println(casa.getDivisaoList());
+                System.out.println(this.c.getHouseDivisoes(id).toString());
                 System.out.println("Seleciona o nome da divisão: ");
                 String escolha = sc.nextLine();
-                while(casa.getDivisao(escolha)==null){
+                while(this.c.getCasaDivisao(id, escolha)==null){
                     System.out.println("Seleciona uma divisão válida: ");
                     escolha = sc.nextLine();
                 }
@@ -922,37 +897,32 @@ public class View {
                 sc.nextLine();
                 switch (choice) {
                     case (0) -> {
-                        casa.setDivisaoOFF(escolha);
+                        this.c.setCasaDivisaoOFF(id,escolha);
                         clearConsole();
                         System.out.println("Energia da divisão desligada com sucesso.");
-                        menuInteracaoCasas(city, casa, sc);
+                        menuInteracaoCasas(id);
                     }
                     case (1) -> {
-                        casa.setDivisaoOn(escolha);
+                        this.c.setCasaDivisaoOn(id,escolha);
                         clearConsole();
                         System.out.println("Energia da divisão ligada com sucesso.");
-                        menuInteracaoCasas(city, casa, sc);
+                        menuInteracaoCasas(id);
                     }
-                    default -> menuInteracaoCasas(city, casa, sc);
+                    default -> menuInteracaoCasas(id);
                 }
             case(5):
-                System.out.println("Comercializador Atual: "+casa.getCompanhia_eletrica());
+                System.out.println("Comercializador Atual: "+this.c.getComercializadoratual(id));
                 System.out.println("Escolha um comercializador dos listados abaixo: ");
-                System.out.println(city.listComercializadores());
+                System.out.println(this.c.listComercializadores());
                 String nome = sc.nextLine();
-                while(city.getComercializador(nome)==null){
+                while(this.c.hasComercializador(nome)){
                     System.out.println("Comercializador inválido, por favor selecione um nome válido entre os listados.");
                     nome = sc.nextLine();
                 }
-                //clearConsole();
-                try{
-                    casa.mudaDeFornecedor(city.getComercializador(nome), city.getDataAtual());
-                }
-                catch(Exception e){
-                    System.out.println("Algo correu mal a mudar de fornecedor.");
-                }
+                clearConsole();
+                this.c.mudaDeFornecedorString(id,nome, this.c.getDataAtual());
                 System.out.println("Comercializador de energia mudado com sucesso.");
-                menuInteracaoCasas(city, casa, sc);
+                menuInteracaoCasas(id);
             break;
             case(6):
                 clearConsole();
@@ -962,36 +932,41 @@ public class View {
         }
     }
 
-    public void editaDivisoes(SmartCity city, SmartHouse casa, Scanner sc){
+    /**
+     * Menu que edita divisões da casa
+     * @param id id da casa
+     */
+    public void editaDivisoes(int id){
         System.out.println("1 - Adicionar divisão");
         System.out.println("2 - Remover divisão");
         System.out.println("3 - Adicionar dispositivo a divisão");
         System.out.println("4 - Retroceder");
         int option = sc.nextInt();
-        sc.nextLine();
+        this.sc.nextLine();
         switch(option){
             case(1):
                 System.out.println("Nome da divisão a adicionar");
                 String divisao = sc.nextLine();
-                casa.addDivisao(divisao);
+                this.c.criaDivisaoCasa(id,divisao);
                 System.out.println("Divisão adicionada com sucesso");
             break;
             case(2):
                 System.out.println("Nome da divisão a remover");
                 divisao =  sc.nextLine();
-                casa.removeDivisao(divisao);
+                this.c.removeDivisaoCasa(id,divisao);
                 System.out.println("Divisão removida com sucesso");
             break;
             case(3):
                 System.out.println("Divisão a adicionar dispositivo:");
                 divisao =  sc.nextLine();
-                addDeviceToDivisaoMenu(city, casa.getID(), divisao, sc);
+                addDeviceToDivisaoMenu(id, divisao);
                 break;
             case(4):
-                menuInteracaoCasas(city, casa, sc);
+                menuInteracaoCasas(id);
             break;
         }
 
     }
 
 }
+
