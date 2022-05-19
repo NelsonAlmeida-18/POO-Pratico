@@ -3,8 +3,6 @@ package View;
 import java.io.*;
 import java.util.Scanner;
 
-import javax.print.attribute.standard.PresentationDirection;
-
 import java.lang.InterruptedException;
 import java.lang.ProcessBuilder;
 import java.time.LocalDate;
@@ -99,11 +97,9 @@ public class View{
 
             }
             else {
-                //System.out.print("\033\143");
                 System.out.print("\033\143");
             }
         } catch (IOException | InterruptedException ex) { System.out.println(ex.getMessage());}
-       // System.out.println("limpo");
     }
     
 
@@ -120,12 +116,13 @@ public class View{
         System.out.println("3 - Consultar comercializadores de energia existentes");
         System.out.println("4 - Editar comercializador existente");
         System.out.println("5 - Consultar marcas existentes");
-        System.out.println("6 - Consultar SmartDevices presets");
-        System.out.println("7 - Carregar um estado de programa");
-        System.out.println("8 - Carregar um ficheiro log");
-        System.out.println("9 - Guardar estado");
-        System.out.println("10 - Começar Simulação");
-        System.out.println("11 - Sair");
+        System.out.println("6 - Editar marcas existentes");
+        System.out.println("7 - Consultar SmartDevices presets");
+        System.out.println("8 - Carregar um estado de programa");
+        System.out.println("9 - Carregar um ficheiro log");
+        System.out.println("10 - Guardar estado");
+        System.out.println("11 - Começar Simulação");
+        System.out.println("12 - Sair");
         int res = sc.nextInt();
         sc.nextLine();
         switch (res) {
@@ -157,17 +154,22 @@ public class View{
                 this.c.listMarcas();
                 menuInicial();
             }
-            case 6 -> { //Consultar SmartDevices presets
+            case 6 -> { //Editar marcas existentes
+                clearConsole();
+                editMarcasMenu();
+                menuInicial();
+            }
+            case 7 -> { //Consultar SmartDevices presets
                 clearConsole();
                 this.c.listSmartDevicesPresets();
                 menuInicial();
             }
-            case 7 -> { //Carregar um estado de programa
+            case 8 -> { //Carregar um estado de programa
                 clearConsole();
                 loadMenu();
                 menuInicial();
             }
-            case 8 -> { //Carregar um ficheiro log
+            case 9 -> { //Carregar um ficheiro log
                 clearConsole();
                 Controller p = new Controller();
 
@@ -175,18 +177,18 @@ public class View{
 
                 menuInicial();
             }
-            case 9 -> { //Guardar estado
+            case 10 -> { //Guardar estado
                 clearConsole();
                 saveState(); //função save, não tem menu, simplesmente guarda na pasta save
                 System.out.println("Estado do programa guardado");
                 menuInicial();
             }
-            case 10 -> { //Começar Simulação
+            case 11 -> { //Começar Simulação
                 clearConsole();
                 simulationMenu();
                 menuInicial();
             }
-            case 11 -> { //Sair
+            case 12 -> { //Sair
                 clearConsole();
                 System.out.println("Tem a certeza que quer sair?");
                 if (response(sc) == 1) {
@@ -201,6 +203,43 @@ public class View{
                 menuInicial();
             }
         }
+    }
+
+    public void editMarcasMenu() throws IOException{
+        System.out.println("Marcas disponiveis: ");
+        this.c.listMarcas();
+        System.out.println("Selecione uma para editar(através do nome) ou 0 para retroceder.");
+        String marca = sc.nextLine();
+        if (marca.equals("0"))
+            menuInicial();
+        while(this.c.getMarca(marca)==null){
+            clearConsole();
+            System.out.println("Selecione uma marca válida entre as listadas ou 0 para retroceder.");
+            this.c.listMarcas();
+            marca=sc.nextLine();
+            if (marca.equals("0"))
+                menuInicial();
+        }
+        clearConsole();
+        System.out.println("Qual a edição que pretende fazer:");
+        System.out.println("1 - Alterar o consumo diário");
+        System.out.println("2 - Retroceder");
+        String option = sc.nextLine();
+        switch(option){
+            case("1"):
+                clearConsole();
+                System.out.println("Qual o novo consumo diário desta marca?");
+                option = sc.nextLine();
+                this.c.alteraConsumoDiario(marca,option);
+                clearConsole();
+                System.out.println("Novo consumo diário definido com sucesso.");
+                break;
+            case("2"):
+                clearConsole();
+                editMarcasMenu();
+            break;
+        }
+
     }
 
     /**
@@ -257,7 +296,6 @@ public class View{
                 try {
                     menuInicial();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             break;
@@ -547,7 +585,7 @@ public class View{
         this.c.addSmartCameraToDivisao(house_id,divisao, width, heigth, tamanho,0.0, estado);
         if(house_id == -1){
             String nome_preset = divisao;
-            this.c.addSmartCameraPreset(nome_preset, width, heigth, tamanho, estado); //TODO add SmartCamera preset com polimorfismo
+            this.c.addSmartCameraPreset(nome_preset, width, heigth, tamanho, estado); 
         }
     }
 
@@ -779,7 +817,7 @@ public class View{
                 }
                 clearConsole();
                 this.c.ComercializadorFaturacao(choice,time); //ver isto com a data data a data
-                System.out.println(this.c.getListaFaturacaoComercializador(choice)); //TODO:testar o listaFaturacao
+                System.out.println(this.c.getListaFaturacaoComercializador(choice)); 
                 simulationOptions(time);
             }
             case ("4") -> {
@@ -976,5 +1014,3 @@ public class View{
     }
 
 }
-
-//TODO: fazer método para eliminar smartHouse

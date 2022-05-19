@@ -24,14 +24,12 @@ public class SmartCity implements Serializable {
     private Map<String,SmartDevice> presets= new HashMap<>();
     private int houseID=0; //diz quantas casas tem na cidade e atribui o seu numero
     private int deviceID=0; //diz quantos devices tem na cidade e atribui o seu numero
-    private LocalDate data_inicial;
     private LocalDate data_atual;
 
     /**
      * Inicializador de uma cidade
      */
     public SmartCity(){
-        this.data_inicial = LocalDate.now();
         this.data_atual = LocalDate.now();
         this.deviceID = 0;
         this.houseID = 0;
@@ -46,7 +44,6 @@ public class SmartCity implements Serializable {
      * @param state cidade para ser duplicada
      */
     public SmartCity(SmartCity state){
-        this.data_inicial = state.getDataAtual();
         this.data_atual = state.getDataAtual();
         this.deviceID = state.getDeviceId();
         this.houseID = state.getHouseId();

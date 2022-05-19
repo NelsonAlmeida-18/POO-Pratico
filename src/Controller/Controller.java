@@ -14,7 +14,6 @@ import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AccessDeniedException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -95,6 +94,11 @@ public class Controller {
      */
     public LocalDate getDataAtual(){
         return this.city.getDataAtual();
+    }
+
+
+    public void alteraConsumoDiario(String marca, String novoConsumo){
+        this.city.getMarca(marca).setConsumoDiario(Double.parseDouble(novoConsumo));
     }
 
     /**

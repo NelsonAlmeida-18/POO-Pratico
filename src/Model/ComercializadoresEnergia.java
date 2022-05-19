@@ -375,7 +375,6 @@ public class ComercializadoresEnergia implements Serializable {
      * FUnção que retorna a lista de faturação de um fornecedor
      * @param time tempo de faturação
      */
-    //TODO: rever
     public void faturacao(String time){
         for(SmartHouse casa:this.casas.keySet()) {
             LocalDate data_final= casa.getDataCriacao().plusDays(Integer.parseInt(time));

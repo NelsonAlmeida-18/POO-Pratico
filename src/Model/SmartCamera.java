@@ -2,7 +2,6 @@ package Model;
 
 import java.lang.StringBuilder;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 
 /**
@@ -114,7 +113,7 @@ public class SmartCamera extends SmartDevice {
         switch(this.getEstado().toString()){
             case("ON"):
                 //this.setConsumo((float)(ChronoUnit.DAYS.between(data_atual, dataSimulacao)*this.resolucao*((Math.random()*2)+1)));
-                return 10; //TODO:Definir consumo    
+                return this.tamanho_ficheiros*this.resolucao;
         }
         return 0;
     }

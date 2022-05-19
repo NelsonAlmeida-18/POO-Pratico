@@ -177,11 +177,16 @@ public class SmartBulb extends SmartDevice {
      */
     public double getConsumo() {
         if (this.getEstado() == state.ON){
-            return 10; //TODO:Definir consumo
+            switch(this.mode.toString().toUpperCase()){
+                case("WARM"):
+                    return 10+0.7;
+                case("NEUTRAL"):
+                    return 10+0.2;
+                case("COLD"):
+                    return 10+0.5;
+            }
         }
-        else{
-            return 0;
-        }
+        return 0;
     }
 
     /**
