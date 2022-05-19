@@ -113,11 +113,10 @@ public class SmartCamera extends SmartDevice {
     public double getConsumo(LocalDate data_atual, LocalDate dataSimulacao){
         switch(this.getEstado().toString()){
             case("ON"):
-                this.setConsumo((float)(ChronoUnit.DAYS.between(data_atual, dataSimulacao)*this.resolucao*((Math.random()*2)+1)));
-            case("OFF"):
-                this.setConsumo(0);;
+                //this.setConsumo((float)(ChronoUnit.DAYS.between(data_atual, dataSimulacao)*this.resolucao*((Math.random()*2)+1)));
+                return 10; //TODO:Definir consumo    
         }
-        return this.getConsumo();
+        return 0;
     }
 
     /**

@@ -2,6 +2,9 @@ package View;
 
 import java.io.*;
 import java.util.Scanner;
+
+import javax.print.attribute.standard.PresentationDirection;
+
 import java.lang.InterruptedException;
 import java.lang.ProcessBuilder;
 import java.time.LocalDate;
@@ -167,12 +170,6 @@ public class View{
             case 8 -> { //Carregar um ficheiro log
                 clearConsole();
                 Controller p = new Controller();
-                //this.c = p.parse(this.c.getHouseId(), this.c.getDeviceId());
-
-                //não devia ser algo deste género?
-                //Smartthis.c temp = p.parse(this.c.getHouseID(), this.c.getDeviceId());
-                //this.c.merge(temp);
-                //assim podiamos dar merge de vários files
 
                 p.parse();
 
@@ -371,12 +368,12 @@ public class View{
         this.c.listComercializadores();
         String fornecedor = sc.nextLine();
 
-        int house_id = this.c.createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
+        this.c.createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
 
         System.out.println("Pretende adicionar divisões na casa?");
         int res = response(this.sc);
 
-        if(res == 1) addDivisoesToHouseMenu(house_id);
+        if(res == 1) addDivisoesToHouseMenu(this.c.getHouseId());
 
     }
 
@@ -454,8 +451,11 @@ public class View{
 
         System.out.println("Eis os presets existentes:");
         this.c.listSmartDevicesPresets();
+        System.out.println("0 - Para retroceder");
         
         String preset_selection = this.sc.nextLine();
+        if (preset_selection.equals("0"))
+            addDeviceToDivisaoMenu(house_id, nome_divisao);
 
         this.c.addDeviceToDivisao(house_id,nome_divisao, preset_selection);
         
@@ -515,10 +515,10 @@ public class View{
         System.out.println("Insira o estado (ON/OFF):");
         String estado = sc.nextLine();
 
-        this.c.addSmartSpeakerToDivisao(house_id, divisao, nome_marca, consumo, estacao, volume, estado);
+        this.c.addSmartSpeakerToDivisao(house_id, divisao, nome_marca, consumo, estacao, volume, estado.toUpperCase());
         if(house_id == -1){
             String nome_preset = divisao;
-            this.c.addSmartSpeakerPreset(nome_preset, nome_marca, consumo, estacao, volume, estado);
+            this.c.addSmartSpeakerPreset(nome_preset, nome_marca, consumo, estacao, volume, estado.toUpperCase());
         }
     }
 
@@ -716,7 +716,7 @@ public class View{
      * Menu de o
      * @param time Tempo da simulação
      */
-    public void simulationOptions( String time){
+    public void simulationOptions(String time){
         System.out.println("1 - Casa mais gastadora.");
         System.out.println("2 - Comercializador com maior faturação.");
         System.out.println("3 - Listar faturas de um Comercializador.");
@@ -725,11 +725,10 @@ public class View{
         String choice = this.sc.nextLine();
         switch (choice) {
             case ("1") -> {
-
                 //falta fazer a faturacao ou ver se a mesma já foi feita
 
-                System.out.println("A casa mais gastadora neste período de tempo é a casa: " + this.c.getCasaMaisGastadoraID());
-                System.out.println("KW's consumidos: " + this.c.getCasaMaisGastadoraConsumo());
+                System.out.println("A casa mais gastadora neste período de tempo é a casa: " + this.c.getCasaMaisGastadora(time).getID());
+                System.out.println("KW's consumidos: " + this.c.getCasaMaisGastadora(time).getConsumo());
                 System.out.println("1 - Mais dados da casa.");
                 System.out.println("2 - Retroceder.");
                 choice = this.sc.nextLine();
@@ -737,7 +736,7 @@ public class View{
                     case ("1") -> {
                         clearConsole();
                         System.out.println("Dados da casa: ");
-                        System.out.println("KW's consumidos: " + this.c.getCasaMaisGastadoraConsumo());
+                        System.out.println("KW's consumidos: " + this.c.getCasaMaisGastadora(time).getConsumo());
                         System.out.println(this.c.getCasaMaisGastadora());
                         simulationOptions(time);
                     }
@@ -824,8 +823,9 @@ public class View{
     
     /**
      * Menu que edita casas
+     * @throws IOException
      */
-    public void editSmartHouse(){
+    public void editSmartHouse() throws IOException{
         System.out.println("Indique o ID da casa que pertende editar(0-"+(this.c.getHouseId()-1)+"):");
         int id= this.sc.nextInt();
         sc.nextLine();
@@ -841,9 +841,11 @@ public class View{
     /**
      * Menu de interação com uma casa
      * @param id id da casa
+     * @throws IOException
      */
-    public void menuInteracaoCasas(int id){
+    public void menuInteracaoCasas(int id) throws IOException{
     //Menu de edições possíveis
+        System.out.println("0 - Mostrar casa.");
         System.out.println("1 - Listar divisões. ");
         System.out.println("2 - Editar divisões. "); 
         System.out.println("3 - Ligar/Desligar a Casa. ");
@@ -854,6 +856,11 @@ public class View{
         sc.nextLine();
 
         switch(choice){
+            case(0):
+                clearConsole();
+                System.out.println(this.c.getCasa(id).toString());
+                menuInteracaoCasas(id);
+            break;
             case(1):
                 System.out.println(this.c.getHouseDivisoes(id).toString());
                 menuInteracaoCasas(id);
@@ -870,7 +877,6 @@ public class View{
                 this.sc.nextLine();
                 switch (choice) {
                     case (0) -> {
-
                         this.c.setHouseOFF(id);
                         System.out.println("Energia da Casa desligada com sucesso.");
                     }
@@ -926,7 +932,7 @@ public class View{
             break;
             case(6):
                 clearConsole();
-                menuInteracaoCasas(id);
+                createMenu();
 
             break;
         }
@@ -935,8 +941,9 @@ public class View{
     /**
      * Menu que edita divisões da casa
      * @param id id da casa
+     * @throws IOException
      */
-    public void editaDivisoes(int id){
+    public void editaDivisoes(int id) throws IOException{
         System.out.println("1 - Adicionar divisão");
         System.out.println("2 - Remover divisão");
         System.out.println("3 - Adicionar dispositivo a divisão");
@@ -970,3 +977,4 @@ public class View{
 
 }
 
+//TODO: fazer método para eliminar smartHouse

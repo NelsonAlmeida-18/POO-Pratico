@@ -5,6 +5,7 @@ import Model.SmartBulb;
 import Model.SmartCamera;
 import Model.SmartCity;
 import Model.SmartDevice;
+import Model.SmartHouse;
 import Model.SmartSpeaker;
 
 import java.io.FileInputStream;
@@ -267,6 +268,13 @@ public class Controller {
         return this.city.createHouse(nome_prop, nif, morada, fornecedor);
     }
 
+    public SmartHouse getCasa(int id){
+        return this.city.getCasa(id);
+    }
+
+    public SmartHouse getCasaMaisGastadora(String time){return this.city.getCasaMaisGastadora(time);}
+
+
 /**
      * Getter id da casa atual
      * @return id da casa
@@ -359,7 +367,7 @@ public class Controller {
     }
     //house_id, divisao, nome_marca, consumo, estacao, volume, estado
     public void addSmartSpeakerToDivisao(int house_id,String divisao, String nome_marca,  double consumo, String estacao, int volume, String estado){
-        this.city.addDeviceToDivisaoS(house_id, divisao, this.city.getDeviceId(), volume, estacao, nome_marca, consumo);
+        this.city.addDeviceToDivisaoS(house_id, divisao, this.city.getDeviceId(), volume, estacao, nome_marca, consumo, estado);
     }
 
 
@@ -522,8 +530,8 @@ public class Controller {
      */
     public void parse() throws IOException{
         try{
-            //Path path = Path.of("./logs/logs.txt");
-            Path path = FileSystems.getDefault().getPath("logs", "logs.txt");
+            Path path = Path.of("./logs/logs.txt");
+            //Path path = FileSystems.getDefault().getPath("logs", "logs.txt");
             String content = Files.readString(path);
             //List<String> linhas = readFile("dados.csv");
             String[] contentSplited = content.split("\n");
@@ -545,10 +553,10 @@ public class Controller {
                         if (divisao == null) System.out.println("Linha inválida.");
                         parseSmartBulb(divisao, linhaPartida[1]);
                     }
-                    case "SmartCamera" -> {
-                        if (divisao == null) System.out.println("Linha inválida.");
-                        parseSmartCamera(divisao, linhaPartida[1]);
-                    }
+                    // case "SmartCamera" -> {
+                    //     if (divisao == null) System.out.println("Linha inválida.");
+                    //     parseSmartCamera(divisao, linhaPartida[1]);
+                    // }
                     case "SmartSpeaker" -> {
                         if (divisao == null) System.out.println("Linha inválida.");
                         parseSmartSpeaker(divisao, linhaPartida[1]);
@@ -556,9 +564,9 @@ public class Controller {
                     }
                     case "Fornecedor" -> parseComercializadoresEnergia(linhaPartida[1]);
                     case "Marca" -> parseMarca(linhaPartida[1]);
-                    default -> {
-                    }
-                    //System.out.println("Linha inválida.");
+                    // default -> {
+                    // }
+                    // System.out.println("Linha inválida.");
                 }
             }
             System.out.println("Ficheiro carregado com sucesso.");
@@ -591,7 +599,7 @@ public class Controller {
         String mode = campos[0];
         int dimensions = Integer.parseInt(campos[1]);
         double consumo = Double.parseDouble(campos[2]);
-        this.city.addDeviceToDivisaoL(city.getHouseId(), divisao, this.city.giveDeviceId(), mode, dimensions,consumo);
+        this.city.addDeviceToDivisaoL(city.getHouseId()-1, divisao, this.city.giveDeviceId(), mode, dimensions,consumo);
     }
 
     /**
@@ -609,7 +617,7 @@ public class Controller {
         float width = Float.parseFloat(widthHeight[0]);
         float heigth = Float.parseFloat(widthHeight[1]);
         double consumo = Double.parseDouble(campos[2]);
-		this.city.addDeviceToDivisaoC(city.getHouseId(), divisao, this.city.giveDeviceId(),width,heigth,tamanho,consumo);
+		this.city.addDeviceToDivisaoC(city.getHouseId()-1, divisao, this.city.giveDeviceId(),width,heigth,tamanho,consumo);
     }
 
     /**
@@ -622,7 +630,8 @@ public class Controller {
         int vol = Integer.parseInt(campos[0]);
         String estacao = campos[1];
         double consumo = Double.parseDouble(campos[3]);
-        this.city.addDeviceToDivisaoS(city.getHouseId(),divisao, this.city.getDeviceId(), vol, estacao, campos[2], consumo);
+        String estado = "OFF";
+        this.city.addDeviceToDivisaoS(city.getHouseId()-1,divisao, this.city.getDeviceId(), vol, estacao, campos[2], consumo, estado);
     }
 
     /**

@@ -202,7 +202,8 @@ public class SmartHouse implements Serializable{
      * Getter consumo da casa
      * @return consumo
      */
-    public double getConsumo(){return this.consumo;}
+    public double getConsumo(){return this.consumo;
+    }
 
     /**
      * Setter de fornecedor de eletricidade

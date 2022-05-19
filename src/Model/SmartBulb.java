@@ -177,7 +177,7 @@ public class SmartBulb extends SmartDevice {
      */
     public double getConsumo() {
         if (this.getEstado() == state.ON){
-            return this.getConsumo();
+            return 10; //TODO:Definir consumo
         }
         else{
             return 0;
