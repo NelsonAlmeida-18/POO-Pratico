@@ -21,11 +21,9 @@ public class SmartHouse implements Serializable{
     private String morada;
     private ComercializadoresEnergia companhia_eletrica;
     private double consumo; //consumo em kWh
+    private double totalCustoInstalacao;
     private Map<String,Map<Integer, SmartDevice>> devices = new HashMap<>();
     private LocalDate dataCriacao;
-                //divisao, id,sd
-    //Morada -> Map divisão -> devices) CONFIRMAR SE É ISTO
-
 
     /**
      * Inicializador de construtor da casa
@@ -37,6 +35,7 @@ public class SmartHouse implements Serializable{
         this.devices = new HashMap<>();
         this.companhia_eletrica = new ComercializadoresEnergia("");
         this.dataCriacao=LocalDate.now();
+        this.totalCustoInstalacao=0;
     }
 
     /**
@@ -53,6 +52,7 @@ public class SmartHouse implements Serializable{
         this.morada = Morada;
         this.companhia_eletrica = null;
         this.dataCriacao=LocalDate.now();
+        this.totalCustoInstalacao=0;
     }
 
     /**
@@ -73,7 +73,7 @@ public class SmartHouse implements Serializable{
         this.companhia_eletrica=comp;
         comp.addCasa(this);
         this.dataCriacao=LocalDate.now();
-
+        this.totalCustoInstalacao=0;
     }
 
     public SmartHouse(int id,String nome, int NIF, String morada, ComercializadoresEnergia comp, LocalDate dataDaCriacao) {
@@ -86,6 +86,7 @@ public class SmartHouse implements Serializable{
         this.companhia_eletrica=comp;
         comp.addCasa(this);
         this.dataCriacao=dataDaCriacao;
+        this.totalCustoInstalacao=0;
     }
 
     /**
@@ -100,6 +101,7 @@ public class SmartHouse implements Serializable{
         this.morada= sh.getMorada();
         this.companhia_eletrica=sh.getCompanhia_eletrica();
         this.companhia_eletrica.addCasa(this);
+        this.totalCustoInstalacao=sh.getTotalCustoInstalacao();
     }
 
     /**
@@ -116,6 +118,7 @@ public class SmartHouse implements Serializable{
         this.morada = "";
         this.companhia_eletrica = fornecedor;
         fornecedor.addCasa(this);
+        this.totalCustoInstalacao=0;
     }
 
     /**
@@ -129,6 +132,7 @@ public class SmartHouse implements Serializable{
         this.morada = sh.getMorada();
         this.companhia_eletrica = sh.getCompanhia_eletrica();
         this.companhia_eletrica.addCasa(this);
+        this.totalCustoInstalacao=sh.getTotalCustoInstalacao();
     }
 
     /**
@@ -181,6 +185,12 @@ public class SmartHouse implements Serializable{
     public int getNIF_prop(){ return this.NIF_prop; }
 
     /**
+     * Getter custo de instalação acumulado
+     * @return custo total de instalação dos dispositivos
+     */
+    public double getTotalCustoInstalacao(){ return this.totalCustoInstalacao; }
+
+    /**
      * Setter de morada
      * @param morada morada a definir
      */
@@ -216,10 +226,6 @@ public class SmartHouse implements Serializable{
      * @return comercializador de energia
      */
     public ComercializadoresEnergia getCompanhia_eletrica(){return this.companhia_eletrica;}
-
-    // public boolean hasDivisao(String divisao){ return this.divisao.contains(divisao);}
-    // public void addDivisao(String divisao){ if(!hasDivisao(divisao)) this.divisao.add(divisao);}
-    // public void delDivisao(String divisao){ if(hasDivisao(divisao)) this.divisao.remove(this.divisao.lastIndexOf(divisao));}
 
     /**
      * Coloca todos os dispositivos e divisões em um mapo
@@ -529,7 +535,6 @@ public class SmartHouse implements Serializable{
      * @param data_mudanca data em que se muda de fornecedor
      */
     public void mudaDeFornecedor(ComercializadoresEnergia novoComercializadoresEnergia, LocalDate data_mudanca){
-        //this.companhia_eletrica.geraFatura(this, data_mudanca);
         this.companhia_eletrica.terminaContrato(this);//terminar contrato
         this.companhia_eletrica=novoComercializadoresEnergia;
         this.companhia_eletrica.addCasa(this);

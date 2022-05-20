@@ -36,6 +36,7 @@ public class Controller {
         this.city = city;
     }
 
+
     /**
      * Getter da cidade
      * @param city Cidade do controller
@@ -79,10 +80,10 @@ public class Controller {
 
     /**
      * Função que dá merge a cidades
-     * @param toMergeo Cidade a dar merge
+     * @param path Cidade a dar merge
      * @throws FileNotFoundException
     */
-    public void merge(String path) throws FileNotFoundException { //era só isto? *skull emoji*
+    public void merge(String path) throws FileNotFoundException {
  
         SmartCity city = (SmartCity)ReadObjectFromFile(path);
         this.city.merge(city);
@@ -357,7 +358,7 @@ public class Controller {
     }
 
     /**
-     * Adiciona dispositivo a divisão
+     * Adiciona lampada a divisão
      * @param house_id id da casa
      * @param divisao divisão emq uestão
      * @param sd dispositivo a adicionar
@@ -366,10 +367,30 @@ public class Controller {
         this.city.addDeviceToDivisaoL(house_id, divisao, this.city.getDeviceId(),modo , dimensions,consumo);
     }
     
+    /** 
+     * Adiciona camara a divisao
+     * @param house_id id da casa
+     * @param divisao nome divisão
+     * @param width comprimeito da resolução
+     * @param heigth largura da resolução
+     * @param tamanho tamanho
+     * @param consumo consumo
+     * @param estado estado
+     */
     public void addSmartCameraToDivisao(int house_id,String divisao, float width,  float heigth, int tamanho, double consumo, String estado){
         this.city.addDeviceToDivisaoC(house_id, divisao, this.city.getDeviceId(),width , heigth,tamanho, consumo);
     }
-    //house_id, divisao, nome_marca, consumo, estacao, volume, estado
+    
+    /** 
+     * Adiciona coluna a uma divisão
+     * @param house_id id da casa
+     * @param divisao nome divisão
+     * @param nome_marca nome da marca
+     * @param estacao estação
+     * @param volume volume
+     * @param consumo consumo
+     * @param estado estado
+     */
     public void addSmartSpeakerToDivisao(int house_id,String divisao, String nome_marca,  double consumo, String estacao, int volume, String estado){
         this.city.addDeviceToDivisaoS(house_id, divisao, this.city.getDeviceId(), volume, estacao, nome_marca, consumo, estado);
     }
@@ -453,7 +474,7 @@ public class Controller {
         return this.city.giveDeviceId();
     }
 
-
+    // TODO é para apagar esta merda?
     /**
      * Função que lê todas as linhas de um fichero
      * @param time Tempo dado na simulation
@@ -537,7 +558,6 @@ public class Controller {
             Path path = Path.of("./logs/logs.txt");
             //Path path = FileSystems.getDefault().getPath("logs", "logs.txt");
             String content = Files.readString(path);
-            //List<String> linhas = readFile("dados.csv");
             String[] contentSplited = content.split("\n");
             String[] linhaPartida;
             String divisao = "";
@@ -549,7 +569,6 @@ public class Controller {
                 switch (linhaPartida[0]) {
                     case "Casa" -> parseCasa(linhaPartida[1]);
                     case "Divisao" -> {
-                        //if (casaMaisRecente == null) System.out.println("Linha inválida.");
                         divisao = linhaPartida[1];
                         this.city.criaDivisao(divisao);
                     }
@@ -557,10 +576,10 @@ public class Controller {
                         if (divisao == null) System.out.println("Linha inválida.");
                         parseSmartBulb(divisao, linhaPartida[1]);
                     }
-                    // case "SmartCamera" -> {
-                    //     if (divisao == null) System.out.println("Linha inválida.");
-                    //     parseSmartCamera(divisao, linhaPartida[1]);
-                    // }
+                    case "SmartCamera" -> {
+                         if (divisao == null) System.out.println("Linha inválida.");
+                         parseSmartCamera(divisao, linhaPartida[1]);
+                    }
                     case "SmartSpeaker" -> {
                         if (divisao == null) System.out.println("Linha inválida.");
                         parseSmartSpeaker(divisao, linhaPartida[1]);
@@ -568,9 +587,6 @@ public class Controller {
                     }
                     case "Fornecedor" -> parseComercializadoresEnergia(linhaPartida[1]);
                     case "Marca" -> parseMarca(linhaPartida[1]);
-                    // default -> {
-                    // }
-                    // System.out.println("Linha inválida.");
                 }
             }
             System.out.println("Ficheiro carregado com sucesso.");
@@ -670,10 +686,9 @@ public class Controller {
     
     /**
      * Função que trata da parte da simulação com o usuário
-     * @param city SmartCity já existeste que vai sofrer a simulação
      * @param sc Scanner utilizado para ler do terminal
      */
-    public void simulation(SmartCity city, Scanner sc) throws IOException {
+    public void simulation(Scanner sc) throws IOException {
         System.out.println("Especifique o número de linhas que pretende adicionar na simulação: ");
         int loop= sc.nextInt();
         System.out.println("Insira os comandos: ");
@@ -690,16 +705,16 @@ public class Controller {
             // FALTA TRATAR DOS FATORES QUE SÃO DEPENDENTES DA DATA
             //SmartCity city = new SmartCity();
             //city.loadState("path");
-            if(city.hasSmartHouse(Integer.parseInt(linha[1]))) { // house related
-                if (city.getCasa(Integer.parseInt(linha[1])).existsDevice(Integer.parseInt(linha[2]))) {
-                    city.getCasa(Integer.parseInt(linha[1])).getDevice(Integer.parseInt(linha[2]));
+            if(this.city.hasSmartHouse(Integer.parseInt(linha[1]))) { // house related
+                if (this.city.getCasa(Integer.parseInt(linha[1])).existsDevice(Integer.parseInt(linha[2]))) {
+                    this.city.getCasa(Integer.parseInt(linha[1])).getDevice(Integer.parseInt(linha[2]));
                     switch (linha[3].toUpperCase()) {
-                        case "SETON", "TURNON" -> city.getCasa(Integer.parseInt(linha[1])).getDevice(Integer.parseInt(linha[2])).turnOn();
-                        case "SETOFF", "TURNOFF" -> city.getCasa(Integer.parseInt(linha[1])).getDevice(Integer.parseInt(linha[2])).turnOff();
+                        case "SETON", "TURNON" -> this.city.getCasa(Integer.parseInt(linha[1])).getDevice(Integer.parseInt(linha[2])).turnOn();
+                        case "SETOFF", "TURNOFF" -> this.city.getCasa(Integer.parseInt(linha[1])).getDevice(Integer.parseInt(linha[2])).turnOff();
                     }
                 } else {
-                    if (city.hasComercializador(linha[2])) { // try catch não pode ser utilizado dentro de ifs statements
-                        city.getCasa(Integer.parseInt(linha[1])).mudaDeFornecedor(city.getComercializador(linha[2]), city.getDataAtual());
+                    if (this.city.hasComercializador(linha[2])) {
+                        this.city.getCasa(Integer.parseInt(linha[1])).mudaDeFornecedor(this.city.getComercializador(linha[2]), this.city.getDataAtual());
                         throw new IOException(linha[2]);
                     }
                 }

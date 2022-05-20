@@ -7,12 +7,12 @@ import java.lang.InterruptedException;
 import java.lang.ProcessBuilder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 import Controller.Controller;
 
 
-//import static com.intellij.openapi.util.text.Strings.toUpperCase;
-//mudar o ui para um to string e passamos ao parser para construir tudo de uma vez, just an idea
+//import static com.intellij.openapi.util.text.Strings.toUpperCase
 
 
 public class View{
@@ -171,15 +171,12 @@ public class View{
             }
             case 9 -> { //Carregar um ficheiro log
                 clearConsole();
-                Controller p = new Controller();
-
-                p.parse();
-
+                this.c.parse();
                 menuInicial();
             }
             case 10 -> { //Guardar estado
                 clearConsole();
-                saveState(); //função save, não tem menu, simplesmente guarda na pasta save
+                saveState();
                 System.out.println("Estado do programa guardado");
                 menuInicial();
             }
@@ -274,7 +271,6 @@ public class View{
         System.out.println("Seleciona um comercializador para editar dos listados abaixo: ");
         System.out.println(this.c.listComercializadores());
         String nome = sc.nextLine();
-        //while(this.c.getComercializador(choice)==null){
         while(!(this.c.existsComercializador(nome))){
             clearConsole();
             System.out.println("Seleciona um comercializador para editar dos listados abaixo: ");
@@ -329,9 +325,8 @@ public class View{
         System.out.println("3 - Criar Comercializador de Energia");
         System.out.println("4 - Criar marca de SmartSpeaker");
         System.out.println("5 - Criar preset de SmartDevice");
-        System.out.println("6 - Eliminar um preset de SmartDevice");
-        System.out.println("7 - Adicionar apartir de log");
-        System.out.println("8 - Retroceder");
+        System.out.println("6 - Adicionar apartir de log");
+        System.out.println("7 - Retroceder");
         int res = sc.nextInt();
         sc.nextLine();
 
@@ -357,17 +352,13 @@ public class View{
                 createSmartDevicePresetMenu();
                 createMenu();
             }
-            case 6 -> //Eliminar um preset de SmartDevice
-                //deleteSmartDevicePresetMenu(city);
-                    createMenu();
-            case 7 -> { //Adicionar apartir de log
+            case 6 -> { //Adicionar apartir de log
                 clearConsole();
-                //city.merge(p.parse(city.getHouseId(), city.getDeviceId())); //carregar faz gestão de conflitos para dar merge à cidade já existente e à cidade que se está a carregar do log
                 this.c.parse();
 
                 createMenu();
             }
-            case 8 -> { //Retroceder
+            case 7 -> { //Retroceder
                 clearConsole();
                 try {
                     menuInicial();
@@ -406,7 +397,7 @@ public class View{
         this.c.listComercializadores();
         String fornecedor = sc.nextLine();
 
-        this.c.createHouse(nome_prop, nif, morada, fornecedor); //não é o objeto mas sim o identificador acho
+        this.c.createHouse(nome_prop, nif, morada, fornecedor);
 
         System.out.println("Pretende adicionar divisões na casa?");
         int res = response(this.sc);
@@ -446,7 +437,7 @@ public class View{
      * @param house_id id da casa que se pretende adicionar divisão
      * @param nome_divisao Nome da divisão a adicionar o dispositivo
      */
-    public void addDivisionDevicesMenu(int house_id, String nome_divisao){ //reviewed
+    public void addDivisionDevicesMenu(int house_id, String nome_divisao){
         
         addDeviceToDivisaoMenu(house_id, nome_divisao); //adiciona um dispositivo a uma divisão
         System.out.println("Pretende adicionar mais um dispositivo na divisão?");
@@ -474,7 +465,6 @@ public class View{
 
         switch (res) {
             case 1 -> addPresetToDivisaoMenu(house_id, nome_divisao);
-            //case 2 -> this.c.addDeviceToDivisao(house_id, nome_divisao, createSmartDeviceMenu()); //adiciona um dispositivo criado no momento
             case 2 -> createSmartDeviceMenu(house_id, nome_divisao); //adiciona um dispositivo criado no momento
         }
                   
@@ -684,39 +674,6 @@ public class View{
         }
     }
 
-   /*  public void deleteSmartDevicePresetMenu(Smartthis.c this.c){ //falta adicionar opções de voltar atrás ou cancelar
-
-        this.c.listSmartDevicesPresets(); //lista os presets existentes
-
-        System.out.println("Insira o nome do preset que pretende eliminar:");
-        String preset_name = sc.nextLine();
-
-        this.c.deleteSmartDevicePreset(preset_name);
-
-    }
-
-    public void listSmartHousesMenu(Smartthis.c this.c){ //falta adicionar opções de voltar atrás ou cancelar
-
-        this.c.listSmartHouses(); //lista das existentes
-
-        System.out.println("Insira o id da casa para ver mais detalhes:");
-        int id_casa = sc.nextInt();
-
-        this.c.getSmartHouseDetails(id_casa);
-
-    }
-
-    public void listSmartDevicesPresetsMenu(Smartthis.c this.c){ //falta adicionar opções de voltar atrás ou cancelar
-
-        printPresetsList(this.c); //lista das existentes
-
-        System.out.println("Insira o nome do SmartDevice para ver mais detalhes:");
-        String nome = sc.nextLine();
-        sc.nextLine();
-
-        this.c.getSmartDevicePresetDetails(nome);
-
-    } */
 
     
     /**
@@ -724,8 +681,7 @@ public class View{
      */  
     public void simulationMenu() {
         System.out.println("1 - Simulação Manual. ");
-        System.out.println("2 - Simulação através de ficheiro") ;
-        System.out.println("3 - Retroceder.");
+        System.out.println("2 - Retroceder.");
         String choice = this.sc.nextLine();
         switch (choice) {
             case ("1") -> {
@@ -734,11 +690,7 @@ public class View{
                 clearConsole();
                 simulationOptions(time);
             }
-            //fazer o resto dos métodos
-            case ("2") -> System.out.println("Diretório do ficheiro: ");
-
-            //fazer novo parser e tudo o resto.
-            case ("3") -> {
+            case ("2") -> {
                 clearConsole();
                 try {
                     menuInicial();
@@ -755,6 +707,20 @@ public class View{
      * @param time Tempo da simulação
      */
     public void simulationOptions(String time){
+        if (time.contains("dias"))
+            time = time.replace(" dias","");
+        if (time.contains(".")){
+            try{
+                System.out.println(time);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                LocalDate localDate = LocalDate.parse(time, formatter);
+                System.out.println(localDate.toString());
+                time = Long.toString(ChronoUnit.DAYS.between(localDate, this.c.getDataAtual()));
+            }
+            catch(Exception e){
+                System.out.println("Erro a criar a data.");
+            }
+        }
         System.out.println("1 - Casa mais gastadora.");
         System.out.println("2 - Comercializador com maior faturação.");
         System.out.println("3 - Listar faturas de um Comercializador.");
@@ -763,8 +729,6 @@ public class View{
         String choice = this.sc.nextLine();
         switch (choice) {
             case ("1") -> {
-                //falta fazer a faturacao ou ver se a mesma já foi feita
-
                 System.out.println("A casa mais gastadora neste período de tempo é a casa: " + this.c.getCasaMaisGastadora(time).getID());
                 System.out.println("KW's consumidos: " + this.c.getCasaMaisGastadora(time).getConsumo());
                 System.out.println("1 - Mais dados da casa.");
@@ -843,7 +807,7 @@ public class View{
                     dataInicial = LocalDate.from(formatador.parse(dataInicialTexto));
                     System.out.println("Data Final (dd.MM.AAAA).");
                     dataFinalTexto = this.sc.nextLine();
-                    dataFinal = LocalDate.from(formatador.parse(dataFinalTexto));
+                    dataFinal = LocalDate.from(formatador.parse(dataFinalTexto));   //TODO:datas
                 }
                 System.out.println("A casa mais gastadora entre " + dataInicialTexto + " e " + dataFinalTexto + " foi: " + this.c.getCasaMaisGastadora(dataInicial, dataFinal));
                 simulationOptions(time);

@@ -112,7 +112,6 @@ public class SmartCamera extends SmartDevice {
     public double getConsumo(LocalDate data_atual, LocalDate dataSimulacao){
         switch(this.getEstado().toString()){
             case("ON"):
-                //this.setConsumo((float)(ChronoUnit.DAYS.between(data_atual, dataSimulacao)*this.resolucao*((Math.random()*2)+1)));
                 return this.tamanho_ficheiros*this.resolucao;
         }
         return 0;
@@ -143,9 +142,8 @@ public class SmartCamera extends SmartDevice {
             return 0;
         else{
             return this.tamanho_ficheiros*resolucao;
-            //return ChronoUnit.HOURS.between(this.ligadoInit, this.dataFin)*this.resolucao*((Math.random()*2)+1);
         }       
-   }                                   //tempo de gravacao, resolucao, bitrate
+   } //tempo de gravacao, resolucao, bitrate
 
     /**
      * Setter de resolução

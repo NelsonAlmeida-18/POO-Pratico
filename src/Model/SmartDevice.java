@@ -10,6 +10,7 @@ public abstract class SmartDevice implements Serializable{
         OFF
     }
 
+    private final double custoInstalacao = 2.5;
     private int id;
     private state estado;
     private double consumo;
@@ -46,6 +47,12 @@ public abstract class SmartDevice implements Serializable{
 
         return ret;
     }
+
+    /**
+     * Getter do custo associado à instalação de um dispositivo
+     * @return custo de instalação do dispositivo
+     */
+    public double getCustoInstalacao(){return this.custoInstalacao;};
 
     /**
      * Getter do id do dispositivo

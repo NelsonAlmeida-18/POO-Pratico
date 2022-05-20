@@ -86,8 +86,9 @@ public class SmartCity implements Serializable {
             consumo_tmp = casa.getConsumoDaCasa(this.data_atual, data_sim);
             System.out.println("\nCONSUMO CASA No."+ casa.getID() +": " + consumo_tmp);
         }
-        /*percorre comercializadores para tirarem faturas
-        guarda as faturas no seu map e manda para as casas guardarem
+        /*
+         percorre comercializadores para tirarem faturas
+         guarda as faturas no seu map e manda para as casas guardarem
          */
         for (ComercializadoresEnergia comercializadore : this.comercializadores) {
             comercializadore.faturacao(data_sim);
@@ -307,7 +308,7 @@ public class SmartCity implements Serializable {
         try{
             for (ComercializadoresEnergia comer: this.comercializadores){
                 if (!comer.hasFaturado())
-                    comer.faturacao(time);  //depois da primeira vez torna-se redundante e tenho de arranjar forma de corrigir isto
+                    comer.faturacao(time); 
                 SmartHouse temp = comer.getCasaMaisGastadora();
                 if (ret == null || temp.getConsumo()>ret.getConsumo()){
                     ret = temp;
@@ -352,16 +353,6 @@ public class SmartCity implements Serializable {
 
     public List<ComercializadoresEnergia> getComercializadores(){return this.comercializadores;}
 
-    // public ComercializadoresEnergia getComercializador(String id){
-    //     ListIterator<ComercializadoresEnergia> iter = this.comercializadores.listIterator();
-    //     while(iter.hasNext()){
-    //         ComercializadoresEnergia temp = iter.next();
-    //         if(temp.getNome().equals(id)){
-    //             return temp;
-    //         }
-    //     }
-    //     return null;
-    // }
 
     /**
      * Criar comercializador em uma cidade
@@ -421,21 +412,20 @@ public class SmartCity implements Serializable {
      */
     public int createHouse(String nome, int nif, String morada, String comercializadorDeEnergia){
         int id = this.houseID;
-        //if(getCasa(id)!=null){
-            if (getComercializador(comercializadorDeEnergia)==null){
-                createComercializadorEnergia(comercializadorDeEnergia);
-                SmartHouse house = new SmartHouse(id,nome,nif,morada,getComercializador(comercializadorDeEnergia));
-                createHouse(house);
-                //getComercializador(comercializadorDeEnergia).addCasa(house);
-            }
-            else{
-                ComercializadoresEnergia comer = getComercializador(comercializadorDeEnergia);
-                //createComercializadorEnergia(comer);
-                SmartHouse house = new SmartHouse(id,nome,nif,morada,comer);
-                createHouse(house);
-                comer.addCasa(house);
-            }
-        //}
+        
+        if (getComercializador(comercializadorDeEnergia)==null){
+            createComercializadorEnergia(comercializadorDeEnergia);
+            SmartHouse house = new SmartHouse(id,nome,nif,morada,getComercializador(comercializadorDeEnergia));
+            createHouse(house);
+            //getComercializador(comercializadorDeEnergia).addCasa(house);
+        }else{
+            ComercializadoresEnergia comer = getComercializador(comercializadorDeEnergia);
+            //createComercializadorEnergia(comer);
+            SmartHouse house = new SmartHouse(id,nome,nif,morada,comer);
+            createHouse(house);
+            comer.addCasa(house);
+        }
+        
         return id;
     }
 
@@ -467,7 +457,6 @@ public class SmartCity implements Serializable {
      */
     public void criaDivisao(int houseID, String divisao){
         SmartHouse temp = getCasa(houseID);
-        //System.out.println(temp==null);
         if(temp!=null){
             temp.addDivisao(divisao);
         }

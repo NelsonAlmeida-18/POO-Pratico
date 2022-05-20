@@ -334,8 +334,8 @@ public class ComercializadoresEnergia implements Serializable {
         for(SmartHouse casa:this.casas.keySet()){
             List<Fatura> faturas = this.casas.get(casa);
             for (Fatura faturaTemp : faturas) {
-                if (faturaTemp.getDataInicial().isBefore(dataInit) && faturaTemp.getDataFinal().isAfter(dataFin)) {//falta ver se as datas coincidem
-                    if (faturaTemp.getKwsConsumidos() > maxConsumo || casaMaisGastadora == null) {//será que é assim? assim estou a comparar consumos de kws e não em euros
+                if (faturaTemp.getDataInicial().isBefore(dataInit) && faturaTemp.getDataFinal().isAfter(dataFin)) {
+                    if (faturaTemp.getKwsConsumidos() > maxConsumo || casaMaisGastadora == null) {
                         casaMaisGastadora = casa;
                         maxConsumo = faturaTemp.getKwsConsumidos();
                     }
@@ -451,7 +451,6 @@ public class ComercializadoresEnergia implements Serializable {
             sb.append(this.casas.get(casa).toString());
         }*/
         sb.append(this.numeroDeClientes);
-        //sb.append("\n");
         return sb.toString();
     }
 
