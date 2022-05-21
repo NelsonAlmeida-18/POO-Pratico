@@ -222,19 +222,19 @@ public class View{
         System.out.println("1 - Alterar o consumo diário");
         System.out.println("2 - Retroceder");
         String option = sc.nextLine();
-        switch(option){
-            case("1"):
+        switch (option) {
+            case ("1") -> {
                 clearConsole();
                 System.out.println("Qual o novo consumo diário desta marca?");
                 option = sc.nextLine();
-                this.c.alteraConsumoDiario(marca,option);
+                this.c.alteraConsumoDiario(marca, option);
                 clearConsole();
                 System.out.println("Novo consumo diário definido com sucesso.");
-                break;
-            case("2"):
+            }
+            case ("2") -> {
                 clearConsole();
                 editMarcasMenu();
-            break;
+            }
         }
 
     }
@@ -261,9 +261,6 @@ public class View{
 
     /**
      * Menu para editar os valores dos comercializadores de energia, nomeadamente o valor do KWh e o fator imposto
-     * @param this.c Cidade a ser utilizada
-     * @param sc Scannar a ser utilizada
-     * @throws IOException
      */
 
     public void editComercializadores() throws IOException{
@@ -281,12 +278,12 @@ public class View{
         System.out.println("2 - Editar o fator de imposto");
         System.out.println("3 - Retroceder");
         String choice = sc.nextLine();
-        switch(choice){
-            case("1"):
+        switch (choice) {
+            case ("1") -> {
                 clearConsole();
-                System.out.println("Valor atual do KWh: "+this.c.getComercializadorPrecoBaseKW(nome)); 
+                System.out.println("Valor atual do KWh: " + this.c.getComercializadorPrecoBaseKW(nome));
                 System.out.print("Selecione um novo preço por KWh:");
-                this.c.setComercializadorPrecoBaseKW(nome,Double.parseDouble(sc.nextLine()));   
+                this.c.setComercializadorPrecoBaseKW(nome, Double.parseDouble(sc.nextLine()));
                 clearConsole();
                 System.out.println("Valor do KWh atualizado com sucesso!");
                 try {
@@ -294,20 +291,20 @@ public class View{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            break;
-            case("2"):
+            }
+            case ("2") -> {
                 clearConsole();
-                System.out.println("Valor atual do imposto: "+this.c.getComercializadorFatorImposto(nome)); 
+                System.out.println("Valor atual do imposto: " + this.c.getComercializadorFatorImposto(nome));
                 System.out.print("Selecione um novo valor do imposto:");
-                this.c.setComercializadorFatorImposto(nome,Double.parseDouble(sc.nextLine()));
+                this.c.setComercializadorFatorImposto(nome, Double.parseDouble(sc.nextLine()));
                 clearConsole();
                 System.out.println("Valor do imposto atualizado com sucesso!");
                 menuInicial();
-            break;
-            default:
+            }
+            default -> {
                 clearConsole();
                 menuInicial();
-            break;
+            }
         }
     }
 
@@ -825,7 +822,6 @@ public class View{
     
     /**
      * Menu que edita casas
-     * @throws IOException
      */
     public void editSmartHouse() throws IOException{
         System.out.println("Indique o ID da casa que pertende editar(0-"+(this.c.getHouseId()-1)+"):");
@@ -843,7 +839,6 @@ public class View{
     /**
      * Menu de interação com uma casa
      * @param id id da casa
-     * @throws IOException
      */
     public void menuInteracaoCasas(int id) throws IOException{
     //Menu de edições possíveis
@@ -943,7 +938,6 @@ public class View{
     /**
      * Menu que edita divisões da casa
      * @param id id da casa
-     * @throws IOException
      */
     public void editaDivisoes(int id) throws IOException{
         System.out.println("1 - Adicionar divisão");

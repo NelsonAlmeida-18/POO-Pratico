@@ -35,7 +35,7 @@ public abstract class SmartDevice implements Serializable{
 
     /**
      * Converter uma string referente a um estado para um valor State
-     * @param state Estado em formato string
+     * @param str_state Estado em formato string
      * @return estado
      */
     public state toState(String str_state){
@@ -52,13 +52,13 @@ public abstract class SmartDevice implements Serializable{
      * Getter do custo associado à instalação de um dispositivo
      * @return custo de instalação do dispositivo
      */
-    public double getCustoInstalacao(){return this.custoInstalacao;};
+    public double getCustoInstalacao(){return this.custoInstalacao;}
 
     /**
      * Getter do id do dispositivo
      * @return id do dispositivo
      */
-    public int getID(){return this.id;}; //para definir nas subclasses
+    public int getID(){return this.id;} //para definir nas subclasses
 
     /**
      * Getter de estado do device
@@ -82,7 +82,7 @@ public abstract class SmartDevice implements Serializable{
      * Getter de consumo
      * @return consumo
      */
-    public double getConsumo(){return this.consumo;};
+    public double getConsumo(){return this.consumo;}
 
     /**
      * Getter de consumo em determinada cortina do cosnumo
@@ -101,7 +101,7 @@ public abstract class SmartDevice implements Serializable{
 
     /**
      * Setter da data de ativação
-     * @param ult data de ativação a definir
+     * @param data data de ativação a definir
      */
     public void setDataFin(LocalDate data){this.dataFin=data;}
 

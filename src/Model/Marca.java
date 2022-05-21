@@ -20,7 +20,7 @@ public class Marca implements Serializable {
     /**
      * Inicializador de uma marca através do nome
      * Consumo diário default de 0.72
-     * @param nome
+     * @param nome nome da marca
      */
     public Marca(String nome) {
         this.nome = nome;

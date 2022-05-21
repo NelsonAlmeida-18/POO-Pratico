@@ -81,7 +81,7 @@ public class ComercializadoresEnergia implements Serializable {
      * @param fatorImposto fator de imposto
      * @param casas Map de casas com as respetivas faturas
      */
-    public ComercializadoresEnergia(String nome,double precoBaseKW, double fatorImposto,Map<SmartHouse,List<Fatura>> casas){
+    public ComercializadoresEnergia(String nome,double precoBaseKW, double fatorImposto,Map<SmartHouse,List<Fatura>> casas) throws CloneNotSupportedException {
         this.nome=nome;
         this.precoBaseKW=precoBaseKW;
         this.fatorImposto=fatorImposto;
@@ -99,12 +99,13 @@ public class ComercializadoresEnergia implements Serializable {
      * Função que inicializa um comercializador
      * @param ce Cópia de cápsula
      */
-    public ComercializadoresEnergia(ComercializadoresEnergia ce){
+    public ComercializadoresEnergia(ComercializadoresEnergia ce) throws CloneNotSupportedException {
         this.nome=ce.getNome();
         this.precoBaseKW = ce.getPrecoBaseKW();
         this.fatorImposto= ce.getFatorImposto();
         this.casas = ce.getCasas();
         this.numeroDeClientes=ce.getNumeroDeCliente();
+        this.faturado=false;
     }
 
     /**
@@ -117,7 +118,7 @@ public class ComercializadoresEnergia implements Serializable {
      * Getter de casas
      * @return Map de casas com as respetivas faturas
      */
-    public Map<SmartHouse,List<Fatura>> getCasas(){
+    public Map<SmartHouse,List<Fatura>> getCasas() throws CloneNotSupportedException {
         Map<SmartHouse,List<Fatura>> casinhasNovas=new HashMap<>();
         for(SmartHouse casa:casas.keySet()){
             List<Fatura> casinhas = new ArrayList<>(casas.get(casa));
@@ -130,7 +131,7 @@ public class ComercializadoresEnergia implements Serializable {
      * Setter de casas
      * @param casas Map de casas com as respetivas faturas
      */
-    public void setCasas(Map<SmartHouse,List<Fatura>> casas){
+    public void setCasas(Map<SmartHouse,List<Fatura>> casas) throws CloneNotSupportedException {
         Map<SmartHouse,List<Fatura>> casinhasNovas=new HashMap<>();
         for(SmartHouse casa:casas.keySet()){
             casinhasNovas.put(casa.clone(), clonaFaturas(casas.get(casa)));
@@ -266,7 +267,7 @@ public class ComercializadoresEnergia implements Serializable {
      * @param casa Casa em investigação
      * @return Lista de faturas de uma casa
      */
-    public List<Fatura> getFaturas(SmartHouse casa){
+    public List<Fatura> getFaturas(SmartHouse casa) throws CloneNotSupportedException {
         List<Fatura> faturas = new ArrayList<>();
         if(this.casas.containsKey(casa)){
             for (Fatura fatura : this.casas.get(casa)) faturas.add(fatura.clone());
@@ -414,7 +415,7 @@ public class ComercializadoresEnergia implements Serializable {
 
     /**
      * Função que compara o comercializador com um objeto para ver se são iguais
-     * @param obj
+     * @param obj objeto
      * @return bool de comparação
      */
     public boolean equals(Object obj){
@@ -428,7 +429,8 @@ public class ComercializadoresEnergia implements Serializable {
      * Função que clona um forncedor
      * @return Comercizalidor clonado
      */
-    public ComercializadoresEnergia clone(){
+    public ComercializadoresEnergia clone() throws CloneNotSupportedException {
+        ComercializadoresEnergia clone = (ComercializadoresEnergia) super.clone();
         return new ComercializadoresEnergia(this);
     }
 

@@ -135,8 +135,7 @@ public class SmartCity implements Serializable {
     /**
      * Getter de marca
      * @param nome nome da marca a procurar
-     * @return marca em questão
-     * @return null se não existir
+     * @return marca em questão ou null
      */
     public Marca getMarca(String nome){
         for(Marca x : this.marcas){
@@ -640,8 +639,7 @@ public class SmartCity implements Serializable {
     /**
      * Getter de determinado comercializor
      * @param nomeComercializador nome do comercializador
-     * @return Comercializador pretendido
-     * @return null caso não existe comercializador
+     * @return Comercializador pretendido ou null
      */
     public ComercializadoresEnergia getComercializador(String nomeComercializador){
         for (ComercializadoresEnergia comer:this.comercializadores){
@@ -663,7 +661,7 @@ public class SmartCity implements Serializable {
             sb.append("\n");
             sb.append(this.presets.get(name).toString());
         }
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 
     /**
@@ -681,7 +679,7 @@ public class SmartCity implements Serializable {
         for(SmartHouse casa: this.casas.values()){
             sb.append(casa.toString());
         }
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 
     /**
