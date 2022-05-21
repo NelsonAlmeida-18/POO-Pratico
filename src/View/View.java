@@ -788,12 +788,13 @@ public class View{
                     LocalDate dataFinal = LocalDate.parse(dataFinalTexto, formatter);
                     LocalDate dataCriacao = this.c.getDataAtual();  //Mudar para data Inicial
                     while (dataCriacao.isAfter(dataInicial) || dataInicial.isAfter(dataFinal)) {
-                         clearConsole();
-                         System.out.println("Datas inválidas!");
-                         System.out.println("Data inicial mínima: " + dataCriacao);
+                        clearConsole();
+                        System.out.println("Datas inválidas!");
+                        System.out.println("Data inicial mínima: " + dataCriacao);
                         System.out.println("Data inicial (dd.MM.AAAA).");
                         dataInicialTexto = this.sc.nextLine();
-                        dataInicial = LocalDate.parse(dataInicialTexto, formatter);                        System.out.println("Data Final (dd.MM.AAAA).");
+                        dataInicial = LocalDate.parse(dataInicialTexto, formatter);                       
+                        System.out.println("Data Final (dd.MM.AAAA).");
                         dataFinalTexto = this.sc.nextLine();
                         dataFinal = LocalDate.parse(dataFinalTexto, formatter);  
                     }
