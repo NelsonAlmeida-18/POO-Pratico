@@ -1,9 +1,11 @@
 package View;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
-
+import java.util.stream.Collectors;
 import java.lang.InterruptedException;
 import java.lang.ProcessBuilder;
 import java.time.LocalDate;
@@ -800,11 +802,13 @@ public class View{
                     }
                     time = Long.toString(ChronoUnit.DAYS.between(dataInicial, dataFinal));
                     List<SmartHouse> casasMaisGastadoras = this.c.getCasasMaisGastadoras(time);
-                    System.out.println(casasMaisGastadoras);
+                    clearConsole();
+                    System.out.println(casasMaisGastadoras.stream().map(SmartHouse::getID).collect(Collectors.toCollection(ArrayList::new)));
                 }
                 catch(Exception e){
                     System.out.println("Erro a simular.");
                 }
+                simulationOptions(time);
             }
             case ("5") -> {
                 clearConsole();

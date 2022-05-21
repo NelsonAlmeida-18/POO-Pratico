@@ -330,7 +330,8 @@ public class SmartCity implements Serializable{
                 SmartHouse temp = comer.getCasaMaisGastadora();
                 casas.add(temp);
             }
-            Collections.sort(casas);
+            Collections.sort(casas, Collections.reverseOrder());
+
             return casas;
         }
         catch(Exception e){
