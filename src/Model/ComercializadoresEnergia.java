@@ -331,6 +331,9 @@ public class ComercializadoresEnergia implements Serializable {
     public SmartHouse getCasaMaisGastadora(LocalDate dataInit, LocalDate dataFin){
         SmartHouse casaMaisGastadora=null;
         double maxConsumo=0;
+        if (!this.faturado){
+
+        }
         for(SmartHouse casa:this.casas.keySet()){
             List<Fatura> faturas = this.casas.get(casa);
             for (Fatura faturaTemp : faturas) {

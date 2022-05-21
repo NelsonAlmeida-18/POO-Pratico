@@ -1,6 +1,7 @@
 package View;
 
 import java.io.*;
+import java.util.List;
 import java.util.Scanner;
 
 import java.lang.InterruptedException;
@@ -10,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import Controller.Controller;
+import Model.SmartHouse;
 
 
 //import static com.intellij.openapi.util.text.Strings.toUpperCase
@@ -119,10 +121,9 @@ public class View{
         System.out.println("6 - Editar marcas existentes");
         System.out.println("7 - Consultar SmartDevices presets");
         System.out.println("8 - Carregar um estado de programa");
-        System.out.println("9 - Carregar um ficheiro log");
-        System.out.println("10 - Guardar estado");
-        System.out.println("11 - Começar Simulação");
-        System.out.println("12 - Sair");
+        System.out.println("9 - Guardar estado");
+        System.out.println("10 - Começar Simulação");
+        System.out.println("11 - Sair");
         int res = sc.nextInt();
         sc.nextLine();
         switch (res) {
@@ -169,23 +170,18 @@ public class View{
                 loadMenu();
                 menuInicial();
             }
-            case 9 -> { //Carregar um ficheiro log
-                clearConsole();
-                this.c.parse();
-                menuInicial();
-            }
-            case 10 -> { //Guardar estado
+            case 9 -> { //Guardar estado
                 clearConsole();
                 saveState();
                 System.out.println("Estado do programa guardado");
                 menuInicial();
             }
-            case 11 -> { //Começar Simulação
+            case 10 -> { //Começar Simulação
                 clearConsole();
                 simulationMenu();
                 menuInicial();
             }
-            case 12 -> { //Sair
+            case 11 -> { //Sair
                 clearConsole();
                 System.out.println("Tem a certeza que quer sair?");
                 if (response(sc) == 1) {
@@ -711,14 +707,13 @@ public class View{
             time = time.replace(" dias","");
         if (time.contains(".")){
             try{
-                System.out.println(time);
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
                 LocalDate localDate = LocalDate.parse(time, formatter);
-                System.out.println(localDate.toString());
                 time = Long.toString(ChronoUnit.DAYS.between(localDate, this.c.getDataAtual()));
             }
             catch(Exception e){
                 System.out.println("Erro a criar a data.");
+                simulationOptions(time);
             }
         }
         System.out.println("1 - Casa mais gastadora.");
@@ -786,31 +781,32 @@ public class View{
             }
             case ("4") -> {
                 clearConsole();
-                String formato = "dd.MM.yyyy";
-                DateTimeFormatter formatador = DateTimeFormatter.ofPattern(formato);
-                System.out.println("Data inicial (dd.MM.AAAA).");
-                String dataInicialTexto = this.sc.nextLine();
-                LocalDate dataInicial = LocalDate.from(formatador.parse(dataInicialTexto));
-                System.out.println("Data Final (dd.MM.AAAA).");
-                String dataFinalTexto = this.sc.nextLine();
-                LocalDate dataFinal = LocalDate.from(formatador.parse(dataFinalTexto));
-                LocalDate dataCriacao = this.c.getDataAtual();  //Mudar para data Inicial
-                System.out.println(dataCriacao.isAfter(dataInicial));
-                System.out.println(dataInicial.isAfter(dataFinal));
-                System.out.println(dataCriacao);
-                while (dataCriacao.isAfter(dataInicial) || dataInicial.isAfter(dataFinal)) {
-                    clearConsole();
-                    System.out.println("Datas inválidas!");
-                    System.out.println("Data inicial mínima: " + dataCriacao);
+                try{
                     System.out.println("Data inicial (dd.MM.AAAA).");
-                    dataInicialTexto = this.sc.nextLine();
-                    dataInicial = LocalDate.from(formatador.parse(dataInicialTexto));
+                    String dataInicialTexto = this.sc.nextLine();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                    LocalDate dataInicial = LocalDate.parse(dataInicialTexto, formatter);
                     System.out.println("Data Final (dd.MM.AAAA).");
-                    dataFinalTexto = this.sc.nextLine();
-                    dataFinal = LocalDate.from(formatador.parse(dataFinalTexto));   //TODO:datas
+                    String dataFinalTexto = this.sc.nextLine();
+                    LocalDate dataFinal = LocalDate.parse(dataFinalTexto, formatter);
+                    LocalDate dataCriacao = this.c.getDataAtual();  //Mudar para data Inicial
+                    while (dataCriacao.isAfter(dataInicial) || dataInicial.isAfter(dataFinal)) {
+                         clearConsole();
+                         System.out.println("Datas inválidas!");
+                         System.out.println("Data inicial mínima: " + dataCriacao);
+                        System.out.println("Data inicial (dd.MM.AAAA).");
+                        dataInicialTexto = this.sc.nextLine();
+                        dataInicial = LocalDate.parse(dataInicialTexto, formatter);                        System.out.println("Data Final (dd.MM.AAAA).");
+                        dataFinalTexto = this.sc.nextLine();
+                        dataFinal = LocalDate.parse(dataFinalTexto, formatter);  
+                    }
+                    time = Long.toString(ChronoUnit.DAYS.between(dataInicial, dataFinal));
+                    List<SmartHouse> casasMaisGastadoras = this.c.getCasasMaisGastadoras(time);
+                    System.out.println(casasMaisGastadoras);
                 }
-                System.out.println("A casa mais gastadora entre " + dataInicialTexto + " e " + dataFinalTexto + " foi: " + this.c.getCasaMaisGastadora(dataInicial, dataFinal));
-                simulationOptions(time);
+                catch(Exception e){
+                    System.out.println("Erro a simular.");
+                }
             }
             case ("5") -> {
                 clearConsole();

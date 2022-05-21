@@ -287,7 +287,12 @@ public class Controller {
     public int getHouseId(){return this.city.getHouseId();}
 
     public int getCasaMaisGastadora(LocalDate a, LocalDate b){
-        return this.city.getCasaMaisGastadora(a,b).getID();
+        SmartHouse casa = this.city.getCasaMaisGastadora(a,b);
+        return casa.getID();
+    }
+
+    public List<SmartHouse> getCasasMaisGastadoras(String time){
+        return this.city.getCasasMaisGastadoras(time);
     }
 
     /**

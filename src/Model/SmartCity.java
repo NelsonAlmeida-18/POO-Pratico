@@ -14,7 +14,7 @@ import java.io.*;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-public class SmartCity implements Serializable {
+public class SmartCity implements Serializable{
 
     @Serial
     private static final long serialVersionUID = 1732799934;
@@ -320,6 +320,25 @@ public class SmartCity implements Serializable {
             System.out.println("Deu asneira a ir buscar a casa mais gastadora");
         }
         return ret;
+    }
+
+    public List<SmartHouse> getCasasMaisGastadoras(String time){
+        ArrayList<SmartHouse> casas = new ArrayList<>();
+        try{
+            for (ComercializadoresEnergia comer: this.comercializadores){
+                if (!comer.hasFaturado())
+                    comer.faturacao(time); 
+                SmartHouse temp = comer.getCasaMaisGastadora();
+                casas.add(temp);
+            }
+            Collections.sort(casas);
+            return casas;
+        }
+        catch(Exception e){
+            System.out.println("Deu asneira a ir buscar a casa mais gastadora");
+        }
+        Collections.sort(casas);
+        return casas;
     }
 
     /**
@@ -746,5 +765,6 @@ public class SmartCity implements Serializable {
         bd.append("\n");
         return bd.toString();
     }
+
 
 }

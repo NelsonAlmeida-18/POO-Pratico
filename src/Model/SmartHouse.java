@@ -13,7 +13,7 @@ import java.util.Set;
  * espaços (as salas) que existem na casa.
  *
  */
-public class SmartHouse implements Serializable{
+public class SmartHouse implements Serializable, Comparable<SmartHouse>{
 
     private int id;
     private String nome_prop;
@@ -596,6 +596,17 @@ public class SmartHouse implements Serializable{
      * @return divisão
      */
     public String getDivisaoByIndex(int index){return this.getDivisaoList().get(index);}
+
+
+    @Override
+    public int compareTo(SmartHouse casa){
+        if (this.consumo<casa.getConsumo())
+            return -1;
+
+        else if (this.consumo>casa.getConsumo())
+            return 1;
+        return 0;
+    }
 
 
 }
