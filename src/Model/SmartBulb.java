@@ -12,13 +12,13 @@ import java.time.temporal.ChronoUnit;
  */
 public class SmartBulb extends SmartDevice {
     
-    public enum modo{
+    private enum modo{
         COLD,
         NEUTRAL,
         WARM
     }
 
-    public modo mode;
+    private modo mode;
     private int dimensions;
 
     /**
