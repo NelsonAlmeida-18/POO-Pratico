@@ -230,7 +230,7 @@ public class SmartBulb extends SmartDevice {
 
     /**
      * Compara a lampada a um objeto
-     * @param obj
+     * @param obj objeto
      * @return Bool de validação da comparação entre objetos
      */
     public boolean equals(Object obj){

@@ -133,6 +133,9 @@ public class SmartHouse implements Serializable, Comparable<SmartHouse>{
         this.companhia_eletrica = sh.getCompanhia_eletrica();
         this.companhia_eletrica.addCasa(this);
         this.totalCustoInstalacao=sh.getTotalCustoInstalacao();
+        this.consumo=sh.getConsumo();
+        this.devices=sh.getHouse();
+        this.dataCriacao = sh.getDataCriacao();
     }
 
     /**
@@ -489,7 +492,8 @@ public class SmartHouse implements Serializable, Comparable<SmartHouse>{
      * Clone da casa
      * @return casa clonada
      */
-    public SmartHouse clone(){
+    public SmartHouse clone() throws CloneNotSupportedException {
+        SmartHouse clone = (SmartHouse) super.clone();
         return new SmartHouse(this);
     }
 
@@ -519,9 +523,9 @@ public class SmartHouse implements Serializable, Comparable<SmartHouse>{
                 //sb.append("Id do dispositivo: ");
                 //sb.append(sd.getID());
                 //sb.append("\n");
-                sb.append("Consumo do dispositivo: "+sd.getConsumo());
+                sb.append("Consumo do dispositivo: ").append(sd.getConsumo());
                 sb.append("\n");
-                sb.append(sd.toString());
+                sb.append(sd);
                 sb.append("\n");
             }
         }

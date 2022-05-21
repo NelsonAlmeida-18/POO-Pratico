@@ -39,10 +39,9 @@ public class Controller {
 
     /**
      * Getter da cidade
-     * @param city Cidade do controller
      * @return Cidade
      */
-    public SmartCity getCity(SmartCity city){
+    public SmartCity getCity(){
         return this.city;
     }
 
@@ -81,8 +80,7 @@ public class Controller {
     /**
      * Função que dá merge a cidades
      * @param path Cidade a dar merge
-     * @throws FileNotFoundException
-    */
+     */
     public void merge(String path) throws FileNotFoundException {
  
         SmartCity city = (SmartCity)ReadObjectFromFile(path);
@@ -114,7 +112,7 @@ public class Controller {
 
     /**
      * Verifica se um dado comercializador existe na cidade
-     * @param String nome do comercializador a procurar
+     * @param nome do comercializador a procurar
      * @return Bool a indicar se existe ou não
      */
     public boolean existsComercializador(String nome){
@@ -151,7 +149,7 @@ public class Controller {
     /**
      * Setter do comercializador do fator imposto
      * @param nome nome do comercializador
-     * @param precobase fator imposto a modificar
+     * @param fator fator imposto a modificar
      */
     public void setComercializadorFatorImposto(String nome,double fator){
         this.city.getComercializador(nome).setFatorImposto(fator);
@@ -363,10 +361,13 @@ public class Controller {
     }
 
     /**
-     * Adiciona lampada a divisão
+     * Adiciona lampada a divisao
      * @param house_id id da casa
-     * @param divisao divisão emq uestão
-     * @param sd dispositivo a adicionar
+     * @param divisao divisão em questão
+     * @param modo modo da lampada
+     * @param dimensions dimensões da lampada
+     * @param consumo consumo da lampada
+     * @param estado estado da lampada
      */
     public void addSmartBulbToDivisao(int house_id,String divisao, String modo,  int dimensions, double consumo, String estado){
         this.city.addDeviceToDivisaoL(house_id, divisao, this.city.getDeviceId(),modo , dimensions,consumo);
@@ -478,51 +479,6 @@ public class Controller {
     public int giveDeviceId(){
         return this.city.giveDeviceId();
     }
-
-    // TODO é para apagar esta merda?
-    /**
-     * Função que lê todas as linhas de um fichero
-     * @param time Tempo dado na simulation
-     */
-    /*
-    public int simulation(String time){
-
-        String [] data = time.split("\\.", 3);  //separa a data dada
-        int no_days = 0;
-        LocalDate data_sim;
-        double consumo_tmp;
-
-        switch (data.length) {
-            case 1 -> { //apenas dado um dia
-                no_days = Integer.parseInt(data[0]);
-                data_sim = LocalDate.now().plus(no_days,DAYS);
-            }
-            case 3 -> { //dada uma data em formato DD.MM.YYYY
-                Parser p = new Parser();
-                data_sim = p.parseData(time);
-                if(data_sim.isBefore(this.data_atual)) return 1; //data anterior portanto inválida
-            }
-            default -> {
-                //Data inválida
-                return 1;
-            }
-        }
-        System.out.println("\nDATA: "+data_sim.toString());
-        //calcula consumos no intervalo de datas da data atual à data da simulação
-        for (SmartHouse casa : this.casas.values()){
-            consumo_tmp = casa.getConsumoDaCasa(this.data_atual, data_sim);
-            System.out.println("\nCONSUMO CASA No."+ casa.getID() +": " + consumo_tmp);
-        }
-        /*percorre comercializadores para tirarem faturas
-        guarda as faturas no seu map e manda para as casas guardarem
-         *//*
-        for (ComercializadoresEnergia comercializadore : this.comercializadores) {
-            comercializadore.faturacao(data_sim);
-        }
-        this.data_atual = data_sim;
-        return 0;
-    } 
-    */
     
     /**
      * Função que lê todas as linhas de um fichero

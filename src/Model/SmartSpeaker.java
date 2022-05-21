@@ -130,7 +130,7 @@ public class SmartSpeaker extends SmartDevice {
      * Getter de consumo dentro de determinado periodo do tempo
      * @param data_atual Data atual
      * @param dataSimulacao data de inicial da cortina de tempo
-     * @return
+     * @return consumo
      */
     public double getConsumo(LocalDate data_atual, LocalDate dataSimulacao){
 
@@ -164,7 +164,7 @@ public class SmartSpeaker extends SmartDevice {
             return false;
 
         SmartSpeaker newC = (SmartSpeaker) obj;
-        return (this.getID() == newC.getID() && this.volume == (newC.getVolume()) && this.estacao==newC.getEstacao()  && this.getEstado().toString().equals(newC.getEstado().toString())
+        return (this.getID() == newC.getID() && this.volume == (newC.getVolume()) && this.estacao.equals(newC.getEstacao()) && this.getEstado().toString().equals(newC.getEstado().toString())
                 &&  this.getConsumo() == (newC.getConsumo()));
     }
 

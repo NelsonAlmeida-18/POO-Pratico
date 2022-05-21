@@ -110,11 +110,10 @@ public class SmartCamera extends SmartDevice {
      * @return consumo
      */
     public double getConsumo(LocalDate data_atual, LocalDate dataSimulacao){
-        switch(this.getEstado().toString()){
-            case("ON"):
-                return this.tamanho_ficheiros*this.resolucao;
-        }
-        return 0;
+        return switch (this.getEstado().toString()) {
+            case ("ON") -> this.tamanho_ficheiros * this.resolucao;
+            default -> 0;
+        };
     }
 
     /**
