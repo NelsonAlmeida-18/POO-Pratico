@@ -15,8 +15,6 @@ import java.time.temporal.ChronoUnit;
  */
 
 public class SmartSpeaker extends SmartDevice {
-
-    
     private int volume;
     private String estacao;
     private Marca marca;
