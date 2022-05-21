@@ -368,7 +368,8 @@ public class ComercializadoresEnergia implements Serializable {
      */
     public void faturacao(LocalDate data_final){
         for(SmartHouse casa:this.casas.keySet()) {
-            geraFatura(casa, data_final);
+            if(this.casas.get(casa).size()==0)
+                geraFatura(casa, data_final);
             //casa.setConsumo(0);
         }
         this.faturado=true;
@@ -382,7 +383,8 @@ public class ComercializadoresEnergia implements Serializable {
     public void faturacao(String time){
         for(SmartHouse casa:this.casas.keySet()) {
             LocalDate data_final= casa.getDataCriacao().plusDays(Integer.parseInt(time));
-            geraFatura(casa, data_final);
+            if(!hasFaturado())
+                geraFatura(casa, data_final);
         }
         this.faturado=true;
     }
@@ -433,7 +435,6 @@ public class ComercializadoresEnergia implements Serializable {
      * @return Comercizalidor clonado
      */
     public ComercializadoresEnergia clone() throws CloneNotSupportedException {
-        ComercializadoresEnergia clone = (ComercializadoresEnergia) super.clone();
         return new ComercializadoresEnergia(this);
     }
 

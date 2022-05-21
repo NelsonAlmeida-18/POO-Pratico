@@ -514,9 +514,11 @@ public class Controller {
     /**
      * Função que dá parse às logs dadas em ficheiro
      */
-    public void parse() throws IOException{
+    public void parse(String nameOfFile) throws IOException{
         try{
-            Path path = Path.of("./logs/logs.txt");
+            if (!nameOfFile.contains(".txt"))
+                nameOfFile=nameOfFile+".txt";
+            Path path = Path.of("./logs/"+nameOfFile);
             //Path path = FileSystems.getDefault().getPath("logs", "logs.txt");
             String content = Files.readString(path);
             String[] contentSplited = content.split("\n");

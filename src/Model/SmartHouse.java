@@ -493,7 +493,6 @@ public class SmartHouse implements Serializable, Comparable<SmartHouse>{
      * @return casa clonada
      */
     public SmartHouse clone() throws CloneNotSupportedException {
-        SmartHouse clone = (SmartHouse) super.clone();
         return new SmartHouse(this);
     }
 
@@ -600,6 +599,22 @@ public class SmartHouse implements Serializable, Comparable<SmartHouse>{
      * @return divisão
      */
     public String getDivisaoByIndex(int index){return this.getDivisaoList().get(index);}
+
+    public String basicToString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nPROPRIETÁRIO: ");
+        sb.append(this.nome_prop);
+        sb.append("\tNIF: ");
+        sb.append(this.NIF_prop);
+        sb.append("\tMORADA: ");
+        sb.append(this.morada);
+        sb.append("\tCOMERCIALIZADOR DE ENERGIA:");
+        sb.append(this.companhia_eletrica.toString());
+        sb.append("\tCONSUMO DA CASA:");
+        sb.append(getConsumo());
+        sb.append("\n");
+        return sb.toString();
+    }
 
 
     @Override

@@ -82,7 +82,6 @@ public class Fatura {
      * @return fatura clonada
      */
     public Fatura clone() throws CloneNotSupportedException {
-        Fatura clone = (Fatura) super.clone();
         return new Fatura(this);
     }
 

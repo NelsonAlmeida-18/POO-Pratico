@@ -2,7 +2,6 @@ package View;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -349,7 +348,9 @@ public class View{
             }
             case 6 -> { //Adicionar apartir de log
                 clearConsole();
-                this.c.parse();
+                System.out.println("Selecione o nome do ficheiro de log(.txt) que pretende importar: ");
+                String nameOfFile = this.sc.nextLine();
+                this.c.parse(nameOfFile);
 
                 createMenu();
             }
@@ -803,7 +804,7 @@ public class View{
                     time = Long.toString(ChronoUnit.DAYS.between(dataInicial, dataFinal));
                     List<SmartHouse> casasMaisGastadoras = this.c.getCasasMaisGastadoras(time);
                     clearConsole();
-                    System.out.println(casasMaisGastadoras.stream().map(SmartHouse::getID).collect(Collectors.toCollection(ArrayList::new)));
+                    System.out.println(casasMaisGastadoras.stream().map(SmartHouse::basicToString).collect(Collectors.toCollection(ArrayList::new)));
                 }
                 catch(Exception e){
                     System.out.println("Erro a simular.");
