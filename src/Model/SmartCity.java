@@ -764,6 +764,4 @@ public class SmartCity implements Serializable{
         bd.append("\n");
         return bd.toString();
     }
-
-
 }
